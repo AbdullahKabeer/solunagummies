@@ -1,7 +1,3 @@
-'use client';
-
-import { motion } from 'framer-motion';
-
 export default function ComparisonSection() {
   return (
     <section className="py-32 bg-[#FDFCF8] relative overflow-hidden">

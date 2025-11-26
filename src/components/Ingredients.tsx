@@ -85,7 +85,7 @@ export default function Ingredients() {
                    
                    {/* Abstract Shapes */}
                    <div className="absolute inset-0 opacity-50 mix-blend-multiply">
-                      <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.png')] opacity-20"></div>
+                      <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-20"></div>
                       <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full blur-2xl ${index === 0 ? 'bg-blue-400/30' : index === 1 ? 'bg-green-400/30' : index === 2 ? 'bg-orange-400/30' : 'bg-purple-400/30'}`}></div>
                    </div>
 
@@ -155,7 +155,7 @@ export default function Ingredients() {
                   
                   {/* Abstract Shapes */}
                   <div className="absolute inset-0 opacity-50 mix-blend-multiply">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.png')] opacity-20"></div>
+                    <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-20"></div>
                     <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full blur-2xl ${index === 0 ? 'bg-blue-400/30' : index === 1 ? 'bg-green-400/30' : index === 2 ? 'bg-orange-400/30' : 'bg-purple-400/30'}`}></div>
                   </div>
 

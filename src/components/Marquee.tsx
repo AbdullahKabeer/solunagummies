@@ -1,5 +1,3 @@
-'use client';
-
 export default function Marquee() {
   return (
     <div className="relative flex overflow-hidden bg-black py-4 md:py-8 border-y border-white/10">

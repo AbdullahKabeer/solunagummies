@@ -1,7 +1,7 @@
 export default function PreOrder() {
   return (
     <section id="pre-order" className="py-32 bg-primary text-white text-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay"></div>
       <div className="container mx-auto px-6 relative z-10">
         <h2 className="text-5xl md:text-7xl font-serif font-bold mb-8">Ready to Unlock Your Potential?</h2>
         <p className="text-2xl mb-16 max-w-2xl mx-auto opacity-90 font-light">

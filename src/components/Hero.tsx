@@ -1,78 +1,47 @@
-'use client';
-
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import Hero3DProduct from './Hero3DProduct';
 
 export default function Hero() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"]
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, -10]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center overflow-hidden bg-transparent">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-transparent">
       
       <div className="container mx-auto px-6 relative z-10 pt-20">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div className="w-full lg:w-3/5">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="flex items-center gap-4 mb-12"
+            <div
+              className="flex items-center gap-4 mb-12 animate-fade-in-up"
             >
               <div className="h-[1px] w-12 bg-orange-600"></div>
               <span className="text-xs font-bold tracking-[0.3em] text-orange-900 uppercase">Est. 2024</span>
-            </motion.div>
+            </div>
 
             <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="py-2"
+              <div
+                className="py-2 animate-fade-in-up"
               >
                 Reclaim your
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                className="italic text-orange-600 ml-8 md:ml-24 pr-4 py-2"
+              </div>
+              <div
+                className="italic text-orange-600 ml-8 md:ml-24 pr-4 py-2 animate-fade-in-up delay-100"
               >
                 cognitive
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                className="py-2"
+              </div>
+              <div
+                className="py-2 animate-fade-in-up delay-200"
               >
                 architecture.
-              </motion.div>
+              </div>
             </h1>
 
             <div className="flex flex-col md:flex-row items-start gap-8 md:gap-24 ml-2 md:ml-4">
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-lg md:text-xl text-gray-600 max-w-md leading-relaxed font-light"
+              <p 
+                className="text-lg md:text-xl text-gray-600 max-w-md leading-relaxed font-light animate-fade-in-up delay-300"
               >
                 A daily ritual for deep work. <br/>
                 Formulated with <span className="text-orange-600 font-medium">Cognizin®</span> and <span className="text-orange-600 font-medium">Saffron</span> to silence the noise and amplify your signal.
-              </motion.p>
+              </p>
 
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="relative group hidden md:block"
+              <div 
+                className="relative group hidden md:block animate-fade-in-up delay-400"
               >
                 <a 
                   href="#purchase" 
@@ -81,14 +50,11 @@ export default function Hero() {
                   Shop
                 </a>
                 <div className="absolute inset-0 rounded-full border border-[#1a1a1a] scale-110 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700"></div>
-              </motion.div>
+              </div>
               
               {/* Mobile Shop Button */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="md:hidden w-full"
+              <div 
+                className="md:hidden w-full animate-fade-in-up delay-400"
               >
                 <a 
                   href="#purchase" 
@@ -96,7 +62,7 @@ export default function Hero() {
                 >
                   Shop Now
                 </a>
-              </motion.div>
+              </div>
             </div>
           </div>
 
@@ -140,68 +106,15 @@ export default function Hero() {
             </div>
 
             {/* Desktop Animated View */}
-            <motion.div
-              initial={{ opacity: 0, rotateY: -20, rotateX: 10, y: 50 }}
-              animate={{ opacity: 1, rotateY: -15, rotateX: 5, y: 0 }}
-              transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-              style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
-              className="hidden md:block"
-            >
-              <motion.div
-                animate={{ 
-                  y: [-10, 10, -10],
-                  rotateX: [2, 0, 2],
-                  rotateY: [-20, -15, -20]
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d]"
-              >
-                {/* Side Face (Thickness) */}
-                <div className="absolute top-6 bottom-6 right-[1px] w-12 bg-gray-300 origin-right [transform:rotateY(-90deg)] rounded-l-sm border-l border-gray-400/30"></div>
-
-                {/* Front Face */}
-                <div className="absolute inset-0 bg-gradient-to-b from-gray-100 to-gray-200 rounded-3xl shadow-2xl border border-white/50 md:backdrop-blur-sm flex flex-col items-center p-6 [transform:translateZ(1px)]">
-                  {/* Glossy Overlay */}
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/40 to-transparent pointer-events-none"></div>
-                  
-                  {/* Package Content */}
-                <div className="w-full text-center mt-8 z-10">
-                  <div className="text-[10px] font-bold tracking-[0.3em] text-gray-400 mb-3">SOLUNA</div>
-                  <div className="text-5xl font-serif font-bold text-gray-800 mb-1">Focus</div>
-                  <div className="text-sm font-serif italic text-orange-600">Daily Nootropic</div>
-                </div>
-
-                {/* Abstract Graphic */}
-                <div className="flex-1 w-full flex items-center justify-center relative">
-                  <div className="absolute w-32 h-32 bg-orange-500/20 rounded-full blur-2xl md:animate-pulse"></div>
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 to-red-500 shadow-lg z-10 opacity-90"></div>
-                </div>
-
-                {/* Bottom Details */}
-                <div className="w-full flex justify-between items-end border-t border-gray-300/50 pt-4 z-10">
-                  <div className="text-left">
-                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Count</div>
-                    <div className="text-xs font-bold text-gray-700">30 Gummies</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Flavor</div>
-                    <div className="text-xs font-bold text-gray-700">Blood Orange</div>
-                  </div>
-                </div>
-                </div>
-              </motion.div>
-            </motion.div>
+            <Hero3DProduct />
           </div>
         </div>
       </div>
       
       {/* Scroll Line */}
-      <motion.div 
-        initial={{ height: 0 }}
-        animate={{ height: 100 }}
-        transition={{ duration: 1.5, delay: 1 }}
-        className="absolute bottom-0 left-12 w-[1px] bg-gray-300 hidden md:block"
-      ></motion.div>
+      <div 
+        className="absolute bottom-0 left-12 w-[1px] bg-gray-300 hidden md:block animate-grow-height delay-1000"
+      ></div>
     </section>
   );
 }

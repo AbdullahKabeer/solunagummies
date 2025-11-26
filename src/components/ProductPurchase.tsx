@@ -24,7 +24,7 @@ export default function ProductPurchase() {
             >
               <div className="aspect-4/5 rounded-[3rem] bg-[#F5F5F0] relative overflow-hidden flex items-center justify-center group">
                 {/* Background Elements */}
-                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-30 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay"></div>
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-200/20 rounded-full blur-3xl group-hover:bg-orange-300/30 transition-colors duration-700"></div>
                 
                 {/* Product Render Placeholder */}
