@@ -25,7 +25,7 @@ export default function ComparisonSection() {
               {Array.from({ length: 96 }).map((_, i) => (
                 <div 
                   key={i} 
-                  className="bg-gray-800/20 backdrop-blur-sm"
+                  className="bg-gray-800/30"
                   style={{
                     opacity: Math.random() * 0.5 + 0.2
                   }}

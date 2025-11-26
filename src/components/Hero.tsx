@@ -113,7 +113,11 @@ export default function Hero() {
               style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
             >
               <motion.div
-                animate={{ y: [-15, 15, -15], rotateX: [5, 0, 5], rotateY: [-25, -15, -25] }}
+                animate={{ 
+                  y: [-10, 10, -10],
+                  rotateX: [2, 0, 2],
+                  rotateY: [-20, -15, -20]
+                }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 className="relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d]"
               >
@@ -121,7 +125,7 @@ export default function Hero() {
                 <div className="absolute top-6 bottom-6 right-[1px] w-12 bg-gray-300 origin-right [transform:rotateY(-90deg)] rounded-l-sm border-l border-gray-400/30"></div>
 
                 {/* Front Face */}
-                <div className="absolute inset-0 bg-gradient-to-b from-gray-100 to-gray-200 rounded-3xl shadow-2xl border border-white/50 backdrop-blur-sm flex flex-col items-center p-6 [transform:translateZ(1px)]">
+                <div className="absolute inset-0 bg-gradient-to-b from-gray-100 to-gray-200 rounded-3xl shadow-2xl border border-white/50 md:backdrop-blur-sm flex flex-col items-center p-6 [transform:translateZ(1px)]">
                   {/* Glossy Overlay */}
                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/40 to-transparent pointer-events-none"></div>
                   
@@ -134,7 +138,7 @@ export default function Hero() {
 
                 {/* Abstract Graphic */}
                 <div className="flex-1 w-full flex items-center justify-center relative">
-                  <div className="absolute w-32 h-32 bg-orange-500/20 rounded-full blur-2xl animate-pulse"></div>
+                  <div className="absolute w-32 h-32 bg-orange-500/20 rounded-full blur-2xl md:animate-pulse"></div>
                   <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 to-red-500 shadow-lg z-10 opacity-90"></div>
                 </div>
 

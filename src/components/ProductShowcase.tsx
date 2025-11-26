@@ -102,20 +102,16 @@ export default function ProductShowcase() {
               <div className="relative w-full max-w-[280px] h-56">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-3xl opacity-20 animate-pulse" />
                 <div className="absolute inset-0 flex items-center justify-center gap-4">
-                  <motion.div 
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  <div 
                     className="w-20 h-20 rounded-full bg-linear-to-br from-white to-white/80 shadow-xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm border border-white/50"
                   >
                     <span className="font-serif text-[#1a1a1a] text-lg">1</span>
-                  </motion.div>
-                  <motion.div 
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  </div>
+                  <div 
                     className="w-20 h-20 rounded-full bg-linear-to-br from-white to-white/80 shadow-xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm mt-6 border border-white/50"
                   >
                     <span className="font-serif text-[#1a1a1a] text-lg">2</span>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>
