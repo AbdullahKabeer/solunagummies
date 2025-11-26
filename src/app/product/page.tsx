@@ -22,12 +22,12 @@ export default function ProductPage() {
       <div className="relative z-10">
         <Header />
         
-        <div className="pt-32 pb-20 container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row gap-16">
+        <div className="pt-24 lg:pt-32 pb-20 container mx-auto px-6">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
             
-            {/* LEFT COLUMN - VISUALS (Sticky) */}
-            <div className="w-full lg:w-1/2 hidden lg:block">
-              <div className="sticky top-24 h-[calc(100vh-12rem)] min-h-[500px] rounded-[3rem] overflow-hidden bg-[#F2F0E9] border border-white/60 shadow-2xl group">
+            {/* LEFT COLUMN - VISUALS (Sticky on Desktop, Static on Mobile) */}
+            <div className="w-full lg:w-1/2">
+              <div className="relative lg:sticky lg:top-24 h-[500px] lg:h-[calc(100vh-12rem)] min-h-[400px] lg:min-h-[500px] rounded-[2rem] lg:rounded-[3rem] overflow-hidden bg-[#F2F0E9] border border-white/60 shadow-2xl group">
                 
                 {/* Background Texture */}
                 <div className="absolute inset-0 opacity-40 mix-blend-overlay">
@@ -40,13 +40,13 @@ export default function ProductPage() {
 
                 <div className="absolute inset-0 flex items-center justify-center">
                   {/* Product Hero - Boxy Look */}
-                  <div className="relative w-80 h-[30rem] bg-linear-to-b from-gray-100 to-gray-300 rounded-3xl shadow-2xl flex flex-col items-center justify-between p-8 border border-white/40 backdrop-blur-sm transform hover:scale-105 transition-transform duration-500">
+                  <div className="relative w-64 h-[24rem] lg:w-80 lg:h-[30rem] bg-linear-to-b from-gray-100 to-gray-300 rounded-3xl shadow-2xl flex flex-col items-center justify-between p-6 lg:p-8 border border-white/40 backdrop-blur-sm transform hover:scale-105 transition-transform duration-500">
                       <div className="w-full text-center mt-4">
                         <div className="text-xs font-bold tracking-[0.2em] text-gray-500 mb-2">SOLUNA</div>
-                        <div className="text-5xl font-serif font-bold text-gray-800">Focus</div>
+                        <div className="text-4xl lg:text-5xl font-serif font-bold text-gray-800">Focus</div>
                       </div>
                       
-                      <div className="w-40 h-40 rounded-full bg-orange-500/20 blur-3xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+                      <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-orange-500/20 blur-3xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
                       
                       <div className="text-center mb-4 relative z-10">
                         <div className="text-xs text-gray-500 font-mono mb-1">30 GUMMIES</div>
@@ -54,21 +54,21 @@ export default function ProductPage() {
                       </div>
                   </div>
 
-                  {/* Floating Elements */}
+                  {/* Floating Elements - Hidden on small mobile to reduce clutter */}
                   <motion.div 
                     animate={{ y: [0, -15, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-12 right-12 bg-white/90 backdrop-blur px-6 py-3 rounded-full shadow-lg border border-white/50"
+                    className="hidden sm:block absolute top-8 right-8 lg:top-12 lg:right-12 bg-white/90 backdrop-blur px-4 py-2 lg:px-6 lg:py-3 rounded-full shadow-lg border border-white/50"
                   >
-                    <span className="text-xs font-bold tracking-widest text-orange-600">CLINICALLY DOSED</span>
+                    <span className="text-[10px] lg:text-xs font-bold tracking-widest text-orange-600">CLINICALLY DOSED</span>
                   </motion.div>
 
                   <motion.div 
                     animate={{ y: [0, 15, 0] }}
                     transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute bottom-12 left-12 bg-white/90 backdrop-blur px-6 py-3 rounded-full shadow-lg border border-white/50"
+                    className="hidden sm:block absolute bottom-8 left-8 lg:bottom-12 lg:left-12 bg-white/90 backdrop-blur px-4 py-2 lg:px-6 lg:py-3 rounded-full shadow-lg border border-white/50"
                   >
-                    <span className="text-xs font-bold tracking-widest text-gray-600">VEGAN & GLUTEN FREE</span>
+                    <span className="text-[10px] lg:text-xs font-bold tracking-widest text-gray-600">VEGAN & GLUTEN FREE</span>
                   </motion.div>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export default function ProductPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="min-h-[80vh] flex flex-col justify-center"
+                className="min-h-auto lg:min-h-[80vh] flex flex-col justify-center pt-8 lg:pt-0"
               >
                 {/* Breadcrumbs / Badges */}
                 <div className="flex items-center gap-3 mb-6">
@@ -97,7 +97,7 @@ export default function ProductPage() {
                   </div>
                 </div>
 
-                <h1 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 mb-6 leading-[0.9]">
+                <h1 className="text-5xl lg:text-7xl font-serif font-bold text-gray-900 mb-6 leading-[0.9]">
                   Soluna Focus & <br/>
                   <span className="italic text-orange-500">Mood Gummies.</span>
                 </h1>

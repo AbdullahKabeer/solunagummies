@@ -5,19 +5,19 @@ import { Zap, Brain, Smile } from 'lucide-react';
 
 export default function TimelineSection() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-12 md:py-24 bg-white">
       <div className="container mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-20">
           <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-4 block">The Journey</span>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
             Better mornings, better energy for life.
           </h2>
-          <p className="text-xl text-gray-500 font-light">
+          <p className="text-lg md:text-xl text-gray-500 font-light">
             Soluna isn't just a quick fix. It's a cumulative investment in your brain's operating system.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
           {/* Card 1 */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

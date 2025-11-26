@@ -15,11 +15,11 @@ export default function ProductShowcase() {
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
 
   return (
-    <section ref={ref} className="h-[200vh] relative bg-transparent">
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+    <section ref={ref} className="min-h-screen md:h-[200vh] relative bg-transparent py-12 md:py-0">
+      <div className="relative md:sticky md:top-0 h-auto md:h-screen flex items-center overflow-hidden">
         
         <div className="container mx-auto px-6 relative z-10">
-          <div className="flex flex-col md:flex-row items-center gap-24">
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
           
           {/* Text Content (Left) */}
           <div className="w-full md:w-1/2">
@@ -28,12 +28,12 @@ export default function ProductShowcase() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-6 block">The Experience</span>
-              <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8 text-gray-900 leading-tight">
+              <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-4 md:mb-6 block">The Experience</span>
+              <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 md:mb-8 text-gray-900 leading-tight">
                 Simple Ritual,<br />
                 <span className="text-orange-600">Daily Impact.</span>
               </h2>
-              <p className="text-xl text-gray-600 mb-12 leading-relaxed font-light">
+              <p className="text-lg md:text-xl text-gray-600 mb-8 md:mb-12 leading-relaxed font-light">
                 Designed to fit seamlessly into your morning routine, giving you the lift you need without the crash.
               </p>
               
@@ -72,29 +72,54 @@ export default function ProductShowcase() {
           </div>
 
           {/* Visual Content (Right) */}
-          <motion.div 
-            style={{ y, rotate }}
-            className="w-full md:w-1/2 relative aspect-square flex items-center justify-center"
-          >
-            {/* Abstract Visual Representation of 2 Gummies */}
-            <div className="relative w-full h-full">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-3xl opacity-20 animate-pulse" />
-              <div className="absolute inset-0 flex items-center justify-center gap-8">
-                <motion.div 
-                  whileHover={{ y: -10 }}
-                  className="w-32 h-32 rounded-full bg-linear-to-br from-white to-white/80 shadow-2xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm border border-white/50"
-                >
-                  <span className="font-serif text-[#1a1a1a] text-2xl">1</span>
-                </motion.div>
-                <motion.div 
-                  whileHover={{ y: -10 }}
-                  className="w-32 h-32 rounded-full bg-linear-to-br from-white to-white/80 shadow-2xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm mt-16 border border-white/50"
-                >
-                  <span className="font-serif text-[#1a1a1a] text-2xl">2</span>
-                </motion.div>
+          <div className="w-full md:w-1/2 relative md:aspect-square flex items-center justify-center mt-8 md:mt-0">
+            <motion.div 
+              style={{ y, rotate }}
+              className="w-full h-full items-center justify-center hidden md:flex"
+            >
+              {/* Desktop Animated Visual */}
+              <div className="relative w-full h-full">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-3xl opacity-20 animate-pulse" />
+                <div className="absolute inset-0 flex items-center justify-center gap-8">
+                  <motion.div 
+                    whileHover={{ y: -10 }}
+                    className="w-32 h-32 rounded-full bg-linear-to-br from-white to-white/80 shadow-2xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm border border-white/50"
+                  >
+                    <span className="font-serif text-[#1a1a1a] text-2xl">1</span>
+                  </motion.div>
+                  <motion.div 
+                    whileHover={{ y: -10 }}
+                    className="w-32 h-32 rounded-full bg-linear-to-br from-white to-white/80 shadow-2xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm mt-16 border border-white/50"
+                  >
+                    <span className="font-serif text-[#1a1a1a] text-2xl">2</span>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Mobile Dynamic Visual */}
+            <div className="w-full flex items-center justify-center md:hidden py-4">
+              <div className="relative w-full max-w-[280px] h-56">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-3xl opacity-20 animate-pulse" />
+                <div className="absolute inset-0 flex items-center justify-center gap-4">
+                  <motion.div 
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-20 h-20 rounded-full bg-linear-to-br from-white to-white/80 shadow-xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm border border-white/50"
+                  >
+                    <span className="font-serif text-[#1a1a1a] text-lg">1</span>
+                  </motion.div>
+                  <motion.div 
+                    animate={{ y: [0, 6, 0] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    className="w-20 h-20 rounded-full bg-linear-to-br from-white to-white/80 shadow-xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm mt-6 border border-white/50"
+                  >
+                    <span className="font-serif text-[#1a1a1a] text-lg">2</span>
+                  </motion.div>
+                </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
         </div>
       </div>

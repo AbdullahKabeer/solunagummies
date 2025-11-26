@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Zap, Brain, Sun, ShieldCheck } from 'lucide-react';
+import { Zap, Brain, Sun, ShieldCheck, Smile } from 'lucide-react';
 
 export default function IngredientsBreakdown() {
   const ingredients = [
@@ -27,7 +27,7 @@ export default function IngredientsBreakdown() {
       name: "Saffron Extract",
       amount: "30mg",
       desc: "Clinically studied to support positive mood and emotional balance.",
-      icon: SmileIcon
+      icon: Smile
     },
     {
       name: "Vitamin B12",
@@ -38,14 +38,14 @@ export default function IngredientsBreakdown() {
   ];
 
   return (
-    <section className="py-24 bg-[#FDFCF8]">
+    <section className="py-12 md:py-24 bg-[#FDFCF8]">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center gap-16">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
           
           {/* Left: Grid */}
           <div className="w-full md:w-1/2 order-2 md:order-1">
-            <div className="mb-12">
-              <h2 className="text-4xl font-serif font-bold text-gray-900 mb-4">
+            <div className="mb-8 md:mb-12">
+              <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
                 Meet the world's first<br />
                 <span className="text-orange-600">comprehensive focus gummy.</span>
               </h2>

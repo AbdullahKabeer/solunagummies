@@ -30,7 +30,7 @@ export default function Hero() {
               <span className="text-xs font-bold tracking-[0.3em] text-orange-900 uppercase">Est. 2024</span>
             </motion.div>
 
-            <h1 className="font-serif text-6xl md:text-8xl leading-[1.1] text-[#1a1a1a] mb-12 tracking-tight">
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight">
               <div className="overflow-hidden py-2">
                 <motion.div
                   initial={{ y: "100%", rotate: 5 }}
@@ -45,7 +45,7 @@ export default function Hero() {
                   initial={{ y: "100%", rotate: 5 }}
                   animate={{ y: 0, rotate: 0 }}
                   transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  className="italic text-orange-600 ml-12 md:ml-24 pr-4"
+                  className="italic text-orange-600 ml-8 md:ml-24 pr-4"
                 >
                   cognitive
                 </motion.div>
@@ -61,7 +61,7 @@ export default function Hero() {
               </div>
             </h1>
 
-            <div className="flex flex-col md:flex-row items-start gap-12 md:gap-24 ml-2 md:ml-4">
+            <div className="flex flex-col md:flex-row items-start gap-8 md:gap-24 ml-2 md:ml-4">
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ export default function Hero() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="relative group"
+                className="relative group hidden md:block"
               >
                 <a 
                   href="#purchase" 
@@ -86,11 +86,26 @@ export default function Hero() {
                 </a>
                 <div className="absolute inset-0 rounded-full border border-[#1a1a1a] scale-110 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700"></div>
               </motion.div>
+              
+              {/* Mobile Shop Button */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="md:hidden w-full"
+              >
+                <a 
+                  href="#purchase" 
+                  className="flex items-center justify-center w-full py-4 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase"
+                >
+                  Shop Now
+                </a>
+              </motion.div>
             </div>
           </div>
 
           {/* Floating Product Mockup */}
-          <div className="w-full lg:w-2/5 relative flex justify-center lg:justify-end [perspective:1000px]">
+          <div className="w-full lg:w-2/5 relative flex justify-center lg:justify-end [perspective:1000px] mt-12 lg:mt-0">
             <motion.div
               initial={{ opacity: 0, rotateY: -20, rotateX: 10, y: 50 }}
               animate={{ opacity: 1, rotateY: -15, rotateX: 5, y: 0 }}
@@ -100,7 +115,7 @@ export default function Hero() {
               <motion.div
                 animate={{ y: [-15, 15, -15], rotateX: [5, 0, 5], rotateY: [-25, -15, -25] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-72 h-[28rem] [transform-style:preserve-3d]"
+                className="relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d]"
               >
                 {/* Side Face (Thickness) */}
                 <div className="absolute top-6 bottom-6 right-[1px] w-12 bg-gray-300 origin-right [transform:rotateY(-90deg)] rounded-l-sm border-l border-gray-400/30"></div>
