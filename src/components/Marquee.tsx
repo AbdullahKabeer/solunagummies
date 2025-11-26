@@ -1,19 +1,18 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 export default function Marquee() {
   return (
     <div className="relative flex overflow-hidden bg-black py-4 md:py-8 border-y border-white/10">
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+      `}} />
       <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
-      <motion.div
+      <div
         className="flex whitespace-nowrap"
-        animate={{ x: "-50%" }}
-        transition={{
-          repeat: Infinity,
-          ease: "linear",
-          duration: 40,
-        }}
+        style={{ animation: 'marquee 40s linear infinite' }}
       >
         {[0, 1].map((part) => (
           <div key={part} className="flex shrink-0">
@@ -35,7 +34,7 @@ export default function Marquee() {
             ))}
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

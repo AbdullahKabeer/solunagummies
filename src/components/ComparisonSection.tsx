@@ -27,7 +27,7 @@ export default function ComparisonSection() {
                   key={i} 
                   className="bg-gray-800/30"
                   style={{
-                    opacity: Math.random() * 0.5 + 0.2
+                    opacity: ((i * 7) % 10) / 20 + 0.2 // Deterministic opacity between 0.2 and 0.7
                   }}
                 ></div>
               ))}
