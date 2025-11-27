@@ -6,106 +6,70 @@ export default function Hero() {
       
       <div className="container mx-auto px-6 relative z-10 pt-20">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          <div className="w-full lg:w-3/5">
-            <div
-              className="flex items-center gap-4 mb-12 animate-fade-in-up"
-            >
-              <div className="h-[1px] w-12 bg-orange-600"></div>
-              <span className="text-xs font-bold tracking-[0.3em] text-orange-900 uppercase">Est. 2024</span>
-            </div>
-
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight">
+          <div className="w-full lg:w-3/5 [perspective:2000px]">
+            <div className="lg:transform-[rotateY(15deg)] lg:origin-center lg:[transform-style:preserve-3d]">
               <div
-                className="py-2 animate-fade-in-up"
+                className="flex items-center gap-4 mb-12 animate-fade-in-up"
               >
-                Reclaim your
+                <div className="h-[1px] w-12 bg-orange-600"></div>
+                <span className="text-xs font-bold tracking-[0.3em] text-orange-900 uppercase">Est. 2024</span>
               </div>
-              <div
-                className="italic text-orange-600 ml-8 md:ml-24 pr-4 py-2 animate-fade-in-up delay-100"
-              >
-                cognitive
-              </div>
-              <div
-                className="py-2 animate-fade-in-up delay-200"
-              >
-                architecture.
-              </div>
-            </h1>
 
-            <div className="flex flex-col md:flex-row items-start gap-8 md:gap-24 ml-2 md:ml-4">
-              <p 
-                className="text-lg md:text-xl text-gray-600 max-w-md leading-relaxed font-light animate-fade-in-up delay-300"
-              >
-                A daily ritual for deep work. <br/>
-                Formulated with <span className="text-orange-600 font-medium">Cognizin®</span> and <span className="text-orange-600 font-medium">Saffron</span> to silence the noise and amplify your signal.
-              </p>
-
-              <div 
-                className="relative group hidden md:block animate-fade-in-up delay-400"
-              >
-                <a 
-                  href="#purchase" 
-                  className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase transition-transform duration-500 group-hover:scale-110"
+              <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight">
+                <div
+                  className="py-2 animate-fade-in-up"
                 >
-                  Shop
-                </a>
-                <div className="absolute inset-0 rounded-full border border-[#1a1a1a] scale-110 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700"></div>
-              </div>
-              
-              {/* Mobile Shop Button */}
-              <div 
-                className="md:hidden w-full animate-fade-in-up delay-400"
-              >
-                <a 
-                  href="#purchase" 
-                  className="flex items-center justify-center w-full py-4 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase"
+                  Reclaim your
+                </div>
+                <div
+                  className="italic text-orange-600 ml-8 md:ml-24 pr-4 py-2 animate-fade-in-up delay-100"
                 >
-                  Shop Now
-                </a>
+                  cognitive
+                </div>
+                <div
+                  className="py-2 animate-fade-in-up delay-200"
+                >
+                  architecture.
+                </div>
+              </h1>
+
+              <div className="flex flex-col md:flex-row items-start gap-8 md:gap-24 ml-2 md:ml-4">
+                <p 
+                  className="text-lg md:text-xl text-gray-600 max-w-md leading-relaxed font-light animate-fade-in-up delay-300"
+                >
+                  A daily ritual for deep work. <br/>
+                  Formulated with <span className="text-orange-600 font-medium">Cognizin®</span> and <span className="text-orange-600 font-medium">Saffron</span> to silence the noise and amplify your signal.
+                </p>
+
+                <div 
+                  className="relative group hidden md:block animate-fade-in-up delay-400"
+                >
+                  <a 
+                    href="#purchase" 
+                    className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase transition-transform duration-500 group-hover:scale-110"
+                  >
+                    Shop
+                  </a>
+                  <div className="absolute inset-0 rounded-full border border-[#1a1a1a] scale-110 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700"></div>
+                </div>
+                
+                {/* Mobile Shop Button */}
+                <div 
+                  className="md:hidden w-full animate-fade-in-up delay-400"
+                >
+                  <a 
+                    href="#purchase" 
+                    className="flex items-center justify-center w-full py-4 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase"
+                  >
+                    Shop Now
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Floating Product Mockup */}
           <div className="w-full lg:w-2/5 relative flex justify-center lg:justify-end [perspective:1000px] mt-12 lg:mt-0">
-            {/* Mobile Static View */}
-            <div className="md:hidden relative w-64 h-[24rem] transform-[rotateY(-15deg)_rotateX(5deg)] [transform-style:preserve-3d]">
-                {/* Side Face (Thickness) */}
-                <div className="absolute top-6 bottom-6 right-px w-12 bg-gray-300 origin-right transform-[rotateY(-90deg)] rounded-l-sm border-l border-gray-400/30"></div>
-
-                {/* Front Face */}
-                <div className="absolute inset-0 bg-linear-to-b from-gray-100 to-gray-200 rounded-3xl shadow-2xl border border-white/50 flex flex-col items-center p-6 transform-[translateZ(1px)]">
-                  {/* Glossy Overlay */}
-                  <div className="absolute inset-0 rounded-3xl bg-linear-to-tr from-white/40 to-transparent pointer-events-none"></div>
-                  
-                  {/* Package Content */}
-                  <div className="w-full text-center mt-8 z-10">
-                    <div className="text-[10px] font-bold tracking-[0.3em] text-gray-400 mb-3">SOLUNA</div>
-                    <div className="text-5xl font-serif font-bold text-gray-800 mb-1">Focus</div>
-                    <div className="text-sm font-serif italic text-orange-600">Daily Nootropic</div>
-                  </div>
-
-                  {/* Abstract Graphic */}
-                  <div className="flex-1 w-full flex items-center justify-center relative">
-                    <div className="absolute w-32 h-32 bg-orange-500/20 rounded-full blur-2xl"></div>
-                    <div className="w-24 h-24 rounded-full bg-linear-to-br from-orange-400 to-red-500 shadow-lg z-10 opacity-90"></div>
-                  </div>
-
-                  {/* Bottom Details */}
-                  <div className="w-full flex justify-between items-end border-t border-gray-300/50 pt-4 z-10">
-                    <div className="text-left">
-                      <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Count</div>
-                      <div className="text-xs font-bold text-gray-700">30 Gummies</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Flavor</div>
-                      <div className="text-xs font-bold text-gray-700">Blood Orange</div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-
-            {/* Desktop Animated View */}
             <Hero3DProduct />
           </div>
         </div>
