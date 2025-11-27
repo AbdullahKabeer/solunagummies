@@ -25,7 +25,7 @@ export default function Hero3DProduct() {
             rotateY: [-20, -15, -20]
           }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d]"
+          className="relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d] will-change-transform"
         >
           {/* Back Face */}
           <div className="absolute inset-0 bg-gray-100 rounded-3xl border border-gray-200 transform-[translateZ(-3rem)] flex items-center justify-center shadow-xl">
@@ -33,12 +33,12 @@ export default function Hero3DProduct() {
           </div>
 
           {/* Body Layers */}
-          {Array.from({ length: 20 }).map((_, i) => (
+          {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
-              className={`absolute inset-0 rounded-3xl border ${i === 10 ? 'border-red-500 bg-red-500' : 'border-gray-300 bg-gray-200'}`}
+              className={`absolute inset-0 rounded-3xl border ${i === 6 ? 'border-red-500 bg-red-500' : 'border-gray-300 bg-gray-200'}`}
               style={{
-                transform: `translateZ(-${(i / 19) * 3}rem)`,
+                transform: `translateZ(-${(i / 11) * 3}rem)`,
               }}
             />
           ))}
@@ -57,7 +57,7 @@ export default function Hero3DProduct() {
 
             {/* Abstract Graphic */}
             <div className="flex-1 w-full flex items-center justify-center relative">
-              <div className="absolute w-32 h-32 bg-orange-500/20 rounded-full blur-2xl"></div>
+              <div className="absolute w-32 h-32 bg-orange-500/20 rounded-full blur-xl"></div>
               <div className="w-24 h-24 rounded-full bg-linear-to-br from-orange-400 to-red-500 shadow-lg z-10 opacity-90"></div>
             </div>
 
