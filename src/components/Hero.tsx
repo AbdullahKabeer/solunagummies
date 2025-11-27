@@ -15,14 +15,14 @@ export default function Hero() {
                 <span className="text-xs font-bold tracking-[0.3em] text-orange-900 uppercase">Est. 2024</span>
               </div>
 
-              <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight text-center lg:text-left">
                 <div
                   className="py-2 animate-fade-in-up"
                 >
                   Reclaim your
                 </div>
                 <div
-                  className="italic text-orange-600 ml-8 md:ml-24 pr-4 py-2 animate-fade-in-up delay-100"
+                  className="italic text-orange-600 ml-0 lg:ml-24 lg:pr-4 py-2 animate-fade-in-up delay-100"
                 >
                   cognitive
                 </div>
