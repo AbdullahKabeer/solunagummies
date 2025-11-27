@@ -22,8 +22,8 @@ export default function TimelineSection() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0 }}
             className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors"
           >
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -42,8 +42,8 @@ export default function TimelineSection() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors"
           >
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -62,8 +62,8 @@ export default function TimelineSection() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors"
           >
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">

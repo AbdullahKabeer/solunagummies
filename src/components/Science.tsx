@@ -47,8 +47,8 @@ export default function Science() {
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
               className="relative pl-12 border-l border-[#FDFCF8]/10"
             >
               <span className="absolute -left-[9px] top-0 w-[18px] h-[18px] rounded-full bg-[#1a1a1a] border border-[#FDFCF8]/20 flex items-center justify-center text-[10px] font-bold text-[#FDFCF8]/60">

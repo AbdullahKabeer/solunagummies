@@ -16,7 +16,7 @@ export default function SectionFlow({ variant = 'line', className = '' }: Sectio
             initial={{ height: 0, opacity: 0 }}
             whileInView={{ height: '100%', opacity: 1 }}
             viewport={{ once: true, margin: "-20%" }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="w-[1px] h-full bg-linear-to-b from-transparent via-orange-200 to-transparent"
           />
         </div>
@@ -28,14 +28,14 @@ export default function SectionFlow({ variant = 'line', className = '' }: Sectio
              initial={{ height: 0 }}
              whileInView={{ height: '100%' }}
              viewport={{ once: true }}
-             transition={{ duration: 1 }}
+             transition={{ duration: 0.6 }}
              className="absolute w-[1px] bg-linear-to-b from-gray-100 via-gray-200 to-gray-100"
            />
            <motion.div
              initial={{ scale: 0, opacity: 0 }}
              whileInView={{ scale: 1, opacity: 1 }}
              viewport={{ once: true }}
-             transition={{ duration: 0.8, delay: 0.2 }}
+             transition={{ duration: 0.5, delay: 0.1 }}
              className="w-3 h-3 rounded-full border border-orange-300 bg-[#FDFCF8] relative z-10"
            />
            <motion.div
@@ -53,7 +53,7 @@ export default function SectionFlow({ variant = 'line', className = '' }: Sectio
             initial={{ height: 0, opacity: 0 }}
             whileInView={{ height: '100%', opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.6 }}
             className="w-px h-full bg-linear-to-b from-orange-200/50 to-[#FDFCF8]/10 relative z-10"
           />
         </div>
@@ -66,7 +66,7 @@ export default function SectionFlow({ variant = 'line', className = '' }: Sectio
             initial={{ height: 0, opacity: 0 }}
             whileInView={{ height: '100%', opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.6 }}
             className="w-px h-full bg-linear-to-b from-[#FDFCF8]/10 to-orange-200/50 relative z-10"
           />
         </div>

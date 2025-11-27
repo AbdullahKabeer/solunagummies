@@ -15,7 +15,7 @@ export default function Hero3DProduct() {
       <motion.div
         initial={{ opacity: 0, rotateY: -20, rotateX: 10, y: 50 }}
         animate={{ opacity: 1, rotateY: -15, rotateX: 5, y: 0 }}
-        transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
         style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
       >
         <motion.div

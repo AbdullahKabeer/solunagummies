@@ -65,11 +65,25 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0; /* Start hidden */
 }
 
+@media (max-width: 768px) {
+  .animate-fade-in-up {
+    animation-duration: 0.5s;
+  }
+}
+
 .delay-100 { animation-delay: 100ms; }
 .delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
+
+@media (max-width: 768px) {
+  .delay-100 { animation-delay: 0ms; }
+  .delay-200 { animation-delay: 50ms; }
+  .delay-300 { animation-delay: 100ms; }
+  .delay-400 { animation-delay: 150ms; }
+  .delay-500 { animation-delay: 200ms; }
+}
 
 @keyframes growHeight {
   from { height: 0; }
