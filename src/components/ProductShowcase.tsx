@@ -28,7 +28,7 @@ export default function ProductShowcase() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-2 md:mb-3 block">The Experience</span>
+              <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-2 mt-6 md:mb-3 block">The Experience</span>
               <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 md:mb-8 text-gray-900 leading-tight">
                 Simple Ritual,<br />
                 <span className="text-orange-600">Daily Impact.</span>
