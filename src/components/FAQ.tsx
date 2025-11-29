@@ -34,7 +34,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-32 bg-transparent relative overflow-hidden">
+    <section id="faq" className="py-32 bg-transparent relative overflow-hidden">
       
       <div className="container mx-auto px-6 max-w-3xl relative z-10">
         <h2 className="text-4xl font-serif font-bold text-center mb-16 text-[#1a1a1a]">FAQ</h2>

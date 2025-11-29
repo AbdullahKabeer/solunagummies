@@ -24,6 +24,7 @@ export default function Header() {
           <Link href="#benefits" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">Benefits</Link>
           <Link href="#ingredients" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">Ingredients</Link>
           <Link href="#science" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">Science</Link>
+          <Link href="#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">FAQ</Link>
         </nav>
         <Link 
           href="#purchase" 

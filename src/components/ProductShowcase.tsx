@@ -16,19 +16,19 @@ export default function ProductShowcase() {
 
   return (
     <section ref={ref} className="min-h-screen md:h-[200vh] relative bg-transparent py-12 md:py-0">
-      <div className="relative md:sticky md:top-0 h-auto md:h-screen flex items-center overflow-hidden">
+      <div className="relative md:sticky md:top-0 h-auto md:h-screen flex items-center overflow-hidden md:pb-20">
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
           
           {/* Text Content (Left) */}
-          <div className="w-full md:w-1/2 md:mt-36">
+          <div className="w-full md:w-1/2 md:mt-24">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-4 md:mb-6 block">The Experience</span>
+              <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-2 md:mb-3 block">The Experience</span>
               <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 md:mb-8 text-gray-900 leading-tight">
                 Simple Ritual,<br />
                 <span className="text-orange-600">Daily Impact.</span>
@@ -39,7 +39,7 @@ export default function ProductShowcase() {
               
               <div className="space-y-8 border-l border-gray-200 pl-8">
                 <div className="relative group">
-                  <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
+                  <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <div className="flex items-center gap-3 mb-1">
                     <Clock className="w-5 h-5 text-orange-600" />
                     <h4 className="text-lg font-bold text-gray-900">When</h4>
@@ -48,7 +48,7 @@ export default function ProductShowcase() {
                 </div>
                 
                 <div className="relative group">
-                  <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
+                  <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <div className="flex items-center gap-3 mb-1">
                     <Calendar className="w-5 h-5 text-orange-600" />
                     <h4 className="text-lg font-bold text-gray-900">Consistency</h4>
@@ -57,16 +57,19 @@ export default function ProductShowcase() {
                 </div>
 
                 <div className="relative group">
-                  <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
+                  <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <h4 className="text-lg font-bold text-gray-900 mb-1">Plant-Based & Clean</h4>
                   <p className="text-gray-500 font-light">100% Vegan, pectin-based. No high-fructose corn syrup or artificial dyes.</p>
                 </div>
               </div>
               
               <div className="mt-12">
-                <button className="text-gray-900 border-b border-gray-900 pb-1 font-bold hover:text-orange-600 hover:border-orange-600 transition-colors uppercase tracking-widest text-xs">
-                  View Nutrition Facts
-                </button>
+                <a 
+                  href="#purchase" 
+                  className="inline-block bg-[#1a1a1a] text-white px-8 py-4 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg tracking-widest uppercase"
+                >
+                  Shop Now
+                </a>
               </div>
             </motion.div>
           </div>

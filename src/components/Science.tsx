@@ -23,7 +23,7 @@ const steps = [
 
 export default function Science() {
   return (
-    <section id="how-it-works" className="py-32 relative overflow-hidden bg-[#1a1a1a]">
+    <section id="science" className="py-32 relative overflow-hidden bg-[#1a1a1a]">
       {/* Background Noise */}
       <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none bg-noise" />
       
