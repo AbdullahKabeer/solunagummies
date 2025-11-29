@@ -1,6 +1,19 @@
+'use client';
+
+import Link from 'next/link';
 import Hero3DProduct from './Hero3DProduct';
 
 export default function Hero() {
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    const href = e.currentTarget.href;
+    const targetId = href.replace(/.*\#/, "");
+    const elem = document.getElementById(targetId);
+    elem?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-transparent">
       
@@ -44,12 +57,13 @@ export default function Hero() {
                 <div 
                   className="relative group hidden md:block animate-fade-in-up delay-400"
                 >
-                  <a 
+                  <Link 
                     href="#purchase" 
-                    className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase transition-transform duration-500 group-hover:scale-110"
+                    onClick={handleScroll}
+                    className="relative z-10 inline-flex items-center justify-center w-32 h-32 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase transition-transform duration-500 group-hover:scale-110"
                   >
                     Shop
-                  </a>
+                  </Link>
                   <div className="absolute inset-0 rounded-full border border-[#1a1a1a] scale-110 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700"></div>
                 </div>
                 
@@ -57,12 +71,13 @@ export default function Hero() {
                 <div 
                   className="md:hidden w-full animate-fade-in-up delay-400"
                 >
-                  <a 
+                  <Link 
                     href="#purchase" 
+                    onClick={handleScroll}
                     className="flex items-center justify-center w-full py-4 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase"
                   >
                     Shop Now
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

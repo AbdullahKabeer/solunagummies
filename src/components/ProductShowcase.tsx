@@ -15,7 +15,7 @@ export default function ProductShowcase() {
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
 
   return (
-    <section ref={ref} className="min-h-screen md:h-[200vh] relative bg-transparent py-12 md:py-0">
+    <section id="product" ref={ref} className="min-h-screen md:h-[200vh] relative bg-transparent py-12 md:py-0">
       <div className="relative md:sticky md:top-0 h-auto md:h-screen flex items-center overflow-hidden md:pb-20">
         
         <div className="container mx-auto px-6 relative z-10">
