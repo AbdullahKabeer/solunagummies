@@ -22,7 +22,7 @@ export default function ProductShowcase() {
           <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
           
           {/* Text Content (Left) */}
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/2 md:mt-36">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
