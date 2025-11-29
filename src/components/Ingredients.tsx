@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence, PanInfo } from 'framer-motion';
+import { useRef, useState } from 'react';
 
 const ingredients = [
   {
@@ -47,6 +47,7 @@ const ingredients = [
 ];
 
 export default function Ingredients() {
+  const [activeCard, setActiveCard] = useState(0);
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -134,71 +135,124 @@ export default function Ingredients() {
         </motion.div>
       </div>
 
-      {/* Mobile Vertical Stack View */}
-      <div className="md:hidden py-20 px-6">
-        <div className="mb-20">
-          <h2 className="text-4xl font-serif font-bold mb-6 text-gray-900 leading-tight">
+      {/* Mobile Stacked Card View */}
+      <div className="md:hidden py-12 px-2 min-h-screen flex flex-col">
+        <div className="mb-8 px-4">
+          <h2 className="text-4xl font-serif font-bold mb-4 text-gray-900 leading-tight">
             All-natural, clinically-validated formula.<br />
             <span className="text-[#FF4D00]">Simple, powerful ingredients.</span>
           </h2>
           <p className="text-lg text-gray-600 font-light leading-relaxed">
-            We don&apos;t believe in spraying and praying. Each ingredient is hand-curated and validated to support morning energy, focus, and mood.
+            Swipe to explore our hand-curated ingredients.
           </p>
         </div>
 
-        <div className="space-y-24">
-          {ingredients.map((ing, index) => (
-            <div key={index} className="flex flex-col gap-8">
-              {/* Image Placeholder */}
-              <div className="aspect-square rounded-3xl relative overflow-hidden shadow-xl shadow-orange-900/5">
-                  <div className={`absolute inset-0 bg-linear-to-br ${index === 0 ? 'from-blue-100 to-blue-50' : index === 1 ? 'from-green-100 to-green-50' : index === 2 ? 'from-orange-100 to-orange-50' : 'from-purple-100 to-purple-50'}`}></div>
-                  
-                  {/* Abstract Shapes */}
-                  <div className="absolute inset-0 opacity-50 mix-blend-multiply">
-                    <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-20"></div>
-                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full blur-2xl ${index === 0 ? 'bg-blue-400/30' : index === 1 ? 'bg-green-400/30' : index === 2 ? 'bg-orange-400/30' : 'bg-purple-400/30'}`}></div>
-                  </div>
+        <div className="relative h-[680px] w-full flex-1 perspective-1000">
+          <AnimatePresence mode="popLayout">
+            {ingredients.map((ing, index) => {
+              if (index === activeCard) {
+                return (
+                  <motion.div
+                    key={index}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.2}
+                    onDragEnd={(e, { offset, velocity }) => {
+                      const swipe = Math.abs(offset.x) * velocity.x;
+                      if (offset.x < -100 || swipe < -500) {
+                        setActiveCard((prev) => (prev + 1) % ingredients.length);
+                      } else if (offset.x > 100 || swipe > 500) {
+                        setActiveCard((prev) => (prev - 1 + ingredients.length) % ingredients.length);
+                      }
+                    }}
+                    initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, x: 0, y: 0, rotate: 0 }}
+                    exit={{ x: -300, opacity: 0, rotate: -20, transition: { duration: 0.2 } }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    className="absolute inset-0 bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden z-20 cursor-grab active:cursor-grabbing p-3"
+                  >
+                    <div className="h-full flex flex-col">
+                      {/* Image Area */}
+                      <div className="h-[35%] relative overflow-hidden rounded-[2rem]">
+                        <div className={`absolute inset-0 bg-linear-to-br ${index === 0 ? 'from-blue-100 to-blue-50' : index === 1 ? 'from-green-100 to-green-50' : index === 2 ? 'from-orange-100 to-orange-50' : 'from-purple-100 to-purple-50'}`}></div>
+                        <div className="absolute inset-0 opacity-50 mix-blend-multiply">
+                          <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-20"></div>
+                          <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full blur-2xl ${index === 0 ? 'bg-blue-400/30' : index === 1 ? 'bg-green-400/30' : index === 2 ? 'bg-orange-400/30' : 'bg-purple-400/30'}`}></div>
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-8xl filter drop-shadow-lg">
+                            {index === 0 ? '🧠' : index === 1 ? '🍵' : index === 2 ? '⚡' : '🌸'}
+                          </span>
+                        </div>
+                      </div>
 
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-6xl filter drop-shadow-lg">
-                      {index === 0 ? '🧠' : index === 1 ? '🍵' : index === 2 ? '⚡' : '🌸'}
-                    </span>
-                  </div>
-              </div>
+                      {/* Content Area */}
+                      <div className="px-2 py-4 flex-1 flex flex-col">
+                        <div className="flex justify-between items-baseline mb-2">
+                          <h3 className="text-2xl font-serif font-bold text-gray-900">{ing.name}</h3>
+                          <span className="text-orange-600 font-mono font-bold text-sm">{ing.amount}</span>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed mb-4 text-sm line-clamp-3">{ing.description}</p>
+                        
+                        <div className="grid grid-cols-2 gap-3 mb-4">
+                          <div>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Found In</span>
+                            <span className="text-gray-900 font-medium text-sm">{ing.foundIn}</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Sourced From</span>
+                            <span className="text-gray-900 font-medium text-sm">{ing.sourcedFrom}</span>
+                          </div>
+                        </div>
 
-              {/* Content */}
-              <div>
-                <div className="flex justify-between items-baseline mb-4">
-                  <h3 className="text-3xl font-serif font-bold text-gray-900">{ing.name}</h3>
-                  <span className="text-orange-600 font-mono font-bold">{ing.amount}</span>
-                </div>
-                <p className="text-lg text-gray-600 leading-relaxed mb-8">{ing.description}</p>
-                
-                <div className="grid grid-cols-2 gap-6 mb-8">
-                  <div>
-                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">Found In</span>
-                    <span className="text-gray-900 font-medium">{ing.foundIn}</span>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">Sourced From</span>
-                    <span className="text-gray-900 font-medium">{ing.sourcedFrom}</span>
-                  </div>
-                </div>
+                        <div className="bg-gray-50 p-4 rounded-2xl mt-auto">
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Key Benefits</span>
+                          <ul className="space-y-2">
+                            {ing.benefits.map((benefit, i) => (
+                              <li key={i} className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-orange-500"></div>
+                                <span className="text-gray-700 font-medium text-sm">{benefit}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              } else if (index === (activeCard + 1) % ingredients.length) {
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ scale: 0.9, x: 20, opacity: 0 }}
+                    animate={{ scale: 0.95, x: 24, y: 0, opacity: 1 }}
+                    className="absolute inset-0 bg-white rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden z-10 opacity-50 pointer-events-none p-3"
+                  >
+                     <div className="h-full flex flex-col opacity-40">
+                        <div className={`h-[35%] bg-gray-100 rounded-[2rem]`}></div>
+                        <div className="p-6">
+                            <div className="h-8 w-3/4 bg-gray-200 rounded mb-4"></div>
+                            <div className="h-4 w-full bg-gray-100 rounded mb-2"></div>
+                            <div className="h-4 w-full bg-gray-100 rounded mb-2"></div>
+                        </div>
+                     </div>
+                  </motion.div>
+                );
+              }
+              return null;
+            })}
+          </AnimatePresence>
+        </div>
 
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-4">Key Benefits</span>
-                  <ul className="space-y-3">
-                    {ing.benefits.map((benefit, i) => (
-                      <li key={i} className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                        <span className="text-gray-700 font-medium">{benefit}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ))}
+        {/* Dots Indicator */}
+        <div className="flex justify-center gap-2 mt-8">
+            {ingredients.map((_, i) => (
+                <div 
+                  key={i} 
+                  onClick={() => setActiveCard(i)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${i === activeCard ? 'bg-orange-600 w-6' : 'bg-gray-300'}`} 
+                />
+            ))}
         </div>
       </div>
     </section>
