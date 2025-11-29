@@ -59,6 +59,15 @@ export default function Science() {
             </motion.div>
           ))}
         </div>
+
+        <div className="mt-24 text-center">
+          <a 
+            href="#purchase" 
+            className="inline-block bg-[#FDFCF8] text-[#1a1a1a] px-10 py-5 rounded-full text-sm font-bold hover:bg-orange-600 hover:text-white transition-all shadow-lg tracking-widest uppercase"
+          >
+            Experience The Science
+          </a>
+        </div>
       </div>
     </section>
   );

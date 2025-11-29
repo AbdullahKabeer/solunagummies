@@ -69,6 +69,15 @@ export default function Timeline() {
             ))}
           </div>
         </div>
+
+        <div className="mt-24 text-center">
+          <a 
+            href="#purchase" 
+            className="inline-block bg-[#1a1a1a] text-white px-10 py-5 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg tracking-widest uppercase"
+          >
+            Start Your Journey
+          </a>
+        </div>
       </div>
     </section>
   );

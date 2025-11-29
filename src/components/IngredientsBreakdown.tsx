@@ -85,7 +85,13 @@ export default function IngredientsBreakdown() {
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1626808642875-0aa545482dfb?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
               <div className="relative z-10 text-center p-12">
                 <h3 className="text-4xl font-serif font-bold text-orange-900 mb-4">Power in every gummy.</h3>
-                <p className="text-orange-800/70">Designed to be taken daily for cumulative benefits.</p>
+                <p className="text-orange-800/70 mb-8">Designed to be taken daily for cumulative benefits.</p>
+                <a 
+                  href="#purchase" 
+                  className="inline-block bg-orange-600 text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-orange-700 transition-all shadow-lg tracking-widest uppercase"
+                >
+                  Shop Ingredients
+                </a>
               </div>
               
               {/* Decorative Circles */}
