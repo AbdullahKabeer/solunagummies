@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 const timelineEvents = [
   {
@@ -25,57 +26,51 @@ const timelineEvents = [
 
 export default function Timeline() {
   return (
-    <section id="benefits" className="py-32 bg-transparent relative overflow-hidden">
-
+    <section id="benefits" className="py-24 bg-transparent relative overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-24">
-          <h2 className="text-5xl md:text-7xl font-serif font-bold mb-6 text-gray-900">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-gray-900">
             Energy That Feels <span className="italic text-orange-600">Different</span>.
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-light">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-light">
             Most energy products hit hard and fade fast. Soluna is designed for the long haul.
           </p>
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Line */}
-          <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-0.5 bg-linear-to-b from-orange-200 via-orange-500 to-orange-200 md:-translate-x-1/2"></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative max-w-6xl mx-auto">
+          {/* Connecting Line (Desktop Only) */}
+          <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-linear-to-r from-orange-200 via-orange-400 to-orange-200 -z-10"></div>
 
-          <div className="space-y-24">
-            {timelineEvents.map((event, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                className={`flex flex-col md:flex-row gap-8 md:gap-0 items-start md:items-center relative ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
-              >
-                {/* Content Side */}
-                <div className={`w-full md:w-1/2 pl-12 md:pl-0 ${index % 2 === 0 ? 'md:pl-16 text-left' : 'md:pr-16 md:text-right'}`}>
-                  <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-2 block">{event.time}</span>
-                  <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4">{event.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{event.description}</p>
-                </div>
-
-                {/* Center Icon */}
-                <div className="absolute left-0 md:left-1/2 top-0 md:top-1/2 md:-translate-y-1/2 md:-translate-x-1/2 w-10 h-10 rounded-full bg-white border-4 border-orange-500 z-10 flex items-center justify-center shadow-lg">
-                  <span className="text-xs">{event.icon}</span>
-                </div>
-
-                {/* Empty Side for Balance */}
-                <div className="hidden md:block w-1/2"></div>
-              </motion.div>
-            ))}
-          </div>
+          {timelineEvents.map((event, index) => (
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="flex flex-col items-center text-center group"
+            >
+              <div className="w-24 h-24 rounded-full bg-white border-4 border-orange-100 group-hover:border-orange-500 transition-colors duration-500 flex items-center justify-center shadow-lg mb-6 relative z-10">
+                <span className="text-4xl filter drop-shadow-sm">{event.icon}</span>
+              </div>
+              
+              <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 w-full h-full">
+                <span className="text-orange-600 font-bold tracking-widest uppercase text-[10px] mb-3 inline-block bg-orange-50 px-3 py-1 rounded-full">
+                  {event.time}
+                </span>
+                <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3">{event.title}</h3>
+                <p className="text-gray-600 leading-relaxed text-sm">{event.description}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        <div className="mt-24 text-center">
+        <div className="mt-16 text-center">
           <a 
             href="#purchase" 
-            className="inline-block bg-[#1a1a1a] text-white px-10 py-5 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg tracking-widest uppercase"
+            className="inline-flex items-center gap-2 text-gray-900 font-bold hover:text-orange-600 transition-colors tracking-widest uppercase text-sm border-b-2 border-gray-900 hover:border-orange-600 pb-1"
           >
-            Start Your Journey
+            Start Your Journey <ArrowRight className="w-4 h-4" />
           </a>
         </div>
       </div>
