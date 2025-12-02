@@ -76,7 +76,7 @@ function IngredientCard({ ing, index, containerRef, onClick }: { ing: typeof ing
   // 0.5 (center) -> rotateY: 0deg
   // 1 (leaving to left) -> rotateY: 45deg
   const rotateY = useTransform(scrollXProgress, [0, 0.5, 1], [45, 0, -45]);
-  const scale = useTransform(scrollXProgress, [0, 0.5, 1], [0.85, 1, 0.85]);
+  const scale = useTransform(scrollXProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
   const opacity = useTransform(scrollXProgress, [0, 0.2, 0.8, 1], [0.5, 1, 1, 0.5]);
   const z = useTransform(scrollXProgress, [0, 0.5, 1], [-100, 0, -100]);
 
@@ -110,7 +110,7 @@ function IngredientCard({ ing, index, containerRef, onClick }: { ing: typeof ing
         opacity,
         transformStyle: "preserve-3d",
       }}
-      className="min-w-[320px] md:min-w-[400px] py-10 perspective-1000 cursor-pointer"
+      className="w-[90vw] md:w-auto md:min-w-[400px] shrink-0 py-10 perspective-1000 cursor-pointer"
     >
       <div className="group relative h-full rounded-4xl border border-gray-200 bg-white p-8 shadow-xl transition-all hover:shadow-2xl overflow-hidden flex flex-col">
         
@@ -192,7 +192,14 @@ export default function Ingredients() {
     
     autoScrollTimer.current = setInterval(() => {
       if (containerRef.current && !isDragging) {
-        const cardWidth = window.innerWidth >= 768 ? 424 : 344; // 400+24 gap or 320+24 gap
+        const firstCard = containerRef.current.children[0] as HTMLElement;
+        const secondCard = containerRef.current.children[1] as HTMLElement;
+        const cardWidth = (firstCard && secondCard) 
+          ? secondCard.offsetLeft - firstCard.offsetLeft 
+          : (firstCard ? firstCard.offsetWidth + (window.innerWidth >= 768 ? 24 : 16) : 0);
+        
+        if (!cardWidth) return;
+
         const currentScroll = containerRef.current.scrollLeft;
         
         const currentIndex = Math.round(currentScroll / cardWidth);
@@ -221,7 +228,14 @@ export default function Ingredients() {
     if (!containerRef.current) return;
     setIsDragging(false);
     
-    const cardWidth = window.innerWidth >= 768 ? 424 : 344;
+    const firstCard = containerRef.current.children[0] as HTMLElement;
+    const secondCard = containerRef.current.children[1] as HTMLElement;
+    const cardWidth = (firstCard && secondCard) 
+      ? secondCard.offsetLeft - firstCard.offsetLeft 
+      : (firstCard ? firstCard.offsetWidth + (window.innerWidth >= 768 ? 24 : 16) : 0);
+
+    if (!cardWidth) return;
+
     const currentScroll = containerRef.current.scrollLeft;
     const nearestIndex = Math.round(currentScroll / cardWidth);
     
@@ -374,7 +388,7 @@ export default function Ingredients() {
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            className={`flex gap-6 overflow-x-auto pb-12 pt-4 px-[calc(50%_-_160px)] md:px-[calc(50%_-_200px)] scrollbar-hide ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            className={`flex gap-4 md:gap-6 overflow-x-auto pb-12 pt-4 px-[5vw] md:px-[calc(50%_-_200px)] scrollbar-hide ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{ 
               perspective: '1000px',
               scrollBehavior: isDragging ? 'auto' : 'smooth' 
@@ -392,7 +406,7 @@ export default function Ingredients() {
             
             {/* Call to Action Card */}
             <motion.div
-              className="min-w-[320px] md:min-w-[400px] py-10 flex items-center justify-center"
+              className="w-[90vw] md:w-auto md:min-w-[400px] shrink-0 py-10 flex items-center justify-center"
             >
               <div className="rounded-4xl bg-[#FF4D00] p-8 shadow-xl flex flex-col justify-center items-center text-center text-white relative overflow-hidden group cursor-pointer w-full h-full min-h-[400px]">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
