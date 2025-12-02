@@ -14,6 +14,21 @@ export default function ProductShowcase() {
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
 
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 50]); // Parallax for text
+
+  const listVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    })
+  };
+
   return (
     <section id="product" ref={ref} className="min-h-screen md:h-[200vh] relative bg-transparent py-12 md:py-0">
       <div className="relative md:sticky md:top-0 h-auto md:h-screen flex items-center overflow-hidden md:pb-20">
@@ -22,7 +37,10 @@ export default function ProductShowcase() {
           <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
           
           {/* Text Content (Left) */}
-          <div className="w-full md:w-1/2 md:mt-24">
+          <motion.div 
+            style={{ y: textY }}
+            className="w-full md:w-1/2 md:mt-24"
+          >
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -38,41 +56,64 @@ export default function ProductShowcase() {
               </p>
               
               <div className="space-y-8 border-l border-gray-200 pl-8">
-                <div className="relative group">
+                <motion.div 
+                  custom={0}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={listVariants}
+                  className="relative group"
+                >
                   <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <div className="flex items-center gap-3 mb-1">
                     <Clock className="w-5 h-5 text-orange-600" />
                     <h4 className="text-lg font-bold text-gray-900">When</h4>
                   </div>
                   <p className="text-gray-500 font-light">Take 2 gummies daily, preferably in the morning or early afternoon.</p>
-                </div>
+                </motion.div>
                 
-                <div className="relative group">
+                <motion.div 
+                  custom={1}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={listVariants}
+                  className="relative group"
+                >
                   <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <div className="flex items-center gap-3 mb-1">
                     <Calendar className="w-5 h-5 text-orange-600" />
                     <h4 className="text-lg font-bold text-gray-900">Consistency</h4>
                   </div>
                   <p className="text-gray-500 font-light">Consistency is key—ingredients like Cognizin® and Saffron build up benefits over time.</p>
-                </div>
+                </motion.div>
 
-                <div className="relative group">
+                <motion.div 
+                  custom={2}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={listVariants}
+                  className="relative group"
+                >
                   <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <h4 className="text-lg font-bold text-gray-900 mb-1">Plant-Based & Clean</h4>
                   <p className="text-gray-500 font-light">100% Vegan, pectin-based. No high-fructose corn syrup or artificial dyes.</p>
-                </div>
+                </motion.div>
               </div>
               
               <div className="mt-12">
-                <a 
+                <motion.a 
                   href="#purchase" 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   className="inline-block bg-[#1a1a1a] text-white px-8 py-4 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg tracking-widest uppercase"
                 >
                   Shop Now
-                </a>
+                </motion.a>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
 
           {/* Visual Content (Right) */}
           <div className="w-full md:w-1/2 relative md:aspect-square flex items-center justify-center mt-8 md:mt-0">
