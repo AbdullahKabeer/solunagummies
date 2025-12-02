@@ -24,7 +24,7 @@ export default function ProductShowcase() {
       transition: {
         delay: i * 0.2,
         duration: 0.5,
-        ease: "easeOut"
+        ease: "easeOut" as const
       }
     })
   };
