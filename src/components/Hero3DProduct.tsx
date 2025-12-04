@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
-export default function Hero3DProduct() {
+export default function Hero3DProduct({ isStatic = false }: { isStatic?: boolean }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -13,19 +13,20 @@ export default function Hero3DProduct() {
   return (
     <div ref={ref} className="block">
       <motion.div
-        initial={{ opacity: 0, rotateY: -20, rotateX: 10, y: 50 }}
-        animate={{ opacity: 1, rotateY: -15, rotateX: 5, y: 0 }}
+        initial={isStatic ? { opacity: 1, rotateY: 0, rotateX: 0, y: 0 } : { opacity: 0, rotateY: -20, rotateX: 10, y: 50 }}
+        animate={isStatic ? { opacity: 1, rotateY: 0, rotateX: 0, y: 0 } : { opacity: 1, rotateY: -15, rotateX: 5, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
+        style={isStatic ? {} : { y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
       >
         <motion.div
-          animate={{ 
+          animate={isStatic ? {} : { 
             y: [-10, 10, -10],
             rotateX: [2, 0, 2],
             rotateY: [-20, -15, -20]
           }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           className="relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d] will-change-transform"
+          style={isStatic ? { transform: 'rotateY(0deg) rotateX(0deg)' } : {}}
         >
           {/* Back Face */}
           <div className="absolute inset-0 bg-gray-100 rounded-3xl border border-gray-200 transform-[translateZ(-3rem)] flex items-center justify-center shadow-xl">

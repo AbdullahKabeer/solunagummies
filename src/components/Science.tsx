@@ -23,7 +23,7 @@ const steps = [
 
 export default function Science() {
   return (
-    <section id="science" className="py-32 relative overflow-hidden bg-gray-50">
+    <section id="science" className="py-16 md:py-32 relative overflow-hidden bg-[#FDFCF8]">
       {/* Background Noise */}
       <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none bg-noise" />
       
@@ -36,7 +36,7 @@ export default function Science() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-24 text-center"
+          className="mb-12 md:mb-24 text-center"
         >
           <span className="text-xs font-bold tracking-widest text-gray-500 uppercase mb-4 block">Mechanism of Action</span>
           <h2 className="text-5xl md:text-7xl font-serif font-bold mb-8 text-gray-900 leading-tight">
@@ -64,7 +64,7 @@ export default function Science() {
           ))}
         </div>
 
-        <div className="mt-24 text-center">
+        <div className="mt-12 md:mt-24 text-center">
           <motion.a 
             href="#purchase" 
             whileHover={{ scale: 1.05 }}
