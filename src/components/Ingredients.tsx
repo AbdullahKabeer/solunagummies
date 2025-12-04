@@ -358,7 +358,7 @@ export default function Ingredients() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block mb-4 px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 font-medium text-sm tracking-wide uppercase"
+            className="inline-block mb-4 px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 font-medium text-sm tracking-wide uppercase no-animate-mobile"
           >
             The Formula
           </motion.div>

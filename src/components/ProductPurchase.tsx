@@ -78,7 +78,7 @@ export default function ProductPurchase() {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
-                className="absolute bottom-4 left-4 md:bottom-6 md:left-6 bg-white/80 backdrop-blur-md px-3 py-2 md:px-4 md:py-2 rounded-xl shadow-lg border border-white/50 flex items-center gap-2 md:gap-3"
+                className="absolute bottom-4 left-4 md:bottom-6 md:left-6 bg-white/80 backdrop-blur-md px-3 py-2 md:px-4 md:py-2 rounded-xl shadow-lg border border-white/50 flex items-center gap-2 md:gap-3 no-animate-mobile"
               >
                 <div className="bg-green-100 p-1 rounded-full">
                   <Check className="w-3 h-3 text-green-600" />
@@ -106,6 +106,7 @@ export default function ProductPurchase() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
+              className="no-animate-mobile"
             >
               {/* Desktop Header */}
               <div className="hidden lg:block">
@@ -135,7 +136,7 @@ export default function ProductPurchase() {
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-green-100 text-green-800 px-3 py-2 rounded-lg text-xs font-bold mb-4 flex items-center gap-2"
+                    className="bg-green-100 text-green-800 px-3 py-2 rounded-lg text-xs font-bold mb-4 flex items-center gap-2 no-animate-mobile"
                   >
                     <span>🎉</span>
                     Congrats! You're saving {Math.round(discountPercent * 100)}% off with a bulk discount

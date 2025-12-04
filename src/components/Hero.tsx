@@ -44,7 +44,7 @@ export default function Hero() {
       <div className="container mx-auto px-6 relative z-10 pt-20">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <motion.div 
-            className="w-full lg:w-3/5 perspective-[2000px]"
+            className="w-full lg:w-3/5 perspective-[2000px] no-animate-mobile"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -52,23 +52,23 @@ export default function Hero() {
             <div className="lg:transform-[rotateY(15deg)] lg:origin-center lg:transform-3d">
               <motion.div
                 variants={itemVariants}
-                className="flex items-center gap-4 mb-12"
+                className="flex items-center gap-4 mb-12 no-animate-mobile"
               >
                 <div className="h-px w-12 bg-orange-600"></div>
                 <span className="text-xs font-bold tracking-[0.3em] text-orange-900 uppercase">Est. 2024</span>
               </motion.div>
 
               <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight text-center lg:text-left">
-                <motion.div variants={itemVariants} className="py-2">
+                <motion.div variants={itemVariants} className="py-2 no-animate-mobile">
                   Reclaim your
                 </motion.div>
                 <motion.div
                   variants={itemVariants}
-                  className="italic text-orange-600 ml-0 lg:ml-24 lg:pr-4 py-2"
+                  className="italic text-orange-600 ml-0 lg:ml-24 lg:pr-4 py-2 no-animate-mobile"
                 >
                   cognitive
                 </motion.div>
-                <motion.div variants={itemVariants} className="py-2">
+                <motion.div variants={itemVariants} className="py-2 no-animate-mobile">
                   architecture.
                 </motion.div>
               </h1>
@@ -76,7 +76,7 @@ export default function Hero() {
               <div className="flex flex-col md:flex-row items-start gap-8 md:gap-24 ml-2 md:ml-4">
                 <motion.p 
                   variants={itemVariants}
-                  className="text-lg md:text-xl text-gray-600 max-w-md leading-relaxed font-light"
+                  className="text-lg md:text-xl text-gray-600 max-w-md leading-relaxed font-light no-animate-mobile"
                 >
                   A daily ritual for deep work. <br/>
                   Formulated with <span className="text-orange-600 font-medium">Cognizin®</span> and <span className="text-orange-600 font-medium">Saffron</span> to silence the noise and amplify your signal.
@@ -84,7 +84,7 @@ export default function Hero() {
 
                 <motion.div 
                   variants={itemVariants}
-                  className="relative group hidden md:block"
+                  className="relative group hidden md:block no-animate-mobile"
                 >
                   <Link 
                     href="#purchase" 

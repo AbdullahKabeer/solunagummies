@@ -36,7 +36,7 @@ export default function Science() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-12 md:mb-24 text-center"
+          className="mb-12 md:mb-24 text-center no-animate-mobile"
         >
           <span className="text-xs font-bold tracking-widest text-gray-500 uppercase mb-4 block">Mechanism of Action</span>
           <h2 className="text-5xl md:text-7xl font-serif font-bold mb-8 text-gray-900 leading-tight">
@@ -53,7 +53,7 @@ export default function Science() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ x: 10 }}
-              className="relative pl-12 border-l border-gray-200 group cursor-default"
+              className="relative pl-12 border-l border-gray-200 group cursor-default no-animate-mobile"
             >
               <span className="absolute -left-[9px] top-0 w-[18px] h-[18px] rounded-full bg-gray-50 border border-gray-300 flex items-center justify-center text-[10px] font-bold text-gray-500 group-hover:border-orange-500 group-hover:text-orange-500 transition-colors duration-300">
                 {index + 1}

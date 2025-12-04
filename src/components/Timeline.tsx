@@ -34,7 +34,7 @@ export default function Timeline() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-serif font-bold mb-4 text-gray-900"
+            className="text-4xl md:text-5xl font-serif font-bold mb-4 text-gray-900 no-animate-mobile"
           >
             Energy That Feels <span className="italic text-orange-600">Different</span>.
           </motion.h2>
@@ -43,7 +43,7 @@ export default function Timeline() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-lg text-gray-600 max-w-2xl mx-auto font-light"
+            className="text-lg text-gray-600 max-w-2xl mx-auto font-light no-animate-mobile"
           >
             Most energy products hit hard and fade fast. Soluna is designed for the long haul.
           </motion.p>
@@ -69,7 +69,7 @@ export default function Timeline() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
               whileHover={{ y: -10 }}
-              className="flex flex-col items-center text-center group"
+              className="flex flex-col items-center text-center group no-animate-mobile"
             >
               <motion.div 
                 whileHover={{ scale: 1.1, rotate: 5 }}

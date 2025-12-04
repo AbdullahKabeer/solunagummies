@@ -45,6 +45,7 @@ export default function ProductShowcase() {
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
+              className="no-animate-mobile"
             >
               <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-2 mt-6 md:mb-3 block">The Experience</span>
               <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 md:mb-8 text-gray-900 leading-tight">
@@ -62,7 +63,7 @@ export default function ProductShowcase() {
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={listVariants}
-                  className="relative group"
+                  className="relative group no-animate-mobile"
                 >
                   <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <div className="flex items-center gap-3 mb-1">
@@ -78,7 +79,7 @@ export default function ProductShowcase() {
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={listVariants}
-                  className="relative group"
+                  className="relative group no-animate-mobile"
                 >
                   <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <div className="flex items-center gap-3 mb-1">
@@ -94,7 +95,7 @@ export default function ProductShowcase() {
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={listVariants}
-                  className="relative group"
+                  className="relative group no-animate-mobile"
                 >
                   <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
                   <h4 className="text-lg font-bold text-gray-900 mb-1">Plant-Based & Clean</h4>
