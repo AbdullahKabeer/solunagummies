@@ -18,15 +18,9 @@ export default function Hero3DProduct({ isStatic = false }: { isStatic?: boolean
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
         style={isStatic ? {} : { y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
       >
-        <motion.div
-          animate={isStatic ? {} : { 
-            y: [-10, 10, -10],
-            rotateX: [2, 0, 2],
-            rotateY: [-20, -15, -20]
-          }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d] will-change-transform"
-          style={isStatic ? { transform: 'rotateY(0deg) rotateX(0deg)' } : {}}
+        <div
+          className={`relative w-64 h-[24rem] md:w-72 md:h-[28rem] [transform-style:preserve-3d] will-change-transform ${!isStatic ? 'md:animate-float-3d' : ''}`}
+          style={isStatic ? { transform: 'rotateY(0deg) rotateX(0deg)' } : { transform: 'rotateY(-15deg) rotateX(5deg)' }}
         >
           {/* Back Face */}
           <div className="absolute inset-0 bg-gray-100 rounded-3xl border border-gray-200 transform-[translateZ(-3rem)] flex items-center justify-center shadow-xl">
@@ -74,7 +68,7 @@ export default function Hero3DProduct({ isStatic = false }: { isStatic?: boolean
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </div>
   );

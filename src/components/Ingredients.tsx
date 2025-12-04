@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, MotionValue, useInView } from 'framer-motion';
 import { useRef, useState, MouseEvent, useEffect } from 'react';
 
 const ingredients = [
@@ -165,6 +165,7 @@ function IngredientCard({ ing, index, containerRef, onClick }: { ing: typeof ing
 
 export default function Ingredients() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef);
   const { scrollXProgress } = useScroll({ container: containerRef });
   const [isDragging, setIsDragging] = useState(false);
   const [timerKey, setTimerKey] = useState(0);
@@ -179,13 +180,10 @@ export default function Ingredients() {
   const rAF = useRef<number>(null);
   const autoScrollTimer = useRef<NodeJS.Timeout>(null);
 
-  useEffect(() => {
-    startAutoScroll();
-    return () => {
-      if (rAF.current) cancelAnimationFrame(rAF.current);
-      stopAutoScroll();
-    };
-  }, []);
+  const stopAutoScroll = () => {
+    if (autoScrollTimer.current) clearInterval(autoScrollTimer.current);
+  };
+
   const startAutoScroll = () => {
     stopAutoScroll();
     setTimerKey(prev => prev + 1);
@@ -220,9 +218,17 @@ export default function Ingredients() {
     }, 7000);
   };
 
-  const stopAutoScroll = () => {
-    if (autoScrollTimer.current) clearInterval(autoScrollTimer.current);
-  };
+  useEffect(() => {
+    if (isInView) {
+      startAutoScroll();
+    } else {
+      stopAutoScroll();
+    }
+    return () => {
+      if (rAF.current) cancelAnimationFrame(rAF.current);
+      stopAutoScroll();
+    };
+  }, [isInView]);
 
   const snapToNearestCard = () => {
     if (!containerRef.current) return;
