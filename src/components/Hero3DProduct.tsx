@@ -31,7 +31,7 @@ export default function Hero3DProduct({ isStatic = false }: { isStatic?: boolean
           {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
-              className={`absolute inset-0 rounded-3xl border ${i === 6 ? 'border-red-500 bg-red-500' : 'border-gray-300 bg-gray-200'}`}
+              className={`absolute inset-0 rounded-3xl border ${i === 6 ? 'border-red-500 bg-red-500' : 'border-gray-300 bg-gray-200'} ${i % 3 !== 0 ? 'hidden md:block' : ''}`}
               style={{
                 transform: `translateZ(-${(i / 11) * 3}rem)`,
               }}

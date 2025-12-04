@@ -9,23 +9,31 @@ export default function Header() {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Show/Hide logic
-      // Hide if scrolling down AND past 500px (approx hero height)
-      if (currentScrollY > lastScrollY.current && currentScrollY > 500) {
-        setIsVisible(false);
-      } else if (currentScrollY < lastScrollY.current || currentScrollY < 500) {
-        // Show if scrolling up OR near top
-        setIsVisible(true);
-      }
+    let ticking = false;
 
-      setIsScrolled(currentScrollY > 10);
-      lastScrollY.current = currentScrollY;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          
+          // Show/Hide logic
+          // Hide if scrolling down AND past 500px (approx hero height)
+          if (currentScrollY > lastScrollY.current && currentScrollY > 500) {
+            setIsVisible(false);
+          } else if (currentScrollY < lastScrollY.current || currentScrollY < 500) {
+            // Show if scrolling up OR near top
+            setIsVisible(true);
+          }
+
+          setIsScrolled(currentScrollY > 10);
+          lastScrollY.current = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

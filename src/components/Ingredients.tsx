@@ -110,7 +110,7 @@ function IngredientCard({ ing, index, containerRef, onClick }: { ing: typeof ing
         opacity,
         transformStyle: "preserve-3d",
       }}
-      className="w-full md:w-[400px] shrink-0 py-10 perspective-1000 cursor-pointer"
+      className="w-full md:w-[400px] shrink-0 py-10 perspective-1000 cursor-pointer no-animate-mobile"
     >
       <div className="group relative h-full rounded-4xl border border-gray-200 bg-white p-8 shadow-xl transition-all hover:shadow-2xl overflow-hidden flex flex-col">
         

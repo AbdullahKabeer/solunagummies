@@ -78,7 +78,7 @@ export default function Timeline() {
                 <span className="text-4xl filter drop-shadow-sm">{event.icon}</span>
               </motion.div>
               
-              <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 border border-gray-100 shadow-sm group-hover:shadow-xl transition-all duration-300 w-full h-full">
+              <div className="bg-white md:bg-white/50 md:backdrop-blur-sm rounded-3xl p-6 border border-gray-100 shadow-sm group-hover:shadow-xl transition-all duration-300 w-full h-full">
                 <span className="text-orange-600 font-bold tracking-widest uppercase text-[10px] mb-3 inline-block bg-orange-50 px-3 py-1 rounded-full">
                   {event.time}
                 </span>
