@@ -59,6 +59,20 @@ export default function ProductPurchase() {
            <p className="text-base text-gray-600 leading-relaxed font-light">
                 The daily nootropic gummy for deep work. Formulated with Cognizin®, L-Theanine, and Saffron to silence the noise and amplify your signal.
            </p>
+           
+           {/* Mobile Social Proof */}
+           <div className="mt-4 p-3 bg-orange-50 rounded-xl border border-orange-100 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <div className="flex text-[#FF4D00] mb-1">
+                  {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="w-2 h-2 fill-current" />)}
+                </div>
+                <p className="text-xs text-gray-700 italic">"Finally something that actually works without the jitters. My focus has never been better."</p>
+                <p className="text-[10px] font-bold text-gray-500 mt-1">- Sarah J., Verified Buyer</p>
+              </div>
+           </div>
         </div>
 
         <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
@@ -142,6 +156,15 @@ export default function ProductPurchase() {
                     Congrats! You're saving {Math.round(discountPercent * 100)}% off with a bulk discount
                   </motion.div>
                 )}
+                
+                {/* Urgency Nudge */}
+                <div className="flex items-center gap-2 mb-4 text-xs font-medium text-orange-600 bg-orange-50 w-fit px-2 py-1 rounded-md">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                  </span>
+                  14 people are viewing this right now
+                </div>
 
                 {/* Price Display */}
                 <div className="flex items-baseline gap-3 mb-4">
@@ -151,28 +174,38 @@ export default function ProductPurchase() {
 
                 {/* Quantity Selector */}
                 <div className="mb-6">
-                  <div className="text-[10px] font-bold text-gray-900 uppercase tracking-widest mb-2">Quantity</div>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <div className="text-[10px] font-bold text-gray-900 uppercase tracking-widest">Quantity</div>
+                    <div className="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Most Popular: 3 Months</div>
+                  </div>
                   <div className="flex gap-2">
                     {[1, 2, 3].map((qty) => {
                        const isSelected = quantity === qty;
                        const discount = qty === 2 ? '30% OFF' : qty === 3 ? '35% OFF' : null;
+                       const isBestValue = qty === 3;
+                       
                        return (
                          <button
                            key={qty}
                            onClick={() => setQuantity(qty as 1 | 2 | 3)}
-                           className={`relative flex-1 py-2 rounded-full border text-xs font-bold transition-all ${
+                           className={`relative flex-1 py-3 md:py-2 rounded-xl md:rounded-full border text-xs font-bold transition-all ${
                              isSelected 
-                               ? 'border-[#FF4D00] text-[#FF4D00] ring-1 ring-[#FF4D00] bg-white' 
+                               ? 'border-[#FF4D00] text-[#FF4D00] ring-1 ring-[#FF4D00] bg-white shadow-md' 
                                : 'border-gray-200 text-gray-600 hover:border-gray-300 bg-white'
                            }`}
                          >
                            {qty} Month{qty > 1 ? 's' : ''}
                            {discount && (
-                             <div className={`absolute -top-2.5 left-1/2 -translate-x-1/2 text-[9px] px-1.5 py-0.5 rounded-full whitespace-nowrap border ${
+                             <div className={`absolute -top-2.5 left-1/2 -translate-x-1/2 text-[9px] px-1.5 py-0.5 rounded-full whitespace-nowrap border shadow-sm ${
                                isSelected ? 'bg-green-100 text-green-700 border-green-200' : 'bg-green-100 text-green-700 border-green-200'
                              }`}>
                                {discount}
                              </div>
+                           )}
+                           {isBestValue && !discount && (
+                              <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[9px] px-1.5 py-0.5 rounded-full whitespace-nowrap border bg-orange-100 text-orange-700 border-orange-200">
+                                Best Value
+                              </div>
                            )}
                          </button>
                        );
@@ -221,9 +254,18 @@ export default function ProductPurchase() {
               </div>
 
               {/* Main CTA */}
-              <button className="w-full bg-[#FF4D00] text-white py-3 rounded-lg text-lg font-bold hover:bg-[#e64500] transition-all duration-300 shadow-lg hover:shadow-orange-500/20 mb-4">
-                Order Now
+              <button className="w-full bg-[#FF4D00] text-white py-5 rounded-full text-xl font-bold hover:bg-[#e64500] transition-all duration-300 shadow-xl shadow-orange-500/20 hover:shadow-orange-500/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md mb-4 flex items-center justify-center gap-2">
+                <span>Add to Cart</span>
+                <span className="bg-white/20 px-2 py-0.5 rounded text-base">${finalPrice.toFixed(2)}</span>
               </button>
+
+              {/* Payment Methods */}
+              <div className="flex justify-center gap-2 mb-6 opacity-60 grayscale">
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" className="h-4 object-contain" alt="Visa" />
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" className="h-4 object-contain" alt="Mastercard" />
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/2560px-PayPal.svg.png" className="h-4 object-contain" alt="PayPal" />
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png" className="h-4 object-contain" alt="Apple Pay" />
+              </div>
 
               {/* Trust Signals */}
               <div className="flex items-center justify-center gap-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-6 border-b border-gray-100 pb-6">

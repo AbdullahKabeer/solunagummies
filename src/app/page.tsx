@@ -11,11 +11,13 @@ import Marquee from "@/components/Marquee";
 import Timeline from "@/components/Timeline";
 import FAQ from "@/components/FAQ";
 import FlowingBackground from "@/components/FlowingBackground";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-transparent selection:bg-orange-200 selection:text-orange-900 relative">
       <FlowingBackground />
+      <StickyMobileCTA />
       <div className="relative z-10">
         <Header />
         <Hero />

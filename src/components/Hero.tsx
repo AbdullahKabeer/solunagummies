@@ -104,9 +104,9 @@ export default function Hero() {
                   <Link 
                     href="#purchase" 
                     onClick={handleScroll}
-                    className="flex items-center justify-center w-full py-4 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase"
+                    className="flex items-center justify-center w-full py-5 rounded-full bg-[#1a1a1a] text-white text-base font-bold tracking-widest uppercase shadow-xl"
                   >
-                    Shop Now
+                    Get Focus
                   </Link>
                 </motion.div>
               </div>

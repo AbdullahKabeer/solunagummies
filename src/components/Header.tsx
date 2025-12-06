@@ -51,12 +51,17 @@ export default function Header() {
           <Link href="#science" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">Science</Link>
           <Link href="#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">FAQ</Link>
         </nav>
-        <Link 
-          href="#purchase" 
-          className="bg-[#1a1a1a] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg"
-        >
-          Get Started
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/search" className="hidden md:block text-gray-600 hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </Link>
+          <Link 
+            href="#purchase" 
+            className="bg-[#1a1a1a] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg"
+          >
+            Get Started
+          </Link>
+        </div>
       </div>
     </header>
   );

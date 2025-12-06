@@ -49,6 +49,15 @@ h1, h2, h3, h4, h5, h6 {
   font-variation-settings: "SOFT" 100, "WONK" 1;
 }
 
+@media (max-width: 768px) {
+  .no-animate-mobile {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 @keyframes blob {
   0% {
     transform: translate(0px, 0px) scale(1);

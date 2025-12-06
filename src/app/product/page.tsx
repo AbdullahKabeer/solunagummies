@@ -10,6 +10,7 @@ import FAQ from "@/components/FAQ";
 import TimelineSection from '@/components/TimelineSection';
 import IngredientsBreakdown from '@/components/IngredientsBreakdown';
 import ComparisonSection from '@/components/ComparisonSection';
+import StickyMobileCTA from '@/components/StickyMobileCTA';
 
 export default function ProductPage() {
   const [purchaseType, setPurchaseType] = useState<'subscribe' | 'onetime'>('subscribe');
@@ -19,6 +20,7 @@ export default function ProductPage() {
   return (
     <main className="min-h-screen bg-[#FDFCF8] selection:bg-orange-200 selection:text-orange-900">
       <FlowingBackground />
+      <StickyMobileCTA />
       <div className="relative z-10">
         <Header />
         
@@ -79,6 +81,7 @@ export default function ProductPage() {
               
               {/* SECTION 1: PURCHASE */}
               <motion.div
+                id="purchase"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
@@ -148,7 +151,7 @@ export default function ProductPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-4 mb-12">
+                <div className="flex gap-4 mb-8">
                   <div className="flex items-center bg-white border border-gray-200 rounded-full px-4 h-16">
                     <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-2 hover:text-orange-600 transition-colors">
                       <Minus className="w-5 h-5" />
@@ -161,6 +164,14 @@ export default function ProductPage() {
                   <button className="flex-1 bg-gray-900 text-white h-16 rounded-full font-bold text-lg hover:bg-orange-600 transition-colors shadow-lg shadow-orange-900/20">
                     Add to Cart — ${(purchaseType === 'subscribe' ? 49 : 59) * quantity}.00
                   </button>
+                </div>
+
+                {/* Payment Methods */}
+                <div className="flex justify-center gap-3 mb-12 opacity-60 grayscale">
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" className="h-5 object-contain" alt="Visa" />
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" className="h-5 object-contain" alt="Mastercard" />
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/2560px-PayPal.svg.png" className="h-5 object-contain" alt="PayPal" />
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png" className="h-5 object-contain" alt="Apple Pay" />
                 </div>
 
                 {/* Trust Badges */}
