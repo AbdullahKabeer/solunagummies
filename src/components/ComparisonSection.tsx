@@ -11,7 +11,7 @@ export default function ComparisonSection() {
           <div className="inline-block bg-orange-100 text-orange-800 px-3 py-1 text-xs font-mono mb-4 rounded-full">
             Comparison
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1a1a1a]">
+          <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-[#1a1a1a]">
             What to Expect
           </h2>
         </div>
@@ -35,17 +35,17 @@ export default function ComparisonSection() {
               { label: "Digestive Comfort", soluna: true, coffee: "Varies", energy: "Varies" },
             ].map((row, i) => (
               <div key={i} className="grid grid-cols-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50/50 transition-colors">
-                <div className="p-6 font-medium text-sm text-gray-900 flex items-center">
+                <div className="p-6 py-8 font-medium text-sm text-[#1a1a1a] flex items-center">
                   {row.label}
                 </div>
-                <div className="p-6 flex items-center">
-                  {row.soluna === true ? <div className="bg-orange-100 p-1 rounded-full"><Check className="w-4 h-4 text-[#FF3300]" /></div> : <span className="font-mono text-xs">{row.soluna}</span>}
+                <div className="p-6 py-8 flex items-center">
+                  {row.soluna === true ? <div className="bg-orange-100 p-1 rounded-full"><Check className="w-5 h-5 text-[#FF3300]" /></div> : <span className="font-mono text-xs">{row.soluna}</span>}
                 </div>
-                <div className="p-6 flex items-center">
-                  {row.coffee === true ? <Check className="w-4 h-4 text-gray-400" /> : row.coffee === false ? <X className="w-4 h-4 text-gray-300" /> : <span className="font-mono text-xs text-gray-500">{row.coffee}</span>}
+                <div className="p-6 py-8 flex items-center">
+                  {row.coffee === true ? <Check className="w-5 h-5 text-gray-400" /> : row.coffee === false ? <X className="w-5 h-5 text-gray-300" /> : <span className="font-mono text-xs text-gray-500">{row.coffee}</span>}
                 </div>
-                <div className="p-6 flex items-center">
-                  {row.energy === true ? <Check className="w-4 h-4 text-gray-400" /> : row.energy === false ? <X className="w-4 h-4 text-gray-300" /> : <span className="font-mono text-xs text-gray-500">{row.energy}</span>}
+                <div className="p-6 py-8 flex items-center">
+                  {row.energy === true ? <Check className="w-5 h-5 text-gray-400" /> : row.energy === false ? <X className="w-5 h-5 text-gray-300" /> : <span className="font-mono text-xs text-gray-500">{row.energy}</span>}
                 </div>
               </div>
             ))}

@@ -45,7 +45,7 @@ const ingredients = [
 
 export default function Ingredients() {
   return (
-    <section id="ingredients" className="py-24 border-b border-black/10 bg-white">
+    <section id="ingredients" className="py-24 border-b border-black/10 bg-[#FDFCF8]">
       <div className="container mx-auto px-6">
         <div className="mb-12">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-[#1a1a1a]">

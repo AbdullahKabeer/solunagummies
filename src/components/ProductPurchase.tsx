@@ -32,8 +32,9 @@ export default function ProductPurchase() {
   const { finalPrice, totalBase, savings, perServing, discountPercent } = getPriceDetails(quantity);
 
   return (
-    <section id="purchase" className="py-24 bg-[#FDFCF8] border-b border-black/10">
-      <div className="container mx-auto px-6">
+    <section id="purchase" className="py-16 bg-[#FDFCF8] border-b border-black/10 relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gray-200/50 rounded-full mt-8"></div>
+      <div className="container mx-auto px-6 pt-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           
           {/* Left Column: Product Visual */}
