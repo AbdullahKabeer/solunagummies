@@ -1,169 +1,77 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
-import { Clock, Calendar } from 'lucide-react';
+import { Clock, Calendar, Zap } from 'lucide-react';
 
 export default function ProductShowcase() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"]
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
-
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 50]); // Parallax for text
-
-  const listVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      x: 0,
-      transition: {
-        delay: i * 0.2,
-        duration: 0.5,
-        ease: "easeOut" as const
-      }
-    })
-  };
-
   return (
-    <section id="product" ref={ref} className="min-h-screen md:h-[200vh] relative bg-transparent py-12 md:py-0">
-      <div className="relative md:sticky md:top-0 h-auto md:h-screen flex items-center overflow-hidden md:pb-20">
+    <section id="product" className="py-24 bg-white border-b border-black">
+      <div className="container mx-auto px-6">
         
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
+        <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-center">
           
-          {/* Text Content (Left) */}
-          <motion.div 
-            style={{ y: textY }}
-            className="w-full md:w-1/2 md:mt-24"
-          >
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="no-animate-mobile"
-            >
-              <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-2 mt-6 md:mb-3 block">The Experience</span>
-              <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 md:mb-8 text-gray-900 leading-tight">
-                Simple Ritual,<br />
-                <span className="text-orange-600">Daily Impact.</span>
-              </h2>
-              <p className="text-lg md:text-xl text-gray-600 mb-8 md:mb-12 leading-relaxed font-light">
-                Designed to fit seamlessly into your morning routine, giving you the lift you need without the crash.
-              </p>
-              
-              <div className="space-y-8 border-l border-gray-200 pl-8">
-                <motion.div 
-                  custom={0}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={listVariants}
-                  className="relative group no-animate-mobile"
-                >
-                  <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <Clock className="w-5 h-5 text-orange-600" />
-                    <h4 className="text-lg font-bold text-gray-900">When</h4>
-                  </div>
-                  <p className="text-gray-500 font-light">Take 2 gummies daily, preferably in the morning or early afternoon.</p>
-                </motion.div>
-                
-                <motion.div 
-                  custom={1}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={listVariants}
-                  className="relative group no-animate-mobile"
-                >
-                  <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <Calendar className="w-5 h-5 text-orange-600" />
-                    <h4 className="text-lg font-bold text-gray-900">Consistency</h4>
-                  </div>
-                  <p className="text-gray-500 font-light">Consistency is key—ingredients like Cognizin® and Saffron build up benefits over time.</p>
-                </motion.div>
+          {/* Left: Text */}
+          <div className="w-full md:w-1/2">
+            <div className="inline-block bg-[#FF3300] text-white px-2 py-1 text-xs font-mono mb-6">
+              OPERATIONAL_PROTOCOL
+            </div>
+            <h2 className="text-5xl font-black uppercase tracking-tighter mb-8">
+              Simple Ritual.<br />Daily Impact.
+            </h2>
+            <p className="font-mono text-sm text-gray-600 mb-12 leading-relaxed">
+              Designed to integrate seamlessly into your morning routine. Minimal friction. Maximum output.
+            </p>
 
-                <motion.div 
-                  custom={2}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={listVariants}
-                  className="relative group no-animate-mobile"
-                >
-                  <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-gray-200 border-4 border-[#FDFCF8] group-hover:bg-orange-600 transition-colors duration-500"></div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-1">Plant-Based & Clean</h4>
-                  <p className="text-gray-500 font-light">100% Vegan, pectin-based. No high-fructose corn syrup or artificial dyes.</p>
-                </motion.div>
-              </div>
-              
-              <div className="mt-12">
-                <motion.a 
-                  href="#purchase" 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="inline-block bg-[#1a1a1a] text-white px-8 py-4 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg tracking-widest uppercase"
-                >
-                  Shop Now
-                </motion.a>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Visual Content (Right) */}
-          <div className="w-full md:w-1/2 relative md:aspect-square flex items-center justify-center mt-8 md:mt-0">
-            <motion.div 
-              style={{ y, rotate }}
-              className="w-full h-full items-center justify-center hidden md:flex"
-            >
-              {/* Desktop Animated Visual */}
-              <div className="relative w-full h-full">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-3xl opacity-20 animate-pulse" />
-                <div className="absolute inset-0 flex items-center justify-center gap-8">
-                  <motion.div 
-                    whileHover={{ y: -10 }}
-                    className="w-32 h-32 rounded-full bg-linear-to-br from-white to-white/80 shadow-2xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm border border-white/50"
-                  >
-                    <span className="font-serif text-[#1a1a1a] text-2xl">1</span>
-                  </motion.div>
-                  <motion.div 
-                    whileHover={{ y: -10 }}
-                    className="w-32 h-32 rounded-full bg-linear-to-br from-white to-white/80 shadow-2xl shadow-orange-500/10 flex items-center justify-center backdrop-blur-sm mt-16 border border-white/50"
-                  >
-                    <span className="font-serif text-[#1a1a1a] text-2xl">2</span>
-                  </motion.div>
+            <div className="space-y-8">
+              <div className="flex gap-6 items-start group">
+                <div className="w-12 h-12 border border-black flex items-center justify-center shrink-0 group-hover:bg-black group-hover:text-white transition-colors">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold uppercase mb-2">Timing</h4>
+                  <p className="font-mono text-xs text-gray-500">Take 2 gummies daily. Morning or early afternoon deployment recommended.</p>
                 </div>
               </div>
-            </motion.div>
 
-            {/* Mobile Dynamic Visual */}
-            <div className="w-full flex items-center justify-center md:hidden py-4">
-              <div className="relative w-full max-w-[280px] h-56">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-2xl opacity-20" />
-                <div className="absolute inset-0 flex items-center justify-center gap-4">
-                  <div 
-                    className="w-20 h-20 rounded-full bg-linear-to-br from-white to-white/80 shadow-xl shadow-orange-500/10 flex items-center justify-center border border-white/50"
-                  >
-                    <span className="font-serif text-[#1a1a1a] text-lg">1</span>
-                  </div>
-                  <div 
-                    className="w-20 h-20 rounded-full bg-linear-to-br from-white to-white/80 shadow-xl shadow-orange-500/10 flex items-center justify-center mt-6 border border-white/50"
-                  >
-                    <span className="font-serif text-[#1a1a1a] text-lg">2</span>
-                  </div>
+              <div className="flex gap-6 items-start group">
+                <div className="w-12 h-12 border border-black flex items-center justify-center shrink-0 group-hover:bg-black group-hover:text-white transition-colors">
+                  <Calendar className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold uppercase mb-2">Consistency</h4>
+                  <p className="font-mono text-xs text-gray-500">Cumulative benefits. Cognizin® and Saffron efficacy increases with daily saturation.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-6 items-start group">
+                <div className="w-12 h-12 border border-black flex items-center justify-center shrink-0 group-hover:bg-black group-hover:text-white transition-colors">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold uppercase mb-2">Output</h4>
+                  <p className="font-mono text-xs text-gray-500">Sustained focus. No crash. Optimized for deep work sessions.</p>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Right: Visual */}
+          <div className="w-full md:w-1/2 relative">
+            <div className="aspect-square border border-black bg-gray-100 relative overflow-hidden">
+               <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.05)_25%,rgba(0,0,0,0.05)_50%,transparent_50%,transparent_75%,rgba(0,0,0,0.05)_75%,rgba(0,0,0,0.05)_100%)] bg-[size:20px_20px]"></div>
+               <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-9xl font-black opacity-10">01</div>
+                    <div className="font-mono text-xs uppercase tracking-widest mt-4">Visual_Placeholder</div>
+                  </div>
+               </div>
+            </div>
+            {/* Decorative Elements */}
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#FF3300] border border-black z-[-1]"></div>
+            <div className="absolute -top-4 -left-4 w-24 h-24 border border-black z-[-1]"></div>
+          </div>
+
         </div>
-      </div>
+
       </div>
     </section>
   );

@@ -7,15 +7,13 @@ import ComparisonSection from "@/components/ComparisonSection";
 import ProductPurchase from "@/components/ProductPurchase";
 import Footer from "@/components/Footer";
 import Marquee from "@/components/Marquee";
-import Timeline from "@/components/Timeline";
+import TimelineSection from "@/components/TimelineSection";
 import FAQ from "@/components/FAQ";
-import FlowingBackground from "@/components/FlowingBackground";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-transparent selection:bg-orange-200 selection:text-orange-900 relative">
-      <FlowingBackground />
+    <main className="min-h-screen bg-white selection:bg-[#FF3300] selection:text-white relative">
       <StickyMobileCTA />
       <div className="relative z-10">
         <Header />
@@ -24,7 +22,7 @@ export default function Home() {
         <div className="flex flex-col w-full">
           <ProductShowcase />
           
-          <Timeline />
+          <TimelineSection />
           
           <ComparisonSection /> 
           

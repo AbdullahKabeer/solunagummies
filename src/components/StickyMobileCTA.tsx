@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { Zap } from 'lucide-react';
 
 export default function StickyMobileCTA() {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,13 +17,11 @@ export default function StickyMobileCTA() {
       
       if (purchaseSection) {
         const rect = purchaseSection.getBoundingClientRect();
-        // Check if purchase section is currently in view
         if (rect.top < windowHeight && rect.bottom > 0) {
             inPurchaseSection = true;
         }
       }
 
-      // Show after scrolling 80% of viewport, hide if inside purchase section
       const show = scrollY > windowHeight * 0.8 && !inPurchaseSection;
       setIsVisible(show);
     };
@@ -45,22 +44,22 @@ export default function StickyMobileCTA() {
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed bottom-0 left-0 right-0 z-50 p-4 pb-6 bg-white/95 backdrop-blur-xl border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] md:hidden"
+          className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-black md:hidden"
         >
-          <div className="flex items-center justify-between gap-4 max-w-md mx-auto">
+          <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Subscribe & Save</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-lg font-serif font-bold text-gray-900">$49.00</span>
-                <span className="text-xs text-gray-400 line-through">$59</span>
+              <span className="text-[10px] font-mono text-gray-500 uppercase">Status: Available</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-lg font-black uppercase">.96</span>
+                <span className="text-xs font-mono text-[#FF3300] bg-black/5 px-1">SAVE 20%</span>
               </div>
-              <div className="text-[9px] text-green-600 font-bold">Free Shipping</div>
             </div>
             <button
               onClick={scrollToPurchase}
-              className="flex-1 bg-[#FF4D00] text-white py-4 rounded-full text-base font-bold text-center uppercase tracking-widest shadow-lg shadow-orange-500/20 active:scale-95 transition-transform"
+              className="flex-1 bg-[#FF3300] text-white py-3 border border-black font-mono font-bold uppercase text-sm flex items-center justify-center gap-2 shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
             >
-              Get Focus Gummies
+              <Zap className="w-4 h-4" />
+              Initiate_Order
             </button>
           </div>
         </motion.div>

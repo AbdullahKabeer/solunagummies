@@ -1,31 +1,63 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
-
 const benefits = [
   {
     id: "01",
     title: "Stable Lift",
-    description: "Many users report consistent, natural-feeling energy throughout their day.*",
-    gradient: "from-orange-400 to-red-500",
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop"
+    code: "MOD_LIFT_01",
+    description: "Sustained dopamine release without adrenal fatigue. Engineered for 6-hour efficacy.",
   },
   {
     id: "02",
     title: "Deep Focus",
-    description: "Supports concentration and helps maintain cognitive performance.*",
-    gradient: "from-blue-400 to-teal-500",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
+    code: "MOD_FOCUS_02",
+    description: "Alpha-wave promotion via L-Theanine synergy. Eliminates peripheral distractions.",
   },
   {
     id: "03",
-    title: "Sustained Clarity",
-    description: "Helps promote clear, steady thinking without the spikes and dips.*",
-    gradient: "from-purple-400 to-pink-500",
-    image: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=800&auto=format&fit=crop"
+    title: "Neural Repair",
+    code: "MOD_REPAIR_03",
+    description: "Supports long-term synaptic plasticity and membrane health via Citicoline.",
   }
 ];
+
+export default function Benefits() {
+  return (
+    <section id="benefits" className="py-24 border-b border-black bg-[#F2F0E9]">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black pb-6">
+          <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter">
+            System<br/>Capabilities
+          </h2>
+          <div className="font-mono text-sm mb-2 md:mb-0">
+            /// PERFORMANCE_METRICS
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {benefits.map((benefit) => (
+            <div key={benefit.id} className="card-brutal group hover:bg-black hover:text-white transition-colors duration-300">
+              <div className="flex justify-between items-start mb-8 border-b border-black group-hover:border-white pb-4">
+                <span className="font-mono text-xs font-bold">{benefit.code}</span>
+                <span className="font-mono text-xs">[{benefit.id}]</span>
+              </div>
+              
+              <h3 className="text-3xl font-bold uppercase mb-4 tracking-tight">{benefit.title}</h3>
+              <p className="font-mono text-sm leading-relaxed opacity-80">
+                {benefit.description}
+              </p>
+
+              <div className="mt-8 pt-4 border-t border-dashed border-black group-hover:border-white flex justify-between items-center">
+                <span className="text-[10px] uppercase tracking-widest">Status</span>
+                <div className="w-2 h-2 bg-[#FF3300] rounded-full animate-pulse"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Benefits() {
   const ref = useRef(null);

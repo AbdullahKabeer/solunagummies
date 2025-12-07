@@ -1,67 +1,50 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          
-          // Show/Hide logic
-          // Hide if scrolling down AND past 500px (approx hero height)
-          if (currentScrollY > lastScrollY.current && currentScrollY > 500) {
-            setIsVisible(false);
-          } else if (currentScrollY < lastScrollY.current || currentScrollY < 500) {
-            // Show if scrolling up OR near top
-            setIsVisible(true);
-          }
-
-          setIsScrolled(currentScrollY > 10);
-          lastScrollY.current = currentScrollY;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
-    } ${isScrolled ? 'backdrop-blur-md bg-white/30' : 'bg-transparent'}`}>
-      <div className="container mx-auto px-6 h-24 flex items-center justify-between">
-        <Link href="/" className="text-3xl font-bold tracking-tighter text-gray-900 font-serif italic">
-          Soluna
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-black bg-[#F2F0E9]">
+      <div className="flex items-stretch h-16">
+        {/* Logo Section */}
+        <Link href="/" className="flex items-center px-6 border-r border-black hover:bg-black hover:text-white transition-colors group">
+          <span className="text-xl font-black tracking-tighter uppercase">Soluna_Sys</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-10">
-          <Link href="#benefits" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">Benefits</Link>
-          <Link href="#ingredients" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">Ingredients</Link>
-          <Link href="#science" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">Science</Link>
-          <Link href="#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors tracking-wide">FAQ</Link>
-        </nav>
-        <div className="flex items-center gap-4">
-          <Link href="/search" className="hidden md:block text-gray-600 hover:text-gray-900">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          </Link>
-          <Link 
-            href="#purchase" 
-            className="bg-[#1a1a1a] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-orange-600 transition-all shadow-lg"
-          >
-            Get Started
-          </Link>
+
+        {/* Ticker Section */}
+        <div className="hidden md:flex flex-1 items-center overflow-hidden border-r border-black bg-white">
+          <div className="animate-marquee whitespace-nowrap flex gap-8 text-xs font-mono uppercase tracking-widest">
+            <span>/// System Status: Optimal</span>
+            <span>/// Batch: 004-A</span>
+            <span>/// Next Restock: 24H</span>
+            <span>/// Focus Protocol: Active</span>
+            <span>/// System Status: Optimal</span>
+            <span>/// Batch: 004-A</span>
+            <span>/// Next Restock: 24H</span>
+            <span>/// Focus Protocol: Active</span>
+          </div>
         </div>
+
+        {/* Nav Links */}
+        <nav className="hidden md:flex">
+          {['Benefits', 'Ingredients', 'Science'].map((item) => (
+            <Link 
+              key={item} 
+              href={`#${item.toLowerCase()}`}
+              className="flex items-center px-6 border-r border-black text-sm font-mono uppercase hover:bg-[#FF3300] hover:text-white transition-colors"
+            >
+              {item}
+            </Link>
+          ))}
+        </nav>
+
+        {/* CTA */}
+        <Link 
+          href="#purchase" 
+          className="flex items-center px-8 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF3300] transition-colors ml-auto md:ml-0"
+        >
+          Initialize
+        </Link>
       </div>
     </header>
   );

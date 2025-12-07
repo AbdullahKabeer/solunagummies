@@ -1,26 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const archivo = Archivo({
+  variable: "--font-sans",
   subsets: ["latin"],
+  axes: ["wdth"], // Variable width axis
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
-});
-
-const fraunces = Fraunces({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"], // Add character axes
 });
 
 export const metadata: Metadata = {
-  title: "Soluna | Unlock Your Potential",
-  description: "Premium nootropic gummies for focus, clarity, and flow.",
+  title: "SOLUNA | SYSTEM_01",
+  description: "High-performance cognitive enhancement protocol.",
 };
 
 export default function RootLayout({
@@ -31,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased bg-[#FDFCF8] text-[#1a1a1a]`}
+        className={`${archivo.variable} ${jetbrainsMono.variable} antialiased bg-[#F2F0E9] text-[#121212]`}
         suppressHydrationWarning
       >
         {children}

@@ -1,83 +1,73 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Zap, Brain, Smile } from 'lucide-react';
 
 export default function TimelineSection() {
   return (
-    <section className="py-12 md:py-24 bg-white">
+    <section className="py-16 bg-white border-b border-black/10">
       <div className="container mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-20">
-          <span className="text-orange-600 font-bold tracking-widest uppercase text-xs mb-4 block">The Journey</span>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
-            Better mornings, better energy for life.
+        
+        <div className="mb-12 text-center">
+          <div className="inline-block bg-black text-white px-3 py-1 text-xs font-mono mb-4 rounded-full">
+            Timeline
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1a1a1a]">
+            How It Starts Working
           </h2>
-          <p className="text-lg md:text-xl text-gray-500 font-light">
-            Soluna isn't just a quick fix. It's a cumulative investment in your brain's operating system.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {/* Card 1 */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: 0 }}
-            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors no-animate-mobile"
-          >
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Zap className="w-32 h-32 text-orange-500" />
-            </div>
-            <div className="relative z-10">
-              <span className="inline-block bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full mb-6">HOUR 01</span>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Calm Activation</h3>
-              <p className="text-gray-600 font-light leading-relaxed">
-                Experience a smooth lift within 45 minutes. The L-Theanine neutralizes caffeine jitters, putting you in a state of "relaxed alertness" ready for deep work.
-              </p>
-            </div>
-          </motion.div>
+        <div className="relative">
+          {/* Connecting Line */}
+          <div className="absolute top-8 left-0 w-full h-px bg-gray-200 hidden md:block"></div>
 
-          {/* Card 2 */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors no-animate-mobile"
-          >
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Brain className="w-32 h-32 text-orange-500" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {/* Step 1 */}
+            <div className="relative bg-white pt-8 md:pt-0">
+              <div className="w-4 h-4 bg-white border-4 border-gray-200 rounded-full absolute top-6 left-1/2 -translate-x-1/2 hidden md:block z-10"></div>
+              <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50">
+                <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">30-45 Minutes</div>
+                <div className="mb-6">
+                  <Zap className="w-8 h-8 text-[#FF3300]" />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-[#1a1a1a]">Calm Lift</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  L-Theanine helps smooth out the caffeine, creating a state of "relaxed alertness" without the jitters.
+                </p>
+              </div>
             </div>
-            <div className="relative z-10">
-              <span className="inline-block bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full mb-6">DAY 07</span>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Steady Rhythm</h3>
-              <p className="text-gray-600 font-light leading-relaxed">
-                Consistent use helps support steadier mornings. You may notice less grogginess and improved focus endurance as Cognizin® begins to support brain energy metabolism.
-              </p>
-            </div>
-          </motion.div>
 
-          {/* Card 3 */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors no-animate-mobile"
-          >
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Smile className="w-32 h-32 text-orange-500" />
+            {/* Step 2 */}
+            <div className="relative bg-white pt-8 md:pt-0">
+              <div className="w-4 h-4 bg-white border-4 border-gray-200 rounded-full absolute top-6 left-1/2 -translate-x-1/2 hidden md:block z-10"></div>
+              <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50">
+                <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">Day 7</div>
+                <div className="mb-6">
+                  <Brain className="w-8 h-8 text-[#FF3300]" />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-[#1a1a1a]">Steady Focus</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Consistent use helps support clearer mornings and better focus endurance throughout your workday.
+                </p>
+              </div>
             </div>
-            <div className="relative z-10">
-              <span className="inline-block bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full mb-6">DAY 30+</span>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Optimized Mind</h3>
-              <p className="text-gray-600 font-light leading-relaxed">
-                Long-term users report feeling more refreshed and aligned. Saffron extract supports emotional balance and stress resilience, making challenges feel more manageable.
-              </p>
+
+            {/* Step 3 */}
+            <div className="relative bg-white pt-8 md:pt-0">
+              <div className="w-4 h-4 bg-white border-4 border-gray-200 rounded-full absolute top-6 left-1/2 -translate-x-1/2 hidden md:block z-10"></div>
+              <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50">
+                <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">Day 30+</div>
+                <div className="mb-6">
+                  <Smile className="w-8 h-8 text-[#FF3300]" />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-[#1a1a1a]">Optimized Mind</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Saffron extract supports a balanced mood and stress resilience, helping you handle pressure with ease.
+                </p>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
+
       </div>
     </section>
   );

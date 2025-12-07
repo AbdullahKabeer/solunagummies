@@ -42,32 +42,37 @@ export default function Hero3DProduct({ isStatic = false }: { isStatic?: boolean
           <div className="absolute inset-0 bg-gray-200 rounded-3xl transform translate-x-2 translate-y-2 md:hidden -z-10"></div>
 
           {/* Front Face */}
-          <div className="absolute inset-0 bg-linear-to-b from-gray-50 to-gray-100 rounded-3xl shadow-2xl border border-white/60 flex flex-col items-center p-6 transform-[translateZ(1px)]">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FDFCF8] to-[#F0F0F0] rounded-3xl shadow-2xl border border-white/60 flex flex-col items-center p-6 transform-[translateZ(1px)] overflow-hidden">
+            {/* Noise Texture */}
+            <div className="absolute inset-0 opacity-10 bg-noise pointer-events-none"></div>
+            
             {/* Glossy Overlay */}
-            <div className="absolute inset-0 rounded-3xl bg-linear-to-tr from-white/40 to-transparent pointer-events-none"></div>
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/60 via-white/0 to-transparent pointer-events-none z-20"></div>
             
             {/* Package Content */}
             <div className="w-full text-center mt-8 z-10">
-              <div className="text-[10px] font-bold tracking-[0.3em] text-gray-400 mb-3">SOLUNA</div>
-              <div className="text-5xl font-serif font-bold text-gray-800 mb-1">Focus</div>
+              <div className="text-[10px] font-bold tracking-[0.3em] text-gray-400 mb-3 font-sans">SOLUNA</div>
+              <div className="text-5xl font-serif font-bold text-[#1a1a1a] mb-1">Focus</div>
               <div className="text-sm font-serif italic text-orange-600">Daily Nootropic</div>
             </div>
 
             {/* Abstract Graphic */}
             <div className="flex-1 w-full flex items-center justify-center relative">
-              <div className="absolute w-32 h-32 bg-orange-500/20 rounded-full blur-xl"></div>
-              <div className="w-24 h-24 rounded-full bg-linear-to-br from-orange-400 to-red-500 shadow-lg z-10 opacity-90"></div>
+              <div className="absolute w-40 h-40 bg-orange-500/20 rounded-full blur-2xl animate-pulse"></div>
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 via-red-400 to-purple-400 shadow-inner z-10 opacity-90 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm"></div>
+              </div>
             </div>
 
             {/* Bottom Details */}
             <div className="w-full flex justify-between items-end border-t border-gray-300/50 pt-4 z-10">
               <div className="text-left">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Count</div>
-                <div className="text-xs font-bold text-gray-700">30 Gummies</div>
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Count</div>
+                <div className="text-xs font-bold text-gray-700 font-mono">30 Gummies</div>
               </div>
               <div className="text-right">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Flavor</div>
-                <div className="text-xs font-bold text-gray-700">Blood Orange</div>
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Flavor</div>
+                <div className="text-xs font-bold text-gray-700 font-mono">Blood Orange</div>
               </div>
             </div>
           </div>

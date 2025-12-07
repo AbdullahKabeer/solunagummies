@@ -1,78 +1,70 @@
-import { Zap, Coffee, Battery } from 'lucide-react';
+'use client';
+
+import { Check, X } from 'lucide-react';
 
 export default function ComparisonSection() {
   return (
-    <section className="py-32 bg-[#FDFCF8] relative overflow-hidden">
+    <section className="py-24 bg-[#FDFCF8] border-b border-black/10">
       <div className="container mx-auto px-6">
         
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-4">A smoother alternative to caffeine-heavy drinks.</h2>
+        <div className="mb-12 text-center">
+          <div className="inline-block bg-orange-100 text-orange-800 px-3 py-1 text-xs font-mono mb-4 rounded-full">
+            Comparison
           </div>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1a1a1a]">
+            What to Expect
+          </h2>
+        </div>
 
-          <div className="grid grid-cols-4 gap-4 md:gap-8 border-t-2 border-gray-900 pt-8">
-            {/* Headers */}
-            <div className="font-bold text-gray-900 text-sm md:text-base flex items-center gap-2">Feature</div>
-            <div className="font-bold text-orange-600 text-sm md:text-base flex items-center gap-2">
-              <Zap className="w-4 h-4" />
-              Focus Gummies
-            </div>
-            <div className="font-bold text-gray-400 text-sm md:text-base flex items-center gap-2">
-              <Coffee className="w-4 h-4" />
-              Coffee
-            </div>
-            <div className="font-bold text-gray-400 text-sm md:text-base flex items-center gap-2">
-              <Battery className="w-4 h-4" />
-              Energy Drinks
+        <div className="overflow-x-auto">
+          <div className="min-w-[800px] bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            {/* Header Row */}
+            <div className="grid grid-cols-4 bg-gray-50 border-b border-gray-200 text-gray-500 font-mono text-xs uppercase tracking-wider">
+              <div className="p-6">Feature</div>
+              <div className="p-6 text-[#FF3300] font-bold">Soluna</div>
+              <div className="p-6">Coffee</div>
+              <div className="p-6">Energy Drinks</div>
             </div>
 
-            {/* Row 1 */}
-            <div className="py-4 border-b border-gray-100 text-sm font-medium text-gray-700">Natural Caffeine</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-900 font-bold">✔</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✔</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✘</div>
-
-            {/* Row 2 */}
-            <div className="py-4 border-b border-gray-100 text-sm font-medium text-gray-700">Users report smooth, steady energy*</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-900 font-bold">✔</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✘</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✘</div>
-
-            {/* Row 3 */}
-            <div className="py-4 border-b border-gray-100 text-sm font-medium text-gray-700">No jitters reported*</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-900 font-bold">✔</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✘</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✘</div>
-
-            {/* Row 4 */}
-            <div className="py-4 border-b border-gray-100 text-sm font-medium text-gray-700">No crash reported*</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-900 font-bold">✔</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✘</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">✘</div>
-
-            {/* Row 5 */}
-            <div className="py-4 border-b border-gray-100 text-sm font-medium text-gray-700">Easy on stomach</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-900 font-bold">✔</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">Varies</div>
-            <div className="py-4 border-b border-gray-100 text-sm text-gray-500">Varies</div>
-          </div>
-          
-          <div className="mt-4 text-xs text-gray-400 text-center">
-            *These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.
-          </div>
-          
-          <div className="mt-16 text-center">
-            <p className="text-lg font-serif italic text-gray-600 mb-8">
-              Soluna isn't an upgrade. It's a whole different category.
-            </p>
-            <a 
-              href="#purchase" 
-              className="inline-block bg-[#FF4D00] text-white px-10 py-4 rounded-full font-bold hover:bg-[#ff6a2b] transition-all shadow-lg shadow-orange-500/20"
-            >
-              Make The Switch
-            </a>
+            {/* Rows */}
+            {[
+              { label: "Natural Caffeine Source", soluna: true, coffee: true, energy: false },
+              { label: "Sustained Energy Release", soluna: true, coffee: false, energy: false },
+              { label: "No Jitters / Anxiety", soluna: true, coffee: false, energy: false },
+              { label: "No Crash Effect", soluna: true, coffee: false, energy: false },
+              { label: "Digestive Comfort", soluna: true, coffee: "Varies", energy: "Varies" },
+            ].map((row, i) => (
+              <div key={i} className="grid grid-cols-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50/50 transition-colors">
+                <div className="p-6 font-medium text-sm text-gray-900 flex items-center">
+                  {row.label}
+                </div>
+                <div className="p-6 flex items-center">
+                  {row.soluna === true ? <div className="bg-orange-100 p-1 rounded-full"><Check className="w-4 h-4 text-[#FF3300]" /></div> : <span className="font-mono text-xs">{row.soluna}</span>}
+                </div>
+                <div className="p-6 flex items-center">
+                  {row.coffee === true ? <Check className="w-4 h-4 text-gray-400" /> : row.coffee === false ? <X className="w-4 h-4 text-gray-300" /> : <span className="font-mono text-xs text-gray-500">{row.coffee}</span>}
+                </div>
+                <div className="p-6 flex items-center">
+                  {row.energy === true ? <Check className="w-4 h-4 text-gray-400" /> : row.energy === false ? <X className="w-4 h-4 text-gray-300" /> : <span className="font-mono text-xs text-gray-500">{row.energy}</span>}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+        
+        <div className="mt-6 text-[10px] font-mono text-gray-400 text-center uppercase tracking-widest">
+          *Based on user reported experiences. Individual results may vary.
+        </div>
+        
+        <div className="mt-16 text-center">
+          <a 
+            href="#purchase" 
+            className="inline-block bg-[#1a1a1a] text-white px-8 py-4 rounded-full font-bold text-sm uppercase tracking-wide hover:bg-[#FF3300] transition-colors shadow-lg"
+          >
+            Upgrade Your Routine
+          </a>
+        </div>
+
       </div>
     </section>
   );

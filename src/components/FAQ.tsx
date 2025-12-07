@@ -1,32 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Minus } from 'lucide-react';
 
 const faqs = [
   {
-    question: "How quickly will I notice anything?",
-    answer: "Many users report noticing the experience within 30–60 minutes, but individual responses vary.*"
+    question: "How quickly will I notice effects?",
+    answer: "Most users report feeling a calm, steady lift within 30–60 minutes. It's designed to be gentle, not jarring."
   },
   {
-    question: "Is it safe?",
-    answer: "Focus Gummies are made with ingredients that are generally recognized as safe (GRAS). Consult your healthcare provider if you are pregnant, on medication, or have a medical condition.*"
+    question: "Is it safe for daily use?",
+    answer: "Yes, Soluna is formulated with ingredients that are generally recognized as safe (GRAS) for daily support. As always, consult your healthcare provider if you have specific medical conditions."
   },
   {
     question: "Can I take this with coffee?",
-    answer: "Yes — many customers enjoy Focus alongside their regular routine."
+    answer: "Absolutely. Many of our customers enjoy Soluna alongside their morning coffee to help smooth out the caffeine jitters and extend their focus."
   },
   {
-    question: "Is it vegan?",
-    answer: "Soluna uses a pectin base instead of gelatin, which is typically suitable for people avoiding animal gelatin. Check the full ingredient list on your specific product bottle to confirm it fits your dietary needs.*"
+    question: "Is it vegan / gluten-free?",
+    answer: "Yes. We use a pectin base (no gelatin), and our formula is completely vegan, gluten-free, and free from artificial dyes."
   },
   {
     question: "How much sugar is in it?",
-    answer: "The gummies are sweetened primarily with allulose and monk fruit, with minimal sugar contribution from other ingredients. See the Supplement Facts panel on the label for exact carbohydrate and sugar values.*"
+    answer: "Very little. We sweeten primarily with Allulose and Monk Fruit, so you get a great taste with negligible impact on blood sugar."
   },
   {
-    question: "Can I take it every day?",
-    answer: "Yes—Soluna is designed as a daily supplement. For best results, take 2 gummies every day at roughly the same time, and pair it with good sleep, hydration, and nutrition.*"
+    question: "How should I take it?",
+    answer: "We recommend taking 2 gummies daily, preferably in the morning or about 30 minutes before you need to focus."
   }
 ];
 
@@ -34,41 +34,46 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-32 bg-transparent relative overflow-hidden">
-      
-      <div className="container mx-auto px-6 max-w-3xl relative z-10">
-        <h2 className="text-4xl font-serif font-bold text-center mb-16 text-[#1a1a1a]">FAQ</h2>
-        <div className="space-y-4">
+    <section id="faq" className="py-24 bg-white border-b border-black/10">
+      <div className="container mx-auto px-6 max-w-3xl">
+        
+        <div className="mb-16 text-center">
+          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 text-xs font-mono mb-4 rounded-full">
+            FAQ
+          </div>
+          <h2 className="text-4xl font-bold tracking-tight text-[#1a1a1a]">
+            Common Questions
+          </h2>
+        </div>
+
+        <div className="border-t border-gray-200">
           {faqs.map((faq, index) => (
-            <div key={index} className="border-b border-[#1a1a1a]/10">
+            <div key={index} className="border-b border-gray-200">
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full py-6 flex justify-between items-center text-left focus:outline-none group"
+                className="w-full py-6 flex justify-between items-center text-left focus:outline-none hover:bg-gray-50 transition-colors px-4 -mx-4 rounded-lg"
               >
-                <span className="text-xl font-medium text-[#1a1a1a] group-hover:text-orange-600 transition-colors">{faq.question}</span>
-                <span className={`text-2xl text-[#1a1a1a]/40 transition-transform duration-300 ${openIndex === index ? 'rotate-45' : ''}`}>+</span>
+                <span className="text-lg font-medium text-[#1a1a1a]">{faq.question}</span>
+                <div className="ml-4 text-gray-400">
+                  {openIndex === index ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                </div>
               </button>
-              <AnimatePresence>
-                {openIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="pb-6 text-[#1a1a1a]/70 leading-relaxed font-light">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              
+              <div 
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                <div className="pb-8 text-gray-600 leading-relaxed px-4">
+                  {faq.answer}
+                </div>
+              </div>
             </div>
           ))}
         </div>
-        <div className="mt-12 text-center text-xs text-gray-400 max-w-2xl mx-auto">
-          *These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.
+
+        <div className="mt-12 text-center text-xs text-gray-400 max-w-xl mx-auto">
+          *Statements not evaluated by FDA. Product not intended to diagnose, treat, cure, or prevent disease.
         </div>
+
       </div>
     </section>
   );
