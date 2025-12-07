@@ -24,7 +24,7 @@ export default function TimelineSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: 0 }}
-            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors"
+            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors no-animate-mobile"
           >
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Zap className="w-32 h-32 text-orange-500" />
@@ -44,7 +44,7 @@ export default function TimelineSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors"
+            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors no-animate-mobile"
           >
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Brain className="w-32 h-32 text-orange-500" />
@@ -64,7 +64,7 @@ export default function TimelineSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors"
+            className="bg-[#FDFCF8] rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:border-orange-200 transition-colors no-animate-mobile"
           >
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <Smile className="w-32 h-32 text-orange-500" />

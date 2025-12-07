@@ -5,8 +5,8 @@ export default function FlowingBackground() {
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#FDFCF8]">
       {/* Mobile Static Background */}
       <div className="absolute inset-0 md:hidden">
-        <div className="absolute top-0 right-0 w-[80vw] h-[80vw] rounded-full bg-orange-500/10 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[80vw] h-[80vw] rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="absolute top-0 right-0 w-[80vw] h-[80vw] rounded-full bg-orange-500/10 blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-[80vw] h-[80vw] rounded-full bg-amber-500/10 blur-2xl" />
       </div>
 
       {/* Desktop Animated Background - CSS Animation */}

@@ -145,7 +145,7 @@ export default function ProductShowcase() {
             {/* Mobile Dynamic Visual */}
             <div className="w-full flex items-center justify-center md:hidden py-4">
               <div className="relative w-full max-w-[280px] h-56">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-3xl opacity-20" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-linear-to-br from-[#ff6b6b] to-[#ffa502] rounded-full blur-2xl opacity-20" />
                 <div className="absolute inset-0 flex items-center justify-center gap-4">
                   <div 
                     className="w-20 h-20 rounded-full bg-linear-to-br from-white to-white/80 shadow-xl shadow-orange-500/10 flex items-center justify-center border border-white/50"

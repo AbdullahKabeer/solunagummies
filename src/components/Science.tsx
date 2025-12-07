@@ -25,10 +25,10 @@ export default function Science() {
   return (
     <section id="science" className="py-16 md:py-32 relative overflow-hidden bg-[#FDFCF8]">
       {/* Background Noise */}
-      <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none bg-noise" />
+      <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none bg-noise hidden md:block" />
       
       {/* Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-3xl pointer-events-none hidden md:block" />
 
       <div className="container mx-auto px-6 relative z-10">
         <motion.div 

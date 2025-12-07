@@ -38,8 +38,8 @@ export default function ProductPurchase() {
     <section id="purchase" className="py-8 md:py-20 bg-[#FDFCF8] relative overflow-hidden">
       
       {/* Background Gradients */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gray-100/60 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none hidden md:block" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gray-100/60 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none hidden md:block" />
 
       <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10">
         

@@ -27,16 +27,19 @@ export default function Hero3DProduct({ isStatic = false }: { isStatic?: boolean
              <div className="text-gray-300 font-bold tracking-widest text-sm transform-[scaleX(-1)]">SOLUNA</div>
           </div>
 
-          {/* Body Layers */}
+          {/* Body Layers - Reduced for Mobile */}
           {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
-              className={`absolute inset-0 rounded-3xl border ${i === 6 ? 'border-red-500 bg-red-500' : 'border-gray-300 bg-gray-200'} ${i % 3 !== 0 ? 'hidden md:block' : ''}`}
+              className={`absolute inset-0 rounded-3xl border ${i === 6 ? 'border-red-500 bg-red-500' : 'border-gray-300 bg-gray-200'} ${i % 3 !== 0 ? 'hidden md:block' : 'hidden md:block'}`}
               style={{
                 transform: `translateZ(-${(i / 11) * 3}rem)`,
               }}
             />
           ))}
+          
+          {/* Mobile Simple Shadow Layer (Replaces complex 3D layers) */}
+          <div className="absolute inset-0 bg-gray-200 rounded-3xl transform translate-x-2 translate-y-2 md:hidden -z-10"></div>
 
           {/* Front Face */}
           <div className="absolute inset-0 bg-linear-to-b from-gray-50 to-gray-100 rounded-3xl shadow-2xl border border-white/60 flex flex-col items-center p-6 transform-[translateZ(1px)]">

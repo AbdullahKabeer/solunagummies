@@ -7,9 +7,9 @@ export default function Marquee() {
           to { transform: translateX(-50%); }
         }
       `}} />
-      <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay hidden md:block"></div>
       <div
-        className="flex whitespace-nowrap"
+        className="flex whitespace-nowrap will-change-transform"
         style={{ animation: 'marquee 40s linear infinite' }}
       >
         {[0, 1].map((part) => (
