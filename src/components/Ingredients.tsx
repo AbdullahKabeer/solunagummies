@@ -45,19 +45,19 @@ const ingredients = [
 
 export default function Ingredients() {
   return (
-    <section id="ingredients" className="py-24 border-b border-black/10 bg-[#FDFCF8]">
+    <section id="ingredients" className="py-16 md:py-24 border-b border-black/10 bg-[#FDFCF8]">
       <div className="container mx-auto px-6">
         <div className="mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-[#1a1a1a]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 text-[#1a1a1a]">
             Inside the Gummy
           </h2>
-          <p className="text-gray-600 max-w-2xl">
+          <p className="text-gray-600 max-w-2xl text-sm sm:text-base">
             Full transparency. No proprietary blends. Just clinically studied ingredients at meaningful dosages.
           </p>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left">
+        <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
+          <table className="w-full border-collapse text-left min-w-[600px]">
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="py-4 px-4 font-mono text-xs text-gray-400 uppercase tracking-widest">No.</th>

@@ -24,7 +24,7 @@ export default function TimelineSection() {
             {/* Step 1 */}
             <div className="relative bg-white pt-8 md:pt-0">
               <div className="w-4 h-4 bg-white border-4 border-gray-200 rounded-full absolute top-6 left-1/2 -translate-x-1/2 hidden md:block z-10"></div>
-              <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
+              <div className="p-6 md:p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
                 <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">30-45 Minutes</div>
                 <div className="mb-6">
                   <Zap className="w-8 h-8 text-[#FF3300]" />
@@ -39,7 +39,7 @@ export default function TimelineSection() {
             {/* Step 2 */}
             <div className="relative bg-white pt-8 md:pt-0">
               <div className="w-4 h-4 bg-white border-4 border-gray-200 rounded-full absolute top-6 left-1/2 -translate-x-1/2 hidden md:block z-10"></div>
-              <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
+              <div className="p-6 md:p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
                 <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">Day 7</div>
                 <div className="mb-6">
                   <Brain className="w-8 h-8 text-[#FF3300]" />
@@ -54,7 +54,7 @@ export default function TimelineSection() {
             {/* Step 3 */}
             <div className="relative bg-white pt-8 md:pt-0">
               <div className="w-4 h-4 bg-white border-4 border-gray-200 rounded-full absolute top-6 left-1/2 -translate-x-1/2 hidden md:block z-10"></div>
-              <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
+              <div className="p-6 md:p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
                 <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">Day 30+</div>
                 <div className="mb-6">
                   <Smile className="w-8 h-8 text-[#FF3300]" />

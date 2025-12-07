@@ -38,23 +38,23 @@ export default function ProductPurchase() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           
           {/* Left Column: Product Visual */}
-          <div className="lg:col-span-5 bg-white rounded-3xl border border-gray-100 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden shadow-sm">
+          <div className="lg:col-span-5 bg-white rounded-3xl border border-gray-100 p-6 md:p-12 flex flex-col justify-between relative overflow-hidden shadow-sm">
             <div className="absolute inset-0 bg-orange-50/30 pointer-events-none"></div>
             
             <div className="relative z-10">
               <div className="inline-block px-3 py-1 bg-white border border-gray-100 rounded-full text-xs font-mono mb-6 text-gray-500">
                 Best Seller
               </div>
-              <h2 className="text-4xl font-bold tracking-tight mb-2 text-[#1a1a1a]">Focus Protocol</h2>
-              <p className="text-gray-600">30-Day Supply • Blood Orange Flavor</p>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2 text-[#1a1a1a]">Focus Protocol</h2>
+              <p className="text-gray-600 text-sm md:text-base">30-Day Supply • Blood Orange Flavor</p>
             </div>
 
-            <div className="relative z-10 my-12 flex justify-center">
+            <div className="relative z-10 my-8 md:my-12 flex justify-center">
                {/* Product Placeholder - Clean */}
-               <div className="w-64 h-80 bg-white rounded-2xl shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
-                  <div className="text-center p-6 border border-gray-50 rounded-xl w-full h-full flex flex-col justify-center">
-                    <div className="font-bold text-3xl tracking-tight text-[#1a1a1a]">Soluna</div>
-                    <div className="font-mono text-xs text-[#FF3300] mt-2 bg-orange-50 inline-block mx-auto px-2 py-1 rounded-full">Daily Focus</div>
+               <div className="w-full max-w-[240px] aspect-[3/4] bg-white rounded-2xl shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
+                  <div className="text-center p-4 md:p-6 border border-gray-50 rounded-xl w-full h-full flex flex-col justify-center">
+                    <div className="font-bold text-2xl md:text-3xl tracking-tight text-[#1a1a1a]">Soluna</div>
+                    <div className="font-mono text-[10px] md:text-xs text-[#FF3300] mt-2 bg-orange-50 inline-block mx-auto px-2 py-1 rounded-full">Daily Focus</div>
                   </div>
                </div>
             </div>
@@ -90,28 +90,28 @@ export default function ProductPurchase() {
                         <div 
                         key={qty}
                         onClick={() => setQuantity(qty as 1 | 2 | 3)}
-                        className={`cursor-pointer rounded-xl border-2 p-5 flex items-center justify-between transition-all relative ${isSelected ? 'border-[#FF3300] bg-white shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white/50'}`}
+                        className={`cursor-pointer rounded-xl border-2 p-4 sm:p-5 flex items-center justify-between transition-all relative ${isSelected ? 'border-[#FF3300] bg-white shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white/50'}`}
                         >
                         {qty === 3 && (
-                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FF3300] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FF3300] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm whitespace-nowrap">
                                 Most Popular
                             </div>
                         )}
-                        <div className="flex items-center gap-4">
-                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'bg-[#FF3300] border-[#FF3300]' : 'border-gray-300'}`}>
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${isSelected ? 'bg-[#FF3300] border-[#FF3300]' : 'border-gray-300'}`}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                             </div>
                             <div>
-                            <div className="font-bold text-[#1a1a1a] text-lg">{qty} Month Supply</div>
-                            <div className="text-sm text-gray-500">
+                            <div className="font-bold text-[#1a1a1a] text-base sm:text-lg">{qty} Month Supply</div>
+                            <div className="text-xs sm:text-sm text-gray-500">
                                 {qty * 30} Servings • ${details.perServing.toFixed(2)}/serving
                             </div>
                             </div>
                         </div>
-                        <div className="text-right">
-                            <div className="font-bold text-xl text-[#1a1a1a]">${details.finalPrice.toFixed(2)}</div>
+                        <div className="text-right pl-2">
+                            <div className="font-bold text-lg sm:text-xl text-[#1a1a1a]">${details.finalPrice.toFixed(2)}</div>
                             {qty > 1 && (
-                            <div className="text-xs font-bold text-[#FF3300]">
+                            <div className="text-[10px] sm:text-xs font-bold text-[#FF3300]">
                                 Save ${(details.savings).toFixed(2)}
                             </div>
                             )}

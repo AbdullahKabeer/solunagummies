@@ -6,7 +6,7 @@ import { Star, Zap, Clock, CheckCircle } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section className="min-h-screen pt-8 md:pt-20 flex flex-col justify-center border-b border-black/10 bg-[#FDFCF8] relative overflow-hidden">
+    <section className="min-h-screen pt-24 md:pt-20 flex flex-col justify-center border-b border-black/10 bg-[#FDFCF8] relative overflow-hidden">
       
       {/* Right Split Background */}
       <div className="absolute top-0 right-0 w-full lg:w-[38%] h-full bg-[#F5F5F0] hidden lg:block"></div>
@@ -15,7 +15,7 @@ export default function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
         
           {/* Left: Main Content */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 pb-24 lg:pb-0">
             <div className="inline-block px-3 py-1 bg-orange-100 text-orange-800 text-xs font-mono mb-6 rounded-full">
               New Formula 2.0
             </div>
