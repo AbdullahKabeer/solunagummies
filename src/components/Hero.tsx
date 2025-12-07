@@ -41,8 +41,8 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-transparent">
       
-      <div className="container mx-auto px-6 relative z-10 pt-20 md:pt-20">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      <div className="container mx-auto px-6 relative z-10 pt-16 md:pt-20">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-20">
           <motion.div 
             className="w-full lg:w-3/5 perspective-[2000px] no-animate-mobile"
             variants={containerVariants}
@@ -52,38 +52,38 @@ export default function Hero() {
             <div className="lg:transform-[rotateY(15deg)] lg:origin-center lg:transform-3d">
               <motion.div
                 variants={itemVariants}
-                className="flex items-center gap-4 mb-12 no-animate-mobile"
+                className="flex items-center gap-4 mb-4 md:mb-12 no-animate-mobile"
               >
                 <div className="h-px w-12 bg-orange-600"></div>
                 <span className="text-xs font-bold tracking-[0.3em] text-orange-900 uppercase">Est. 2024</span>
               </motion.div>
 
-              <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-8 md:mb-12 tracking-tight text-center lg:text-left">
-                <motion.div variants={itemVariants} className="py-2 no-animate-mobile">
+              <h1 className="font-serif text-4xl md:text-6xl lg:text-8xl leading-[1.1] text-[#1a1a1a] mb-4 md:mb-12 tracking-tight text-center lg:text-left">
+                <motion.div variants={itemVariants} className="py-0 md:py-2 no-animate-mobile">
                   Smooth, Natural
                 </motion.div>
                 <motion.div
                   variants={itemVariants}
-                  className="italic text-orange-600 ml-0 lg:ml-4 lg:pr-4 py-2 no-animate-mobile"
+                  className="italic text-orange-600 ml-0 lg:ml-4 lg:pr-4 py-0 md:py-2 no-animate-mobile"
                 >
                   Support for Focus
                 </motion.div>
-                <motion.div variants={itemVariants} className="py-2 no-animate-mobile">
+                <motion.div variants={itemVariants} className="py-0 md:py-2 no-animate-mobile">
                   & Daily Energy
                 </motion.div>
               </h1>
 
-              <div className="flex flex-col md:flex-row items-center lg:items-start gap-8 md:gap-24 ml-2 md:ml-4">
+              <div className="flex flex-col md:flex-row items-center lg:items-start gap-6 md:gap-24 ml-2 md:ml-4">
                 <div className="max-w-md text-center lg:text-left">
                   <motion.p 
                     variants={itemVariants}
-                    className="text-lg md:text-xl text-gray-600 leading-relaxed font-light no-animate-mobile mb-4"
+                    className="text-base md:text-xl text-gray-600 leading-relaxed font-light no-animate-mobile mb-4"
                   >
                     A daily nootropic gummy formulated to support alertness, clarity, and a calm sense of energy throughout your day.
                   </motion.p>
                   <motion.p
                     variants={itemVariants}
-                    className="text-xs text-gray-400 leading-relaxed font-light no-animate-mobile"
+                    className="hidden md:block text-xs text-gray-400 leading-relaxed font-light no-animate-mobile"
                   >
                     Made with research-backed ingredients that help support healthy brain function.*
                   </motion.p>
@@ -91,7 +91,7 @@ export default function Hero() {
                   {/* Social Proof */}
                   <motion.div 
                     variants={itemVariants}
-                    className="flex items-center justify-center lg:justify-start gap-3 mt-6 no-animate-mobile"
+                    className="flex items-center justify-center lg:justify-start gap-3 mt-4 md:mt-6 no-animate-mobile"
                   >
                     <div className="flex text-[#FF4D00]">
                       {[1, 2, 3, 4, 5].map((i) => (
@@ -106,7 +106,7 @@ export default function Hero() {
                   {/* Badges */}
                   <motion.div 
                     variants={itemVariants}
-                    className="flex flex-wrap justify-center lg:justify-start gap-3 mt-6 no-animate-mobile"
+                    className="flex flex-wrap justify-center lg:justify-start gap-3 mt-4 md:mt-6 no-animate-mobile"
                   >
                     {['GMP Certified', 'Made in USA', 'Natural Caffeine', 'Vegan', '3rd Party Tested'].map((badge) => (
                       <span key={badge} className="text-[10px] font-bold uppercase tracking-wider text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">
@@ -137,12 +137,12 @@ export default function Hero() {
                 {/* Mobile Shop Button */}
                 <motion.div 
                   variants={itemVariants}
-                  className="md:hidden w-full"
+                  className="md:hidden w-full mt-4"
                 >
                   <Link 
                     href="#purchase" 
                     onClick={handleScroll}
-                    className="flex items-center justify-center w-full py-5 rounded-full bg-[#1a1a1a] text-white text-base font-bold tracking-widest uppercase shadow-xl"
+                    className="flex items-center justify-center w-full py-4 rounded-full bg-[#1a1a1a] text-white text-sm font-bold tracking-widest uppercase shadow-xl"
                   >
                     Get Focus
                   </Link>
