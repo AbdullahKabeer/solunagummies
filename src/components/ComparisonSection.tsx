@@ -35,7 +35,7 @@ export default function ComparisonSection() {
               { label: "Digestive Comfort", soluna: true, coffee: "Varies", energy: "Varies" },
             ].map((row, i) => (
               <div key={i} className="grid grid-cols-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50/50 transition-colors">
-                <div className="p-6 py-8 font-medium text-sm text-[#1a1a1a] flex items-center">
+                <div className="p-6 py-8 font-bold text-sm text-[#1a1a1a] flex items-center">
                   {row.label}
                 </div>
                 <div className="p-6 py-8 flex items-center">

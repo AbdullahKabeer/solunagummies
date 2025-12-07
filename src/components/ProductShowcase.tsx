@@ -4,22 +4,22 @@ import { Clock, Calendar, Zap } from 'lucide-react';
 
 export default function ProductShowcase() {
   return (
-    <section id="product" className="py-24 bg-white border-b border-black">
+    <section id="product" className="py-12 md:py-16 bg-white border-b border-black/10">
       <div className="container mx-auto px-6">
         
-        <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-center">
-          
-          {/* Left: Text */}
-          <div className="w-full md:w-1/2">
-            <div className="inline-block bg-[#FF3300] text-white px-2 py-1 text-xs font-mono mb-6">
-              OPERATIONAL_PROTOCOL
+        <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
+            <div className="inline-block bg-[#FF3300] text-white px-3 py-1 text-xs font-mono mb-6 rounded-full">
+              Daily Ritual
             </div>
-            <h2 className="text-5xl font-black uppercase tracking-tighter mb-8">
-              Simple Ritual.<br />Daily Impact.
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6 text-[#1a1a1a]">
+              Simple Ritual. Daily Impact.
             </h2>
-            <p className="font-mono text-sm text-gray-600 mb-12 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#1a1a1a]/80 leading-relaxed max-w-2xl mx-auto">
               Designed to integrate seamlessly into your morning routine. Minimal friction. Maximum output.
             </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
 
             <div className="space-y-8">
               <div className="flex gap-6 items-start group">

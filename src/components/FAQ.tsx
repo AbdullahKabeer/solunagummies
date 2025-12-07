@@ -5,8 +5,8 @@ import { Plus, Minus } from 'lucide-react';
 
 const faqs = [
   {
-    question: "How quickly will I notice effects?",
-    answer: "Most users report feeling a calm, steady lift within 30–60 minutes. It's designed to be gentle, not jarring."
+    question: "How quickly can I expect to feel the effects?",
+    answer: "Most users report a gentle sense of alertness within 30–60 minutes, though experiences may vary."
   },
   {
     question: "Is it safe for daily use?",

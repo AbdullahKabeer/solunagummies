@@ -32,7 +32,7 @@ export default function ProductPurchase() {
   const { finalPrice, totalBase, savings, perServing, discountPercent } = getPriceDetails(quantity);
 
   return (
-    <section id="purchase" className="py-16 bg-[#FDFCF8] border-b border-black/10 relative">
+    <section id="purchase" className="py-12 bg-[#FDFCF8] border-b border-black/10 relative">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gray-200/50 rounded-full mt-8"></div>
       <div className="container mx-auto px-6 pt-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
@@ -77,73 +77,82 @@ export default function ProductPurchase() {
 
           {/* Right Column: Order Form */}
           <div className="lg:col-span-7 py-4">
-            <div className="mb-8 pb-8 border-b border-gray-100">
-              <h3 className="text-2xl font-bold mb-6 text-[#1a1a1a]">Choose Your Supply</h3>
-              
-              <div className="space-y-4">
-                {[1, 2, 3].map((qty) => {
-                  const details = getPriceDetails(qty);
-                  const isSelected = quantity === qty;
-                  
-                  return (
-                    <div 
-                      key={qty}
-                      onClick={() => setQuantity(qty as 1 | 2 | 3)}
-                      className={`cursor-pointer rounded-xl border-2 p-5 flex items-center justify-between transition-all ${isSelected ? 'border-[#FF3300] bg-orange-50/30' : 'border-gray-100 hover:border-gray-200 bg-white'}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'bg-[#FF3300] border-[#FF3300]' : 'border-gray-300'}`}>
-                          {isSelected && <Check className="w-3 h-3 text-white" />}
-                        </div>
-                        <div>
-                          <div className="font-bold text-[#1a1a1a] text-lg">{qty} Month Supply</div>
-                          <div className="text-sm text-gray-500">
-                            {qty * 30} Servings • ${details.perServing.toFixed(2)}/serving
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold text-xl text-[#1a1a1a]">${details.finalPrice.toFixed(2)}</div>
-                        {qty > 1 && (
-                          <div className="text-xs font-bold text-[#FF3300]">
-                            Save ${(details.savings).toFixed(2)}
-                          </div>
+            <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100">
+                <div className="mb-8 pb-8 border-b border-gray-200">
+                <h3 className="text-2xl font-bold mb-6 text-[#1a1a1a]">Choose Your Supply</h3>
+                
+                <div className="space-y-4">
+                    {[1, 2, 3].map((qty) => {
+                    const details = getPriceDetails(qty);
+                    const isSelected = quantity === qty;
+                    
+                    return (
+                        <div 
+                        key={qty}
+                        onClick={() => setQuantity(qty as 1 | 2 | 3)}
+                        className={`cursor-pointer rounded-xl border-2 p-5 flex items-center justify-between transition-all relative ${isSelected ? 'border-[#FF3300] bg-white shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white/50'}`}
+                        >
+                        {qty === 3 && (
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FF3300] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                                Most Popular
+                            </div>
                         )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+                        <div className="flex items-center gap-4">
+                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'bg-[#FF3300] border-[#FF3300]' : 'border-gray-300'}`}>
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
+                            </div>
+                            <div>
+                            <div className="font-bold text-[#1a1a1a] text-lg">{qty} Month Supply</div>
+                            <div className="text-sm text-gray-500">
+                                {qty * 30} Servings • ${details.perServing.toFixed(2)}/serving
+                            </div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="font-bold text-xl text-[#1a1a1a]">${details.finalPrice.toFixed(2)}</div>
+                            {qty > 1 && (
+                            <div className="text-xs font-bold text-[#FF3300]">
+                                Save ${(details.savings).toFixed(2)}
+                            </div>
+                            )}
+                        </div>
+                        </div>
+                    );
+                    })}
+                </div>
+                </div>
 
-            <div className="space-y-6">
-              <div className="flex justify-between items-center text-sm text-gray-600">
-                <span>Subtotal</span>
-                <span className="line-through">${totalBase.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center text-sm text-gray-600">
-                <span>Discount ({discountPercent * 100}%)</span>
-                <span className="text-[#FF3300] font-bold">- ${savings.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center text-sm text-gray-600">
-                <span>Shipping</span>
-                <span className="text-green-600 font-bold">FREE</span>
-              </div>
-              <div className="flex justify-between items-center font-bold text-2xl border-t border-gray-100 pt-6 text-[#1a1a1a]">
-                <span>Total</span>
-                <span>${finalPrice.toFixed(2)}</span>
-              </div>
+                <div className="space-y-6">
+                <div className="flex justify-between items-center text-sm text-gray-600">
+                    <span>Subtotal</span>
+                    <span className="line-through">${totalBase.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-600">
+                    <span>Discount ({discountPercent * 100}%)</span>
+                    <span className="text-[#FF3300] font-bold">- ${savings.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-600">
+                    <span>Shipping</span>
+                    <span className="text-green-600 font-bold">FREE</span>
+                </div>
+                <div className="flex justify-between items-center font-bold text-2xl border-t border-gray-200 pt-6 text-[#1a1a1a]">
+                    <span>Total</span>
+                    <span>${finalPrice.toFixed(2)}</span>
+                </div>
 
-              <button className="w-full bg-[#FF3300] text-white font-bold text-lg py-5 rounded-full hover:bg-[#e62e00] transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-3">
-                <Zap className="w-5 h-5" />
-                Start Your Ritual
-              </button>
-              
-              <div className="flex justify-center gap-6 text-xs text-gray-400 mt-4">
-                <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4" /> Secure Checkout</span>
-                <span className="flex items-center gap-1"><Truck className="w-4 h-4" /> Fast Shipping</span>
-                <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> 30-Day Guarantee</span>
-              </div>
+                <button className="w-full bg-[#FF3300] text-white font-bold text-lg py-5 rounded-full hover:bg-[#e62e00] transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-3">
+                    <Zap className="w-5 h-5" />
+                    Start Your Ritual
+                </button>
+                
+                <div className="flex justify-center gap-4 text-[10px] md:text-xs text-gray-400 mt-4 uppercase tracking-wide font-medium">
+                    <span className="flex items-center gap-1">30-Day Satisfaction Guarantee</span>
+                    <span className="hidden md:inline text-gray-300">•</span>
+                    <span className="flex items-center gap-1">Cancel Anytime</span>
+                    <span className="hidden md:inline text-gray-300">•</span>
+                    <span className="flex items-center gap-1">Ships in 24 Hours</span>
+                </div>
+                </div>
             </div>
           </div>
         </div>

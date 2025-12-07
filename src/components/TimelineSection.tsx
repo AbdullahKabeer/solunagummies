@@ -20,14 +20,14 @@ export default function TimelineSection() {
           {/* Connecting Line */}
           <div className="absolute top-8 left-0 w-full h-px bg-gray-200 hidden md:block"></div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
             {/* Step 1 */}
             <div className="relative bg-white pt-8 md:pt-0">
               <div className="w-4 h-4 bg-white border-4 border-gray-200 rounded-full absolute top-6 left-1/2 -translate-x-1/2 hidden md:block z-10"></div>
               <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
                 <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">30-45 Minutes</div>
                 <div className="mb-6">
-                  <Zap className="w-7 h-7 text-[#FF3300]" />
+                  <Zap className="w-8 h-8 text-[#FF3300]" />
                 </div>
                 <h3 className="text-base font-bold mb-2 text-[#1a1a1a]">Calm Lift</h3>
                 <p className="text-sm text-[#1a1a1a]/80 leading-relaxed">
@@ -42,7 +42,7 @@ export default function TimelineSection() {
               <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
                 <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">Day 7</div>
                 <div className="mb-6">
-                  <Brain className="w-7 h-7 text-[#FF3300]" />
+                  <Brain className="w-8 h-8 text-[#FF3300]" />
                 </div>
                 <h3 className="text-base font-bold mb-2 text-[#1a1a1a]">Steady Focus</h3>
                 <p className="text-sm text-[#1a1a1a]/80 leading-relaxed">
@@ -57,7 +57,7 @@ export default function TimelineSection() {
               <div className="p-8 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all group bg-gray-50/50 pt-6 pb-4">
                 <div className="font-mono text-xs mb-4 text-gray-400 uppercase tracking-wider">Day 30+</div>
                 <div className="mb-6">
-                  <Smile className="w-7 h-7 text-[#FF3300]" />
+                  <Smile className="w-8 h-8 text-[#FF3300]" />
                 </div>
                 <h3 className="text-base font-bold mb-2 text-[#1a1a1a]">Optimized Mind</h3>
                 <p className="text-sm text-[#1a1a1a]/80 leading-relaxed">
