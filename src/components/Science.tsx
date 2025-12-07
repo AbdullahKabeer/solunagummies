@@ -4,20 +4,20 @@ import { motion } from 'framer-motion';
 
 const steps = [
   {
-    title: "Brain Fuel for Focus",
-    description: "Cognizin® citicoline helps support the brain’s natural energy production and communication between neurons, so it’s easier to lock in on deep work and stay mentally sharp.*"
+    title: "Clean Daily Support",
+    description: "Formulated with ingredients known to support focus, alertness, and overall brain wellness.*"
   },
   {
-    title: "Calm, Smooth Energy",
-    description: "The combination of L-theanine and natural caffeine is designed for “calm alertness” — you feel awake and focused, not wired or jittery.*"
+    title: "Smooth, Balanced Experience",
+    description: "Users commonly describe feeling calmly focused—without overstimulation.*"
   },
   {
-    title: "Mood & Motivation Support",
-    description: "Saffron extract is included at a meaningful dose to support a more balanced mood, stress resilience, and emotional well-being when taken consistently over time.*"
+    title: "No Jitters, No Crash",
+    description: "A balanced approach designed for steady, natural-feeling energy.*"
   },
   {
-    title: "Better-For-You Gummy Base",
-    description: "Pectin-based gummies (no gelatin), sweetened with allulose and monk fruit instead of heavy sugar or corn syrup, so your focus habit feels more like a treat and less like a sugar bomb."
+    title: "Easy Daily Ritual",
+    description: "Just one gummy a day fits effortlessly into your routine."
   }
 ];
 

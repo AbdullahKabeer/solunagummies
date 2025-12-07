@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Hero3DProduct from './Hero3DProduct';
-import { Check, Star, ShieldCheck, Truck, Clock, RefreshCw, Zap, Info } from 'lucide-react';
+import { Check, Star, ShieldCheck, Truck, Clock, RefreshCw, Zap, Info, FlaskConical, Leaf, Flag } from 'lucide-react';
 
 export default function ProductPurchase() {
   const [quantity, setQuantity] = useState<1 | 2 | 3>(1);
@@ -215,6 +215,9 @@ export default function ProductPurchase() {
 
                 {/* Subscription Card */}
                 <div className="relative p-4 rounded-xl border-2 border-[#FF4D00] bg-[#fff5f0] mb-4">
+                  <div className="absolute -top-3 right-4 bg-[#FF4D00] text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                    Most Popular
+                  </div>
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-3">
                       <div className="w-4 h-4 rounded-full border-[4px] border-[#FF4D00] bg-white"></div>
@@ -258,6 +261,23 @@ export default function ProductPurchase() {
                 <span>Add to Cart</span>
                 <span className="bg-white/20 px-2 py-0.5 rounded text-base">${finalPrice.toFixed(2)}</span>
               </button>
+              
+              <div className="text-center mb-6 space-y-1">
+                <div className="flex items-center justify-center gap-2 text-xs font-medium text-gray-600">
+                  <ShieldCheck className="w-3 h-3 text-green-600" />
+                  <span>30-Day Satisfaction Guarantee</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-xs font-medium text-gray-600">
+                  <Clock className="w-3 h-3 text-blue-600" />
+                  <span>Ships in 24 hours</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-xs font-medium text-gray-600">
+                  <Truck className="w-3 h-3 text-orange-600" />
+                  <span>Free shipping on orders $40+</span>
+                </div>
+              </div>
+
+
 
               {/* Payment Methods */}
               <div className="flex justify-center gap-2 mb-6 opacity-60 grayscale">
@@ -268,18 +288,30 @@ export default function ProductPurchase() {
               </div>
 
               {/* Trust Signals */}
-              <div className="flex items-center justify-center gap-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-6 border-b border-gray-100 pb-6">
+              <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-6 border-b border-gray-100 pb-6">
                 <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-3 h-3" />
+                  <ShieldCheck className="w-3 h-3 text-green-600" />
                   30-Day Guarantee
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Truck className="w-3 h-3" />
+                  <Truck className="w-3 h-3 text-blue-600" />
                   Free Shipping
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-3 h-3" />
-                  Cancel Anytime
+                  <FlaskConical className="w-3 h-3 text-purple-600" />
+                  3rd Party Tested
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Leaf className="w-3 h-3 text-green-500" />
+                  Vegan & Gluten-Free
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Check className="w-3 h-3 text-orange-600" />
+                  GMP Certified
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Flag className="w-3 h-3 text-red-600" />
+                  Made in USA
                 </span>
               </div>
 

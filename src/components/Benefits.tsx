@@ -6,22 +6,22 @@ import { useRef } from 'react';
 const benefits = [
   {
     id: "01",
-    title: "Focus & Clarity",
-    description: "Cognizin® citicoline + natural caffeine supports the brain’s natural energy production.",
+    title: "Stable Lift",
+    description: "Many users report consistent, natural-feeling energy throughout their day.*",
     gradient: "from-orange-400 to-red-500",
     image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: "02",
-    title: "Calm Energy",
-    description: "L-theanine + caffeine combo clinically studied for attention and smooth alertness.",
+    title: "Deep Focus",
+    description: "Supports concentration and helps maintain cognitive performance.*",
     gradient: "from-blue-400 to-teal-500",
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: "03",
-    title: "Mood Balance",
-    description: "Standardized saffron extract at research-level doses for emotional well-being.",
+    title: "Sustained Clarity",
+    description: "Helps promote clear, steady thinking without the spikes and dips.*",
     gradient: "from-purple-400 to-pink-500",
     image: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=800&auto=format&fit=crop"
   }

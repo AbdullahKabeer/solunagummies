@@ -5,16 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const faqs = [
   {
-    question: "When will I feel it?",
-    answer: "Many people feel a smoother kind of alertness and focus within about 30–60 minutes of taking 2 gummies. Mood and cognitive support from ingredients like citicoline and saffron are best supported with consistent daily use over time.*"
+    question: "How quickly will I notice anything?",
+    answer: "Many users report noticing the experience within 30–60 minutes, but individual responses vary.*"
   },
   {
-    question: "Can I take this instead of coffee?",
-    answer: "Each serving has about 50 mg of caffeine—roughly half a small cup of coffee—plus L-theanine for calm focus. Some people use Soluna instead of coffee; others stack it with a smaller coffee or tea. If you’re caffeine-sensitive, start with 1 gummy.*"
+    question: "Is it safe?",
+    answer: "Focus Gummies are made with ingredients that are generally recognized as safe (GRAS). Consult your healthcare provider if you are pregnant, on medication, or have a medical condition.*"
   },
   {
-    question: "Will this help with anxiety, depression, or ADHD?",
-    answer: "Soluna is not intended to diagnose, treat, cure, or prevent any disease. It’s formulated to support focus, calm energy, and mood as a dietary supplement. If you have or suspect a medical condition, talk to your healthcare provider.*"
+    question: "Can I take this with coffee?",
+    answer: "Yes — many customers enjoy Focus alongside their regular routine."
   },
   {
     question: "Is it vegan?",
@@ -65,6 +65,9 @@ export default function FAQ() {
               </AnimatePresence>
             </div>
           ))}
+        </div>
+        <div className="mt-12 text-center text-xs text-gray-400 max-w-2xl mx-auto">
+          *These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.
         </div>
       </div>
     </section>

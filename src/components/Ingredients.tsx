@@ -10,7 +10,7 @@ const ingredients = [
     foundIn: "Brain Tissue",
     sourcedFrom: "Japan",
     benefits: ["Brain Energy", "Focus", "Neural Repair"],
-    description: "A patented form of citicoline that supports the brain’s natural energy production and healthy communication between neurons.",
+    description: "Supports overall cognitive wellness and may help maintain healthy nerve function.*",
     color: "from-blue-500 to-cyan-400",
     bg: "bg-blue-50",
     icon: "🧠"
@@ -21,7 +21,7 @@ const ingredients = [
     foundIn: "Green Tea",
     sourcedFrom: "Japan",
     benefits: ["Calm Alertness", "Alpha Waves", "Stress Reduction"],
-    description: "An amino acid that promotes a state of 'calm alertness,' helping smooth out caffeine and support focused concentration.",
+    description: "Promotes relaxation while supporting focus and clarity.*",
     color: "from-green-500 to-emerald-400",
     bg: "bg-green-50",
     icon: "🍵"
@@ -32,7 +32,7 @@ const ingredients = [
     foundIn: "Green Tea",
     sourcedFrom: "India",
     benefits: ["Alertness", "Reaction Time", "Metabolism"],
-    description: "Gentle lift in alertness and reaction time from a natural source. Enough to feel, not enough to crash.",
+    description: "Provides a gentle lift in alertness without the crash.*",
     color: "from-orange-500 to-amber-400",
     bg: "bg-orange-50",
     icon: "⚡"
@@ -43,7 +43,7 @@ const ingredients = [
     foundIn: "Saffron Crocus",
     sourcedFrom: "Spain",
     benefits: ["Mood Support", "Emotional Balance", "Stress"],
-    description: "Standardized saffron extract to support a positive mood, stress resilience, and emotional balance over time.*",
+    description: "Supports a positive mood and emotional balance.*",
     color: "from-purple-500 to-pink-400",
     bg: "bg-purple-50",
     icon: "🌸"
@@ -54,7 +54,7 @@ const ingredients = [
     foundIn: "Bioactive Methylcobalamin",
     sourcedFrom: "Lab Synthesized",
     benefits: ["Energy Metabolism", "Nervous System", "Cellular Health"],
-    description: "Bioactive B12 to support healthy energy metabolism and nervous system function, especially useful for low B12 intake.*",
+    description: "Helps convert nutrients into cellular energy.*",
     color: "from-red-500 to-rose-400",
     bg: "bg-red-50",
     icon: "🧬"

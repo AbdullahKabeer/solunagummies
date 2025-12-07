@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Benefits from "@/components/Benefits";
 import Ingredients from "@/components/Ingredients";
 import Science from "@/components/Science";
 import ProductShowcase from "@/components/ProductShowcase";
@@ -23,19 +22,17 @@ export default function Home() {
         <Hero />
         
         <div className="flex flex-col w-full">
-          <Marquee />
-          
-          {/* <ComparisonSection /> */}
-          
           <ProductShowcase />
           
           <Timeline />
           
-          {/*<Benefits />*/}
+          <ComparisonSection /> 
           
           <Ingredients />
           
           <Science />
+
+          <Marquee />
 
           <ProductPurchase />
 

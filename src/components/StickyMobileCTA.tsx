@@ -60,7 +60,7 @@ export default function StickyMobileCTA() {
               onClick={scrollToPurchase}
               className="flex-1 bg-[#FF4D00] text-white py-4 rounded-full text-base font-bold text-center uppercase tracking-widest shadow-lg shadow-orange-500/20 active:scale-95 transition-transform"
             >
-              Get Focus
+              Get Focus Gummies
             </button>
           </div>
         </motion.div>
