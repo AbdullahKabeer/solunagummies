@@ -142,6 +142,16 @@ export default function ProductPurchase() {
                 </p>
               </div>
 
+              {/* Trust Badges */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['Made in USA', 'Third-party tested', 'Natural Caffeine', 'Vegan / Non-GMO', '30-day satisfaction guarantee'].map((badge) => (
+                  <div key={badge} className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">
+                    <Check className="w-3 h-3 text-green-600" />
+                    <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider">{badge}</span>
+                  </div>
+                ))}
+              </div>
+
               {/* Purchase Toggles */}
               <div className="mb-6">
                 

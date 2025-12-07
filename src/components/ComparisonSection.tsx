@@ -1,3 +1,5 @@
+import { Zap, Coffee, Battery } from 'lucide-react';
+
 export default function ComparisonSection() {
   return (
     <section className="py-32 bg-[#FDFCF8] relative overflow-hidden">
@@ -10,10 +12,19 @@ export default function ComparisonSection() {
 
           <div className="grid grid-cols-4 gap-4 md:gap-8 border-t-2 border-gray-900 pt-8">
             {/* Headers */}
-            <div className="font-bold text-gray-900 text-sm md:text-base">Feature</div>
-            <div className="font-bold text-orange-600 text-sm md:text-base">Focus Gummies</div>
-            <div className="font-bold text-gray-400 text-sm md:text-base">Coffee</div>
-            <div className="font-bold text-gray-400 text-sm md:text-base">Energy Drinks</div>
+            <div className="font-bold text-gray-900 text-sm md:text-base flex items-center gap-2">Feature</div>
+            <div className="font-bold text-orange-600 text-sm md:text-base flex items-center gap-2">
+              <Zap className="w-4 h-4" />
+              Focus Gummies
+            </div>
+            <div className="font-bold text-gray-400 text-sm md:text-base flex items-center gap-2">
+              <Coffee className="w-4 h-4" />
+              Coffee
+            </div>
+            <div className="font-bold text-gray-400 text-sm md:text-base flex items-center gap-2">
+              <Battery className="w-4 h-4" />
+              Energy Drinks
+            </div>
 
             {/* Row 1 */}
             <div className="py-4 border-b border-gray-100 text-sm font-medium text-gray-700">Natural Caffeine</div>

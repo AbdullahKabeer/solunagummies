@@ -152,7 +152,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Floating Product Mockup */}
-          <div className="w-full lg:w-2/5 relative flex justify-center lg:justify-end perspective-[1000px] mt-0 lg:mt-0 mb-20 lg:mb-0">
+          <div className="w-full lg:w-2/5 relative flex justify-center lg:justify-end perspective-[1000px] mt-0 lg:mt-0 mb-8 lg:mb-0 scale-90 md:scale-100">
             <Hero3DProduct />
           </div>
         </div>
