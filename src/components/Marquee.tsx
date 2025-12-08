@@ -9,7 +9,7 @@ export default function Marquee() {
       `}} />
       <div
         className="flex whitespace-nowrap will-change-transform"
-        style={{ animation: 'marquee 30s linear infinite' }}
+        style={{ animation: 'marquee 60s linear infinite' }}
       >
         {[0, 1, 2, 3].map((part) => (
           <div key={part} className="flex shrink-0 items-center">

@@ -15,7 +15,7 @@ export default function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
         
           {/* Left: Main Content */}
-          <div className="lg:col-span-7 pb-24 lg:pb-0">
+          <div className="lg:col-span-7 pb-8 lg:pb-0">
             <div className="inline-block px-3 py-1 bg-orange-100 text-orange-800 text-xs font-mono mb-6 rounded-full">
               New Formula 2.0
             </div>

@@ -7,7 +7,7 @@ export default function ProductShowcase() {
     <section id="product" className="py-12 md:py-24 bg-white border-b border-black">
       <div className="container mx-auto px-6">
         
-        <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-center">
+        <div className="flex flex-col md:flex-row-reverse gap-12 md:gap-24 items-center">
           
           {/* Left: Text */}
           <div className="w-full md:w-1/2">
