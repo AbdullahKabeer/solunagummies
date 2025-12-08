@@ -1,21 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { Star, RotateCcw, Truck, Bell, ShieldCheck } from 'lucide-react';
+import { Star, RotateCcw, Truck, Bell, ShieldCheck, Check } from 'lucide-react';
 
 export default function ProductPurchase() {
   const [quantity, setQuantity] = useState<1 | 2 | 3>(2);
-  const [isSubscribe, setIsSubscribe] = useState(true);
+  const [purchaseType, setPurchaseType] = useState<'subscribe' | 'onetime'>('subscribe');
 
   const basePrice = 74.95;
   
-  const getPriceDetails = (qty: number, subscribe: boolean) => {
+  const getPriceDetails = (qty: number, type: 'subscribe' | 'onetime') => {
     const totalBase = basePrice * qty;
     let discountPercent = 0;
     
-    if (qty === 1) discountPercent = subscribe ? 0.20 : 0;
-    if (qty === 2) discountPercent = 0.30;
-    if (qty === 3) discountPercent = 0.35;
+    // Subscription always gets discount
+    if (type === 'subscribe') {
+        if (qty === 1) discountPercent = 0.20;
+        if (qty === 2) discountPercent = 0.30;
+        if (qty === 3) discountPercent = 0.35;
+    } else {
+        // One-time purchase gets NO discount (or maybe small bulk discount? User asked for distinct price difference)
+        // Let's keep it simple: One-time is full price.
+        discountPercent = 0;
+    }
     
     const finalPrice = totalBase * (1 - discountPercent);
     const savings = totalBase - finalPrice;
@@ -30,7 +37,10 @@ export default function ProductPurchase() {
     };
   };
 
-  const { finalPrice, totalBase, savings, perServing, discountPercent } = getPriceDetails(quantity, isSubscribe);
+  const { finalPrice, totalBase, savings, perServing, discountPercent } = getPriceDetails(quantity, purchaseType);
+
+  // Calculate subscription price for comparison in One-Time card
+  const subPriceDetails = getPriceDetails(quantity, 'subscribe');
 
   return (
     <section id="purchase" className="py-6 md:py-12 bg-white border-b border-black/10">
@@ -62,7 +72,7 @@ export default function ProductPurchase() {
           <div className="lg:col-span-6 lg:pl-6">
             <div className="mb-3">
                 <div className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-wider mb-1">Timed-Release Nootropic</div>
-                <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-2 tracking-tight">Focus Protocol</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-2 tracking-tight">Your Daily Focus Routine</h2>
                 
                 <div className="flex items-center gap-2 mb-3">
                     <div className="flex text-[#FF3300]">
@@ -75,17 +85,6 @@ export default function ProductPurchase() {
                 <p className="text-gray-600 leading-relaxed mb-6">
                     Developed by neuroscientists and validated in clinical studies, our focus supplement supports clear thinking, sustained energy, and helps counteract brain fog and afternoon fatigue.
                 </p>
-            </div>
-
-            {/* Discount Banner */}
-            <div className="bg-[#F5F5F0] text-[#1a1a1a] px-3 py-2 rounded-lg text-xs font-mono border border-black/5 text-center mb-6">
-                <span className="font-bold text-[#FF3300]">Congrats!</span> You&apos;re saving {(discountPercent * 100).toFixed(0)}% off with a bulk discount
-            </div>
-
-            {/* Price */}
-            <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-3xl font-bold text-[#1a1a1a]">${finalPrice.toFixed(2)}</span>
-                <span className="text-lg text-gray-400 line-through decoration-gray-400/50">${totalBase.toFixed(2)}</span>
             </div>
 
             {/* Quantity Selector */}
@@ -108,52 +107,99 @@ export default function ProductPurchase() {
                                     {qty === 2 ? '30% OFF' : '35% OFF'}
                                 </span>
                             )}
+                            {qty === 3 && (
+                                <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-[#FF3300] whitespace-nowrap">
+                                    MOST POPULAR
+                                </span>
+                            )}
                         </button>
                     ))}
                 </div>
             </div>
 
-            {/* Subscription Box */}
-            <div className={`border-2 rounded-xl p-4 mb-4 transition-all ${isSubscribe ? 'border-[#FF3300] bg-orange-50/30' : 'border-black/10'}`}>
-                <div className="flex items-start gap-3 cursor-pointer" onClick={() => setIsSubscribe(!isSubscribe)}>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${isSubscribe ? 'border-[#FF3300] bg-[#FF3300]' : 'border-gray-300 bg-white'}`}>
-                        {isSubscribe && <div className="w-2 h-2 bg-white rounded-full" />}
-                    </div>
-                    <div className="flex-1">
-                        <div className="flex justify-between items-center mb-1">
-                            <span className="font-bold text-base text-[#1a1a1a]">Subscribe and Save</span>
-                            <div className="text-right">
-                                <div className="font-bold text-base">${finalPrice.toFixed(2)} <span className="text-gray-400 text-xs line-through font-normal">${totalBase.toFixed(2)}</span></div>
-                                <div className="text-[10px] font-mono text-gray-500">${perServing.toFixed(2)} / serving</div>
+            {/* Purchase Options */}
+            <div className="space-y-3 mb-6">
+                
+                {/* Subscribe Option */}
+                <div 
+                    onClick={() => setPurchaseType('subscribe')}
+                    className={`relative rounded-2xl p-4 border-2 cursor-pointer transition-all ${
+                        purchaseType === 'subscribe' 
+                        ? 'bg-[#F9F9F7] border-[#FF3300]' 
+                        : 'bg-white border-gray-200 hover:border-gray-300'
+                    }`}
+                >
+                    <div className="flex justify-between items-start">
+                        <div className="flex gap-3">
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${purchaseType === 'subscribe' ? 'border-[#FF3300] bg-[#FF3300]' : 'border-gray-300 bg-white'}`}>
+                                {purchaseType === 'subscribe' && <div className="w-2 h-2 bg-white rounded-full" />}
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className="font-bold text-[#1a1a1a]">Subscribe & Save</span>
+                                    <span className="bg-[#E6F4EA] text-[#1E4620] text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                        Save {(subPriceDetails.discountPercent * 100).toFixed(0)}%
+                                    </span>
+                                </div>
+                                <div className="text-xs text-gray-500 font-mono mb-2">
+                                    ${subPriceDetails.perServing.toFixed(2)} / serving
+                                </div>
+                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-gray-600 font-medium">
+                                    <div className="flex items-center gap-1">
+                                        <RotateCcw className="w-3 h-3 text-gray-400" />
+                                        <span>Flexible frequency</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <ShieldCheck className="w-3 h-3 text-gray-400" />
+                                        <span>Cancel anytime</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <Truck className="w-3 h-3 text-gray-400" />
+                                        <span>Free shipping</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="inline-block bg-[#FF3300] text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded mb-3 mt-1">
-                            Save {(discountPercent * 100).toFixed(0)}%
-                        </div>
-                        
-                        {isSubscribe && (
-                            <div className="space-y-2 text-xs text-gray-600 font-mono">
-                                <div className="flex items-center gap-2">
-                                    <RotateCcw className="w-3 h-3 text-gray-400" />
-                                    <span>Ships free every {quantity} months.</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold text-[#FF3300]">$</span>
-                                    <span>Save <span className="font-bold text-[#FF3300]">${savings.toFixed(2)}</span> with each delivery.</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <ShieldCheck className="w-3 h-3 text-gray-400" />
-                                    <span>Modify or cancel anytime.</span>
-                                </div>
+                        <div className="text-right">
+                            <div className="font-bold text-lg text-[#1a1a1a]">
+                                ${subPriceDetails.finalPrice.toFixed(2)}
                             </div>
-                        )}
+                            <div className="text-xs text-[#FF3300] font-bold">
+                                Save ${subPriceDetails.savings.toFixed(2)}
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                {/* One-Time Option */}
+                <div 
+                    onClick={() => setPurchaseType('onetime')}
+                    className={`relative rounded-2xl p-4 border-2 cursor-pointer transition-all ${
+                        purchaseType === 'onetime' 
+                        ? 'bg-[#F9F9F7] border-[#1a1a1a]' 
+                        : 'bg-white border-gray-200 hover:border-gray-300'
+                    }`}
+                >
+                    <div className="flex justify-between items-center">
+                        <div className="flex gap-3 items-center">
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${purchaseType === 'onetime' ? 'border-[#1a1a1a] bg-[#1a1a1a]' : 'border-gray-300 bg-white'}`}>
+                                {purchaseType === 'onetime' && <div className="w-2 h-2 bg-white rounded-full" />}
+                            </div>
+                            <span className="font-bold text-[#1a1a1a]">One-Time Purchase</span>
+                        </div>
+                        <div className="text-right">
+                            <div className="font-bold text-lg text-[#1a1a1a]">
+                                ${(basePrice * quantity).toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             {/* CTA */}
             <button className="w-full bg-[#FF3300] text-white font-bold text-base py-3 rounded-full hover:bg-[#e62e00] transition-all shadow-lg shadow-orange-500/20 mb-4">
-                Order Now
+                {purchaseType === 'subscribe' ? 'Start My Subscription' : 'Add to Cart'} - ${finalPrice.toFixed(2)}
             </button>
 
             {/* Trust Badges */}
