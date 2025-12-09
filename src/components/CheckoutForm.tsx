@@ -10,15 +10,17 @@ import {
 } from '@stripe/react-stripe-js';
 import { useCart } from '@/context/CartContext';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [isPromoOpen, setIsPromoOpen] = useState(false);
-  const { cartTotal, clearCart } = useCart();
+  const { cartTotal, clearCart, items } = useCart();
 
   useEffect(() => {
     if (!stripe) {
@@ -63,23 +65,51 @@ export default function CheckoutForm() {
 
     setIsLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
         return_url: `${window.location.origin}/checkout?success=true`,
       },
+      redirect: 'if_required',
     });
 
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer
-    // will be redirected to an intermediate site first to authorize the
-    // payment, then redirected to the `return_url`.
-    if (error.type === 'card_error' || error.type === 'validation_error') {
-      setMessage(error.message || 'An unexpected error occurred.');
-    } else {
-      setMessage('An unexpected error occurred.');
+    if (error) {
+      if (error.type === 'card_error' || error.type === 'validation_error') {
+        setMessage(error.message || 'An unexpected error occurred.');
+      } else {
+        setMessage('An unexpected error occurred.');
+      }
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      // Payment succeeded, create order in database
+      try {
+        const response = await fetch('/api/orders/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            paymentIntentId: paymentIntent.id,
+            amount: paymentIntent.amount,
+            email: email,
+            items: items, // Send cart items
+          }),
+        });
+
+        if (response.ok) {
+          clearCart();
+          router.push('/checkout?success=true');
+        } else {
+          console.error('Failed to create order');
+          // Still redirect to success but maybe log the error?
+          // Or show an error message? 
+          // Ideally we want the user to know payment worked even if order creation failed (edge case)
+          router.push('/checkout?success=true');
+        }
+      } catch (err) {
+        console.error('Error creating order:', err);
+        router.push('/checkout?success=true');
+      }
     }
 
     setIsLoading(false);

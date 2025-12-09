@@ -9,16 +9,19 @@ export default function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
     try {
       await signup(name, email, password);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setError(error.message || 'An error occurred during signup');
     } finally {
       setIsLoading(false);
     }
@@ -45,6 +48,11 @@ export default function SignupPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="p-4 bg-red-50 border border-red-200 text-red-600 text-sm font-mono rounded-lg">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <label className="text-xs font-bold uppercase tracking-wider flex justify-between">
                 Full Name

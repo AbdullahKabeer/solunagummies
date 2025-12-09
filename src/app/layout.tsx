@@ -3,6 +3,7 @@ import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { SessionProvider } from "@/context/SessionContext";
 import CartDrawer from "@/components/CartDrawer";
 
 const archivo = Archivo({
@@ -33,10 +34,12 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          <CartProvider>
-            {children}
-            <CartDrawer />
-          </CartProvider>
+          <SessionProvider>
+            <CartProvider>
+              {children}
+              <CartDrawer />
+            </CartProvider>
+          </SessionProvider>
         </AuthProvider>
       </body>
     </html>
