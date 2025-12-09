@@ -9,12 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^5.4.1",
+    "@stripe/stripe-js": "^8.5.3",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.87.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.554.0",
     "next": "^16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "stripe": "^20.0.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

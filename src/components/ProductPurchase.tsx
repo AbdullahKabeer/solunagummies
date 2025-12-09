@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { Star, RotateCcw, Truck, Bell, ShieldCheck, Check } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 export default function ProductPurchase() {
   const [quantity, setQuantity] = useState<1 | 2 | 3>(2);
   const [purchaseType, setPurchaseType] = useState<'subscribe' | 'onetime'>('subscribe');
+  const { addToCart } = useCart();
 
   const basePrice = 74.95;
   
@@ -41,6 +43,16 @@ export default function ProductPurchase() {
 
   // Calculate subscription price for comparison in One-Time card
   const subPriceDetails = getPriceDetails(quantity, 'subscribe');
+
+  const handleAddToCart = () => {
+    addToCart({
+      productId: 'soluna-focus-protocol',
+      name: 'Soluna Focus Protocol',
+      price: finalPrice / quantity,
+      quantity: quantity,
+      subscription: purchaseType === 'subscribe',
+    });
+  };
 
   return (
     <section id="purchase" className="py-6 md:py-12 bg-white border-b border-black/10">
@@ -193,7 +205,10 @@ export default function ProductPurchase() {
             </div>
 
             {/* CTA */}
-            <button className="w-full bg-[#FF3300] text-white font-bold text-base py-3 rounded-full hover:bg-[#e62e00] transition-all shadow-lg shadow-orange-500/20 mb-4">
+            <button 
+                onClick={handleAddToCart}
+                className="w-full bg-[#FF3300] text-white font-bold text-base py-3 rounded-full hover:bg-[#e62e00] transition-all shadow-lg shadow-orange-500/20 mb-4"
+            >
                 {purchaseType === 'subscribe' ? 'Start My Subscription' : 'Add to Cart'} - ${finalPrice.toFixed(2)}
             </button>
 

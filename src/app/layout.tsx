@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
+import CartDrawer from "@/components/CartDrawer";
 
 const archivo = Archivo({
   variable: "--font-sans",
@@ -14,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SOLUNA | SYSTEM_01",
+  title: "SOLUNA",
   description: "High-performance cognitive enhancement protocol.",
 };
 
@@ -29,7 +32,12 @@ export default function RootLayout({
         className={`${archivo.variable} ${jetbrainsMono.variable} antialiased bg-[#F2F0E9] text-[#121212]`}
         suppressHydrationWarning
       >
-        {children}
+        <AuthProvider>
+          <CartProvider>
+            {children}
+            <CartDrawer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -12,7 +12,7 @@ export default function ProductShowcase() {
           {/* Left: Text */}
           <div className="w-full md:w-1/2">
             <div className="inline-block bg-[#FF3300] text-white px-2 py-1 text-xs font-mono mb-6">
-              OPERATIONAL_PROTOCOL
+              DAILY ROUTINE
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter mb-8">
               Simple Ritual.<br />Daily Impact.
@@ -28,7 +28,7 @@ export default function ProductShowcase() {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold uppercase mb-2">Timing</h4>
-                  <p className="font-mono text-xs text-gray-500">Take 2 gummies daily. Morning or early afternoon deployment recommended.</p>
+                  <p className="font-mono text-xs text-gray-500">Take 2 gummies daily. Morning or early afternoon recommended.</p>
                 </div>
               </div>
 
@@ -38,7 +38,7 @@ export default function ProductShowcase() {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold uppercase mb-2">Consistency</h4>
-                  <p className="font-mono text-xs text-gray-500">Cumulative benefits. Cognizin® and Saffron efficacy increases with daily saturation.</p>
+                  <p className="font-mono text-xs text-gray-500">Cumulative benefits. Cognizin® and Saffron efficacy increases with daily use.</p>
                 </div>
               </div>
 
