@@ -72,7 +72,7 @@ export default function ProductPurchase() {
           <div className="lg:col-span-6 lg:pl-6">
             <div className="mb-3">
                 <div className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-wider mb-1">Timed-Release Nootropic</div>
-                <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-2 tracking-tight">Your Daily Focus Routine</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-2 tracking-tight">Focus Protocol</h2>
                 
                 <div className="flex items-center gap-2 mb-3">
                     <div className="flex text-[#FF3300]">
@@ -105,11 +105,6 @@ export default function ProductPurchase() {
                             {qty > 1 && (
                                 <span className={`absolute -top-3.5 left-1/2 -translate-x-1/2 text-[9px] font-mono px-2 py-0.5 rounded-full text-white shadow-sm whitespace-nowrap ${quantity === qty ? 'bg-[#FF3300]' : 'bg-gray-400'}`}>
                                     {qty === 2 ? '30% OFF' : '35% OFF'}
-                                </span>
-                            )}
-                            {qty === 3 && (
-                                <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-[#FF3300] whitespace-nowrap">
-                                    MOST POPULAR
                                 </span>
                             )}
                         </button>

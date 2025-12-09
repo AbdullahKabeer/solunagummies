@@ -21,10 +21,11 @@ export default function Hero() {
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-4 text-[#1a1a1a]">
               Natural Support for<br/>
-              <span className="text-[#FF3300]">Focus & Flow</span>
+              <span className="text-[#FF3300]">Focus, Flow</span><br/>
+              & Steady Energy
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-[#1a1a1a]/80 max-w-xl leading-relaxed mb-6 font-light">
-              A simple daily gummy designed to support clarity, concentration, and steady energy.
+              A daily gummy for calm, clear energy. No jitters, no crash. Just steady mental performance when you need it most.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-4">
@@ -48,8 +49,19 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Mobile Product Image - REMOVED per request */}
-            {/* <div className="lg:hidden relative flex justify-center my-8">...</div> */}
+            {/* Mobile Product Image */}
+            <div className="lg:hidden relative flex justify-center my-8">
+                 <div className="relative z-10 transform transition-transform duration-700 hover:scale-105 w-full max-w-[240px]">
+                    <div className="w-full aspect-[3/4] bg-white rounded-3xl shadow-2xl shadow-orange-500/10 flex items-center justify-center relative border border-gray-100">
+                        <div className="absolute inset-2 border border-gray-50 rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <span className="font-bold text-3xl tracking-tight text-[#1a1a1a]">Soluna</span>
+                            <span className="font-mono text-[10px] mt-3 text-[#FF3300] bg-orange-50 px-3 py-1 rounded-full">Daily Focus</span>
+                        </div>
+                    </div>
+                 </div>
+                 {/* Background Blur */}
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-orange-200/40 rounded-full blur-[60px] -z-10"></div>
+            </div>
 
             {/* Validation Stats - Above the Fold */}
             <div className="grid grid-cols-3 gap-2 sm:gap-6 border-t border-gray-200 pt-8">
