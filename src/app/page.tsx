@@ -10,10 +10,12 @@ import Marquee from "@/components/Marquee";
 import TimelineSection from "@/components/TimelineSection";
 import FAQ from "@/components/FAQ";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
+import OrderSuccessModal from "@/components/OrderSuccessModal";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white selection:bg-[#FF3300] selection:text-white relative">
+      <OrderSuccessModal />
       <StickyMobileCTA />
       <div className="relative z-10">
         <Header />

@@ -18,6 +18,16 @@ export default function CheckoutPage() {
   const { items, cartTotal } = useCart();
 
   useEffect(() => {
+    // Check if returning from redirect
+    const querySecret = new URLSearchParams(window.location.search).get(
+      'payment_intent_client_secret'
+    );
+
+    if (querySecret) {
+      setClientSecret(querySecret);
+      return;
+    }
+
     if (items.length > 0) {
       // Create PaymentIntent as soon as the page loads
       fetch('/api/create-payment-intent', {

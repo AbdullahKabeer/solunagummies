@@ -9,6 +9,7 @@ import {
   useElements
 } from '@stripe/react-stripe-js';
 import { useCart } from '@/context/CartContext';
+import { useSession } from '@/context/SessionContext';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -19,8 +20,10 @@ export default function CheckoutForm() {
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
+  const [shippingDetails, setShippingDetails] = useState<any>(null);
   const [isPromoOpen, setIsPromoOpen] = useState(false);
   const { cartTotal, clearCart, items } = useCart();
+  const { sessionId } = useSession();
 
   useEffect(() => {
     if (!stripe) {
@@ -35,11 +38,45 @@ export default function CheckoutForm() {
       return;
     }
 
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+    stripe.retrievePaymentIntent(clientSecret).then(async ({ paymentIntent }) => {
       switch (paymentIntent?.status) {
         case 'succeeded':
           setMessage('Payment succeeded!');
-          clearCart();
+          
+          // Handle redirect return: Create order if items exist
+          if (items.length > 0) {
+            try {
+              const response = await fetch('/api/orders/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  paymentIntentId: paymentIntent.id,
+                  amount: paymentIntent.amount,
+                  email: paymentIntent.receipt_email, // Should be in PI
+                  items: items,
+                  sessionId: sessionId,
+                  shippingDetails: paymentIntent.shipping, // Should be in PI
+                }),
+              });
+
+              if (response.ok) {
+                const data = await response.json();
+                clearCart();
+                router.push(`/?order_success=true&order_id=${data.orderId}`);
+              } else {
+                // Fallback if order creation fails but payment succeeded
+                clearCart();
+                router.push('/?order_success=true&order_id=unknown');
+              }
+            } catch (err) {
+              console.error('Error creating order after redirect:', err);
+              clearCart();
+              router.push('/?order_success=true&order_id=unknown');
+            }
+          } else {
+            // Cart already cleared or empty
+            router.push('/');
+          }
           break;
         case 'processing':
           setMessage('Your payment is processing.');
@@ -52,7 +89,7 @@ export default function CheckoutForm() {
           break;
       }
     });
-  }, [stripe, clearCart]);
+  }, [stripe, clearCart, items, sessionId, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,22 +130,25 @@ export default function CheckoutForm() {
             amount: paymentIntent.amount,
             email: email,
             items: items, // Send cart items
+            sessionId: sessionId,
+            shippingDetails: shippingDetails,
           }),
         });
 
         if (response.ok) {
+          const data = await response.json();
           clearCart();
-          router.push('/checkout?success=true');
+          router.push(`/?order_success=true&order_id=${data.orderId}`);
         } else {
           console.error('Failed to create order');
           // Still redirect to success but maybe log the error?
           // Or show an error message? 
           // Ideally we want the user to know payment worked even if order creation failed (edge case)
-          router.push('/checkout?success=true');
+          router.push('/?order_success=true&order_id=unknown');
         }
       } catch (err) {
         console.error('Error creating order:', err);
-        router.push('/checkout?success=true');
+        router.push('/?order_success=true&order_id=unknown');
       }
     }
 
@@ -145,6 +185,11 @@ export default function CheckoutForm() {
                 required: 'never',
               },
             },
+          }}
+          onChange={(e) => {
+            if (e.complete) {
+              setShippingDetails(e.value);
+            }
           }}
         />
       </div>

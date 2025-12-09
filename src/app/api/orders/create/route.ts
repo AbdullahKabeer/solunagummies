@@ -33,13 +33,14 @@ export async function POST(request: Request) {
   );
 
   try {
-    const { items, amount, paymentIntentId, email, shippingDetails } = await request.json();
+    const { items, amount, paymentIntentId, email, shippingDetails, sessionId } = await request.json();
 
     // 3. Create Order
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
       .insert({
         user_id: user?.id || null,
+        session_id: sessionId || null,
         stripe_payment_intent_id: paymentIntentId,
         amount: amount / 100, // Convert cents to dollars
         status: 'paid',
@@ -67,12 +68,28 @@ export async function POST(request: Request) {
       if (itemsError) throw itemsError;
     }
 
-    // 5. Clear Cart (only if user is logged in)
+    // 5. Clear Cart
     if (user) {
       await supabaseAdmin
         .from('cart_items')
         .delete()
         .eq('user_id', user.id);
+    } else if (sessionId) {
+      await supabaseAdmin
+        .from('cart_items')
+        .delete()
+        .eq('session_id', sessionId);
+    }
+
+    // 6. Update Session Conversion
+    if (sessionId) {
+      await supabaseAdmin
+        .from('sessions')
+        .update({
+          converted_at: new Date().toISOString(),
+          last_order_id: order.id
+        })
+        .eq('id', sessionId);
     }
 
     return NextResponse.json({ success: true, orderId: order.id });
