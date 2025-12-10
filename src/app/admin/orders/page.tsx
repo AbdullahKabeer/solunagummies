@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Search, Filter, MoreHorizontal, CheckCircle, Truck, AlertCircle, ChevronDown, ChevronUp, Package, MapPin } from 'lucide-react';
 
@@ -94,9 +94,8 @@ export default function OrdersPage() {
                 </tr>
               ) : orders.length > 0 ? (
                 orders.map((order) => (
-                  <>
+                  <Fragment key={order.id}>
                     <tr 
-                      key={order.id} 
                       className={`border-b border-gray-100 last:border-0 hover:bg-gray-50 group cursor-pointer ${expandedOrderId === order.id ? 'bg-gray-50' : ''}`}
                       onClick={() => toggleExpand(order.id)}
                     >
@@ -195,7 +194,7 @@ export default function OrdersPage() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 ))
               ) : (
                 <tr>

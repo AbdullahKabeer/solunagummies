@@ -70,7 +70,7 @@ export default function CartDrawer() {
                             </button>
                         </div>
                         <p className="text-xs text-gray-500 font-mono mt-1">
-                            {item.subscription ? 'Subscription (Save 20%)' : 'One-time Purchase'}
+                            {item.sku ? `SKU: ${item.sku}` : (item.subscription ? 'Subscription' : 'One-time')}
                         </p>
                       </div>
 

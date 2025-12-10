@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { Star, RotateCcw, Truck, Bell, ShieldCheck, Check } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 export default function ProductPurchase() {
   const [quantity, setQuantity] = useState<1 | 2 | 3>(2);
   const [purchaseType, setPurchaseType] = useState<'subscribe' | 'onetime'>('subscribe');
   const { addToCart } = useCart();
+  const { track } = useAnalytics();
 
   const basePrice = 74.95;
   
@@ -45,13 +47,55 @@ export default function ProductPurchase() {
   const subPriceDetails = getPriceDetails(quantity, 'subscribe');
 
   const handleAddToCart = () => {
-    addToCart({
-      productId: 'soluna-focus-protocol',
-      name: 'Soluna Focus Protocol',
-      price: finalPrice / quantity,
-      quantity: quantity,
-      subscription: purchaseType === 'subscribe',
-    });
+    if (purchaseType === 'subscribe') {
+        // Subscription Logic (Bundles)
+        const sku = `FG${quantity}S`;
+        let productName = `Every ${quantity} Month Soluna Subscription`;
+        if (quantity === 1) productName = "Every Month Soluna Subscription";
+
+        track('add_to_cart', {
+            product_id: 'soluna-focus-protocol',
+            name: productName,
+            quantity: 1,
+            purchase_type: 'subscribe',
+            price: finalPrice,
+            currency: 'USD',
+            sku
+        });
+
+        addToCart({
+            productId: 'soluna-focus-protocol',
+            name: productName,
+            price: finalPrice, // Total price of bundle
+            quantity: 1,       // 1 Bundle
+            subscription: true,
+            sku
+        });
+    } else {
+        // One-time Logic (Aggregated Units)
+        const sku = 'FG1O';
+        const productName = 'Soluna Focus Protocol';
+        const unitPrice = finalPrice / quantity; // Price per bottle
+
+        track('add_to_cart', {
+            product_id: 'soluna-focus-protocol',
+            name: productName,
+            quantity: quantity,
+            purchase_type: 'onetime',
+            price: unitPrice,
+            currency: 'USD',
+            sku
+        });
+
+        addToCart({
+            productId: 'soluna-focus-protocol',
+            name: productName,
+            price: unitPrice,
+            quantity: quantity, // Actual number of bottles
+            subscription: false,
+            sku
+        });
+    }
   };
 
   return (

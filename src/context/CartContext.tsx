@@ -14,6 +14,7 @@ export interface CartItem {
   quantity: number;
   image?: string;
   subscription?: boolean;
+  sku?: string;
 }
 
 interface CartContextType {
@@ -88,6 +89,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           quantity: item.quantity,
           image: item.image,
           subscription: item.subscription,
+          sku: item.sku,
         }));
         setItems(mappedItems);
       }
@@ -103,6 +105,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const addToCart = async (newItem: Omit<CartItem, 'id'>) => {
     if (!sessionId) return;
+
+    // Check for existing item to merge
+    const existingItem = items.find(item => 
+      item.productId === newItem.productId && 
+      item.subscription === newItem.subscription &&
+      item.sku === newItem.sku
+    );
+
+    if (existingItem) {
+      const newQuantity = existingItem.quantity + newItem.quantity;
+      await updateQuantity(existingItem.id, newQuantity);
+      return;
+    }
     
     // Optimistic UI update
     const tempId = crypto.randomUUID();
@@ -121,6 +136,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           quantity: newItem.quantity,
           image: newItem.image,
           subscription: newItem.subscription,
+          sku: newItem.sku,
         })
         .select()
         .single();

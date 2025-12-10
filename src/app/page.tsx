@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Ingredients from "@/components/Ingredients";
@@ -15,7 +16,9 @@ import OrderSuccessModal from "@/components/OrderSuccessModal";
 export default function Home() {
   return (
     <main className="min-h-screen bg-white selection:bg-[#FF3300] selection:text-white relative">
-      <OrderSuccessModal />
+      <Suspense fallback={null}>
+        <OrderSuccessModal />
+      </Suspense>
       <StickyMobileCTA />
       <div className="relative z-10">
         <Header />
