@@ -29,8 +29,15 @@ export default function AdminRaw() {
         .select('*, order_items(*)')
         .order('created_at', { ascending: false })
         .limit(10);
+
+      // 4. Active Carts
+      const { data: carts } = await supabase
+        .from('cart_items')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
       
-      setData({ sessions, events, orders });
+      setData({ sessions, events, orders, carts });
     };
 
     fetchData();
@@ -164,6 +171,84 @@ export default function AdminRaw() {
               ))}
             </tbody>
           </table>
+        </details>
+      </section>
+
+      <hr style={{ margin: '20px 0' }} />
+
+      <section>
+        <h2>4. Active Carts (Potential Orders)</h2>
+        <p>Table: <code>public.cart_items</code> | Status: {data.carts?.length > 0 ? '✅ Collecting' : '⚠️ No Data'}</p>
+        <details open>
+          <summary>View Active Carts ({Object.keys(data.carts?.reduce((acc: any, item: any) => {
+            const key = item.visitor_id || item.session_id || 'unknown';
+            if (!acc[key]) acc[key] = [];
+            return acc;
+          }, {}) || {}).length} Visitors)</summary>
+          
+          <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {Object.values(data.carts?.reduce((acc: any, item: any) => {
+                const key = item.visitor_id || item.session_id || 'unknown';
+                if (!acc[key]) {
+                  acc[key] = {
+                    visitor_id: item.visitor_id,
+                    session_id: item.session_id,
+                    items: [],
+                    totalValue: 0,
+                    totalItems: 0,
+                    lastUpdated: item.created_at
+                  };
+                }
+                acc[key].items.push(item);
+                acc[key].totalValue += (item.price * item.quantity);
+                acc[key].totalItems += item.quantity;
+                if (new Date(item.created_at) > new Date(acc[key].lastUpdated)) {
+                    acc[key].lastUpdated = item.created_at;
+                }
+                return acc;
+              }, {}) || {}).map((group: any, i) => (
+                <details key={i} style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '4px', background: '#fff' }}>
+                  <summary style={{ cursor: 'pointer', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
+                    <span>
+                      Visitor: {group.visitor_id ? group.visitor_id.slice(0, 8) + '...' : 'Guest'} 
+                      <span style={{ fontWeight: 'normal', color: '#666', marginLeft: '10px' }}>
+                        ({group.totalItems} items)
+                      </span>
+                    </span>
+                    <span>${group.totalValue.toFixed(2)}</span>
+                  </summary>
+                  
+                  <div style={{ marginTop: '10px', paddingLeft: '10px', borderLeft: '2px solid #eee' }}>
+                    <div style={{ fontSize: '10px', color: '#999', marginBottom: '5px' }}>
+                      Session: {group.session_id}<br/>
+                      Last Updated: {new Date(group.lastUpdated).toLocaleString()}
+                    </div>
+                    <table border={1} cellPadding={5} style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                      <thead>
+                        <tr style={{ background: '#f9f9f9' }}>
+                          <th>Product</th>
+                          <th>SKU</th>
+                          <th>Qty</th>
+                          <th>Price</th>
+                          <th>Type</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {group.items.map((item: any) => (
+                          <tr key={item.id}>
+                            <td>{item.name}</td>
+                            <td>{item.sku || '-'}</td>
+                            <td>{item.quantity}</td>
+                            <td>${item.price?.toFixed(2)}</td>
+                            <td>{item.subscription ? 'Sub' : 'One-time'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </details>
+            ))}
+          </div>
         </details>
       </section>
     </div>

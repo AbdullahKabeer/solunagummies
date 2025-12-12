@@ -80,7 +80,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     if (!sessionId) return;
 
     // Track Page View on path change
-    track('page_view');
+    track('page_view', {}, { sessionId, visitorId });
 
     const updateHeartbeat = async () => {
       try {

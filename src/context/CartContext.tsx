@@ -35,33 +35,36 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { user, isLoading: isAuthLoading } = useAuth();
-  const { sessionId } = useSession();
+  const { sessionId, visitorId } = useSession();
   
-  // Initialize Supabase client with session header
+  // Initialize Supabase client with session/visitor header
   const supabase = useMemo(() => {
     if (user) {
       return createClient();
     }
     
-    if (sessionId) {
-      console.log('Creating vanilla Supabase client for guest with session:', sessionId);
+    if (visitorId) {
+      console.log('Creating vanilla Supabase client for guest with visitor:', visitorId);
       return createVanillaClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder',
         {
           global: {
-            headers: { 'x-session-id': sessionId }
+            headers: { 
+              'x-session-id': sessionId,
+              'x-visitor-id': visitorId 
+            }
           }
         }
       );
     }
     
     return createClient();
-  }, [user, sessionId]);
+  }, [user, sessionId, visitorId]);
 
   // Load cart
   useEffect(() => {
-    if (isAuthLoading || !sessionId) return;
+    if (isAuthLoading || !visitorId) return;
 
     const loadCart = async () => {
 
@@ -70,7 +73,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (user) {
         query = query.eq('user_id', user.id);
       } else {
-        query = query.eq('session_id', sessionId);
+        // Prioritize Visitor ID for persistence
+        query = query.eq('visitor_id', visitorId);
       }
 
       const { data, error } = await query;
@@ -96,7 +100,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     };
 
     loadCart();
-  }, [user, isAuthLoading, sessionId, supabase]);
+  }, [user, isAuthLoading, visitorId, supabase]);
 
   // Save to Local Storage (Backup only, we rely on DB now)
   useEffect(() => {
@@ -104,7 +108,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const addToCart = async (newItem: Omit<CartItem, 'id'>) => {
-    if (!sessionId) return;
+    if (!visitorId) return;
 
     // Check for existing item to merge
     const existingItem = items.find(item => 
@@ -130,6 +134,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         .insert({
           user_id: user?.id || null,
           session_id: sessionId,
+          visitor_id: visitorId, // Add visitor_id
           product_id: newItem.productId,
           name: newItem.name,
           price: newItem.price,

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, JetBrains_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
@@ -34,12 +35,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          <SessionProvider>
-            <CartProvider>
-              {children}
-              <CartDrawer />
-            </CartProvider>
-          </SessionProvider>
+          <Suspense fallback={null}>
+            <SessionProvider>
+              <CartProvider>
+                {children}
+                <CartDrawer />
+              </CartProvider>
+            </SessionProvider>
+          </Suspense>
         </AuthProvider>
       </body>
     </html>

@@ -11,7 +11,12 @@ const supabaseAdmin = createClient(
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { event_name, properties, session_id, user_id, url } = body;
+    const { event_name, properties, session_id, visitor_id, user_id, url } = body;
+    
+    if (!session_id) {
+      return NextResponse.json({ error: 'Missing session_id' }, { status: 400 });
+    }
+
     const headersList = await headers();
 
     // Extract Geo & Device Info from Headers (Vercel/Next.js specific + Custom Middleware)
@@ -22,12 +27,35 @@ export async function POST(request: Request) {
     const deviceType = headersList.get('x-device-type') || 'Desktop';
     const userAgent = headersList.get('user-agent') || 'unknown';
 
-    // 1. Log the Event
+    // 1. Ensure Session Exists (Upsert)
+    // This prevents foreign key errors if the session was cleared from DB but cookie remains
+    const { error: sessionError } = await supabaseAdmin
+      .from('sessions')
+      .upsert({
+        id: session_id,
+        visitor_id: visitor_id || null, // Handle missing visitor_id
+        last_seen: new Date().toISOString(),
+        ip_address: ip,
+        country,
+        city,
+        region,
+        device_type: deviceType,
+        user_agent: userAgent,
+      }, { onConflict: 'id' });
+
+    if (sessionError) {
+      console.error('Error creating/updating session:', sessionError);
+      // If session creation fails, we can't log the event due to FK constraint
+      return NextResponse.json({ error: 'Failed to create session', details: sessionError }, { status: 500 });
+    }
+
+    // 2. Log the Event
     const { error: eventError } = await supabaseAdmin
       .from('analytics_events')
       .insert({
         session_id,
-        user_id,
+        visitor_id: visitor_id || null,
+        user_id: user_id || null,
         event_name,
         properties,
         url,
@@ -35,8 +63,7 @@ export async function POST(request: Request) {
 
     if (eventError) throw eventError;
 
-    // 2. Update Session with Geo/UTM info if it's a page_view or session_start
-    // We only do this once per session ideally, or on every page view to keep it fresh
+    // 3. Update Session with UTM info if it's a page_view or session_start
     if (event_name === 'page_view' || event_name === 'session_start') {
       // Parse UTM from URL
       const urlObj = new URL(url);
@@ -44,24 +71,17 @@ export async function POST(request: Request) {
       const utm_medium = urlObj.searchParams.get('utm_medium');
       const utm_campaign = urlObj.searchParams.get('utm_campaign');
 
-      const updateData: any = {
-        ip_address: ip,
-        country,
-        city,
-        region,
-        device_type: deviceType,
-        user_agent: userAgent,
-        last_seen: new Date().toISOString(),
-      };
+      if (utm_source || utm_medium || utm_campaign) {
+        const updateData: any = {};
+        if (utm_source) updateData.utm_source = utm_source;
+        if (utm_medium) updateData.utm_medium = utm_medium;
+        if (utm_campaign) updateData.utm_campaign = utm_campaign;
 
-      if (utm_source) updateData.utm_source = utm_source;
-      if (utm_medium) updateData.utm_medium = utm_medium;
-      if (utm_campaign) updateData.utm_campaign = utm_campaign;
-
-      await supabaseAdmin
-        .from('sessions')
-        .update(updateData)
-        .eq('id', session_id);
+        await supabaseAdmin
+          .from('sessions')
+          .update(updateData)
+          .eq('id', session_id);
+      }
     }
 
     return NextResponse.json({ success: true });
