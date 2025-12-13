@@ -1,8 +1,22 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Clock, Calendar, Zap } from 'lucide-react';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 export default function ProductShowcase() {
+  const { track } = useAnalytics();
+
+  useEffect(() => {
+    track('view_item', {
+      product_id: 'soluna-focus-protocol',
+      name: 'Soluna Focus Protocol',
+      price: 74.95,
+      currency: 'USD',
+      sku: 'FG1O'
+    });
+  }, []);
+
   return (
     <section id="product" className="py-12 md:py-24 bg-white border-b border-black">
       <div className="container mx-auto px-6">

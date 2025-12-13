@@ -13,7 +13,7 @@ export default function CustomersPage() {
     const fetchCustomers = async () => {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('profiles')
+        .from('customers')
         .select('*')
         .order('created_at', { ascending: false });
 

@@ -4,12 +4,16 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Check, X, Copy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createClient } from '@/lib/supabase/client';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 export default function OrderSuccessModal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const supabase = createClient();
+  const { track } = useAnalytics();
 
   useEffect(() => {
     const success = searchParams.get('order_success');
@@ -18,6 +22,27 @@ export default function OrderSuccessModal() {
     if (success === 'true' && id) {
       setIsOpen(true);
       setOrderId(id);
+
+      // Fetch order details for tracking
+      const trackPurchase = async () => {
+        const { data: order } = await supabase
+          .from('orders')
+          .select('amount, order_items(quantity)')
+          .eq('id', id)
+          .single();
+        
+        if (order) {
+           const itemCount = order.order_items.reduce((acc: number, item: any) => acc + item.quantity, 0);
+           track('purchase', {
+             transaction_id: id,
+             value: order.amount,
+             currency: 'USD',
+             item_count: itemCount
+           });
+        }
+      };
+      trackPurchase();
+
       // Clean up URL without refresh
       window.history.replaceState(null, '', '/');
     }

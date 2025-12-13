@@ -2,12 +2,14 @@
 
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CartDrawer() {
   const { items, removeFromCart, updateQuantity, cartTotal, isCartOpen, setIsCartOpen } = useCart();
+  const { track } = useAnalytics();
 
   return (
     <AnimatePresence>
@@ -63,7 +65,17 @@ export default function CartDrawer() {
                         <div className="flex justify-between items-start">
                             <h3 className="font-bold text-sm uppercase tracking-wide">{item.name}</h3>
                             <button 
-                                onClick={() => removeFromCart(item.id)}
+                                onClick={() => {
+                                    track('remove_from_cart', {
+                                        product_id: item.productId,
+                                        name: item.name,
+                                        quantity: item.quantity,
+                                        price: item.price,
+                                        currency: 'USD',
+                                        sku: item.sku
+                                    });
+                                    removeFromCart(item.id);
+                                }}
                                 className="text-gray-400 hover:text-[#FF3300] transition-colors"
                             >
                                 <Trash2 className="w-4 h-4" />
@@ -105,10 +117,22 @@ export default function CartDrawer() {
                 <span className="font-mono text-sm uppercase text-gray-500">Subtotal</span>
                 <span className="font-bold font-mono text-xl">${cartTotal.toFixed(2)}</span>
               </div>
-              <p className="text-xs text-gray-500 mb-6 text-center">Shipping & taxes calculated at checkout</p>
               <Link
                 href="/checkout"
-                onClick={() => setIsCartOpen(false)}
+                onClick={() => {
+                  track('begin_checkout', {
+                    value: cartTotal,
+                    currency: 'USD',
+                    item_count: items.length,
+                    items: items.map(item => ({
+                      item_id: item.productId,
+                      item_name: item.name,
+                      price: item.price,
+                      quantity: item.quantity
+                    }))
+                  });
+                  setIsCartOpen(false);
+                }}
                 className={`block w-full py-4 bg-black text-white font-bold uppercase tracking-wider hover:bg-[#FF3300] transition-colors text-center ${items.length === 0 ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 Checkout

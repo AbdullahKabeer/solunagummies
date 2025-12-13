@@ -63,7 +63,57 @@ export async function POST(request: Request) {
 
     if (eventError) throw eventError;
 
-    // 3. Update Session with UTM info if it's a page_view or session_start
+    // 3. Populate Specific Analytics Tables (Enterprise Analytics V3)
+    if (event_name === 'page_view') {
+      await supabaseAdmin.from('page_views').insert({
+        session_id,
+        visitor_id: visitor_id || null,
+        url,
+        path: new URL(url).pathname,
+        title: properties?.title,
+        referrer: properties?.referrer,
+      });
+    } else if (event_name === 'add_to_cart' || event_name === 'remove_from_cart') {
+      await supabaseAdmin.from('cart_events').insert({
+        session_id,
+        visitor_id: visitor_id || null,
+        event_type: event_name === 'add_to_cart' ? 'add' : 'remove',
+        product_id: properties?.product_id,
+        sku: properties?.sku,
+        product_name: properties?.name,
+        quantity: properties?.quantity,
+        unit_price: properties?.price,
+        total_value: (properties?.price || 0) * (properties?.quantity || 1),
+        cart_total: properties?.cart_total, // Ensure client sends this
+      });
+    } else if (event_name === 'begin_checkout') {
+      await supabaseAdmin.from('checkout_events').insert({
+        session_id,
+        visitor_id: visitor_id || null,
+        step: 'initiated',
+        cart_value: properties?.value,
+        item_count: properties?.item_count,
+      });
+    } else if (event_name === 'purchase') {
+      await supabaseAdmin.from('checkout_events').insert({
+        session_id,
+        visitor_id: visitor_id || null,
+        step: 'completed',
+        cart_value: properties?.value,
+        item_count: properties?.item_count,
+      });
+    } else if (event_name === 'view_item') {
+      await supabaseAdmin.from('product_views').insert({
+        session_id,
+        visitor_id: visitor_id || null,
+        product_id: properties?.product_id,
+        sku: properties?.sku,
+        product_name: properties?.name,
+        price_shown: properties?.price,
+      });
+    }
+
+    // 4. Update Session with UTM info if it's a page_view or session_start
     if (event_name === 'page_view' || event_name === 'session_start') {
       // Parse UTM from URL
       const urlObj = new URL(url);
