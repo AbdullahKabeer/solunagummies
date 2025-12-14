@@ -53,14 +53,14 @@ export default function CustomersPage() {
             <div key={customer.id} className="bg-white border border-black p-6 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all group">
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-12 bg-[#F2F0E9] rounded-full flex items-center justify-center font-black text-xl border border-black/10 group-hover:bg-[#FF3300] group-hover:text-white transition-colors">
-                  {customer.full_name?.[0]?.toUpperCase() || '?'}
+                  {customer.first_name?.[0]?.toUpperCase() || '?'}
                 </div>
                 <span className="font-mono text-[10px] bg-gray-100 px-2 py-1 rounded text-gray-500 uppercase">
                   {customer.role || 'Customer'}
                 </span>
               </div>
               
-              <h3 className="font-bold text-lg mb-1">{customer.full_name || 'Unknown User'}</h3>
+              <h3 className="font-bold text-lg mb-1">{customer.first_name} {customer.last_name}</h3>
               
               <div className="space-y-2 mt-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">

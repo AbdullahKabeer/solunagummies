@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import DateRangePicker, { DateRange } from '@/components/admin/DateRangePicker';
+import GranularityPicker from '@/components/admin/GranularityPicker';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ComposedChart, Legend,
@@ -19,11 +21,26 @@ export default function AdminAnalyticsConsole() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [liveHistory, setLiveHistory] = useState<any[]>([]);
+  const [granularity, setGranularity] = useState('hourly');
+  const [dateRange, setDateRange] = useState<DateRange>({
+    label: 'Today',
+    startDate: new Date(new Date().setHours(0, 0, 0, 0)),
+    endDate: new Date(new Date().setHours(23, 59, 59, 999))
+  });
   const supabase = createClient();
 
   useEffect(() => {
     const fetchData = async () => {
       const start = performance.now();
+      const startDateStr = dateRange.startDate.toISOString();
+      const endDateStr = dateRange.endDate.toISOString();
+
+      // Calculate previous period for comparison
+      const duration = dateRange.endDate.getTime() - dateRange.startDate.getTime();
+      const prevEndDate = new Date(dateRange.startDate.getTime());
+      const prevStartDate = new Date(prevEndDate.getTime() - duration);
+      const prevStartDateStr = prevStartDate.toISOString();
+      const prevEndDateStr = prevEndDate.toISOString();
       
       const [
         { data: sessions },
@@ -40,23 +57,29 @@ export default function AdminAnalyticsConsole() {
         { data: cartAbandonment },
         { data: subscriptionMrr },
         { data: customerSegments },
-        { data: auditLogs }
+        { data: auditLogs },
+        // Comparison Data
+        { data: prevSessions },
+        { data: prevOrders }
       ] = await Promise.all([
-        supabase.from('sessions').select('*').order('last_seen', { ascending: false }).limit(500),
-        supabase.from('orders').select('*, order_items(*), customer:customers(*)').order('created_at', { ascending: false }).limit(100),
-        supabase.from('kpi_daily_sales').select('*').order('day', { ascending: true }).limit(30), // Ascending for charts
+        supabase.from('sessions').select('*').gte('last_seen', startDateStr).lte('last_seen', endDateStr).order('last_seen', { ascending: false }).limit(1000),
+        supabase.from('orders').select('*, order_items(*), customer:customers(*)').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(1000),
+        supabase.from('kpi_daily_sales').select('*').gte('day', startDateStr).lte('day', endDateStr).order('day', { ascending: true }),
         supabase.from('kpi_product_performance').select('*').order('gross_sales', { ascending: false }),
         supabase.from('kpi_customer_ltv').select('*').order('total_spent', { ascending: false }).limit(100),
-        supabase.from('kpi_funnel_daily').select('*').order('day', { ascending: true }).limit(30),
+        supabase.from('kpi_funnel_daily').select('*').gte('day', startDateStr).lte('day', endDateStr).order('day', { ascending: true }),
         supabase.from('kpi_traffic_sources').select('*').order('sessions', { ascending: false }),
-        supabase.from('cart_events').select('*').order('created_at', { ascending: false }).limit(100),
-        supabase.from('checkout_events').select('*').order('created_at', { ascending: false }).limit(100),
-        supabase.from('page_views').select('*').order('created_at', { ascending: false }).limit(200),
-        supabase.from('product_views').select('*').order('created_at', { ascending: false }).limit(100),
-        supabase.from('kpi_cart_abandonment').select('*').order('day', { ascending: true }).limit(30),
-        supabase.from('kpi_subscription_mrr').select('*').order('month', { ascending: true }).limit(12),
+        supabase.from('cart_events').select('*').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(1000),
+        supabase.from('checkout_events').select('*').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(1000),
+        supabase.from('page_views').select('*').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(1000),
+        supabase.from('product_views').select('*').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(1000),
+        supabase.from('kpi_cart_abandonment').select('*').gte('day', startDateStr).lte('day', endDateStr).order('day', { ascending: true }),
+        supabase.from('kpi_subscription_mrr').select('*').gte('month', startDateStr).lte('month', endDateStr).order('month', { ascending: true }),
         supabase.from('customer_segments').select('*').order('created_at', { ascending: false }),
-        supabase.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(100)
+        supabase.from('audit_logs').select('*').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(100),
+        // Comparison Queries
+        supabase.from('sessions').select('*').gte('last_seen', prevStartDateStr).lte('last_seen', prevEndDateStr).limit(1000),
+        supabase.from('orders').select('total_amount, created_at').gte('created_at', prevStartDateStr).lte('created_at', prevEndDateStr).limit(1000)
       ]);
 
       // Compute real-time metrics
@@ -74,13 +97,23 @@ export default function AdminAnalyticsConsole() {
 
       // Today's stats
       const today = now.toISOString().split('T')[0];
-      const todaySales = (dailySales || []).find((d: any) => d.day?.startsWith(today));
+      const todaySales = (dailySales || []).find((d: any) => d.day && String(d.day).startsWith(today));
 
       setData({
         sessions: sessions || [],
         orders: orders || [],
-        dailySales: dailySales || [],
-        products: products || [],
+        dailySales: (dailySales || []).map((d: any) => ({
+          ...d,
+          net_revenue: Number(d.net_revenue),
+          total_orders: Number(d.total_orders)
+        })),
+        products: (products || []).map((p: any) => ({
+          ...p,
+          gross_sales: Number(p.gross_sales),
+          gross_profit: Number(p.gross_profit),
+          units_sold: Number(p.units_sold),
+          profit_margin_pct: Number(p.profit_margin_pct)
+        })),
         customers: customers || [],
         funnel: funnel || [],
         traffic: traffic || [],
@@ -92,6 +125,8 @@ export default function AdminAnalyticsConsole() {
         subscriptionMrr: subscriptionMrr || [],
         customerSegments: customerSegments || [],
         auditLogs: auditLogs || [],
+        prevSessions: prevSessions || [],
+        prevOrders: prevOrders || [],
         liveVisitors,
         todaySales,
         perf: (performance.now() - start).toFixed(0)
@@ -102,23 +137,27 @@ export default function AdminAnalyticsConsole() {
     fetchData();
     const interval = setInterval(fetchData, 5000); // Faster polling for "insane" feel
     return () => clearInterval(interval);
-  }, []);
+  }, [dateRange]);
 
   if (loading) return <div className="flex h-screen items-center justify-center bg-gray-50 text-sm text-gray-500 font-mono animate-pulse">INITIALIZING DATA STREAMS...</div>;
 
   const tabs = [
     { id: 'overview', label: 'Command Center' },
+    { id: 'products', label: 'Product Analytics' },
     { id: 'funnel', label: 'Conversion Funnel' },
     { id: 'traffic', label: 'Traffic Intelligence' },
-    { id: 'orders', label: 'Order Ledger' },
-    { id: 'products', label: 'Product Matrix' },
-    { id: 'customers', label: 'Customer LTV' },
     { id: 'sessions', label: 'Live Sessions' },
     { id: 'events', label: 'Event Stream' }
   ];
 
   return (
     <div className="p-6 max-w-[1800px] mx-auto min-h-screen bg-gray-50/50">
+      {/* Date Picker */}
+      <div className="flex justify-end mb-4 gap-2">
+        <GranularityPicker value={granularity} onChange={setGranularity} />
+        <DateRangePicker onRangeChange={setDateRange} />
+      </div>
+
       {/* Header */}
       <header className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
         <div>
@@ -176,12 +215,10 @@ export default function AdminAnalyticsConsole() {
 
       {/* Tab Content */}
       <div className="space-y-8 animate-in fade-in duration-500">
-        {activeTab === 'overview' && <OverviewTab data={data} />}
+        {activeTab === 'overview' && <OverviewTab data={data} dateRange={dateRange} granularity={granularity} />}
+        {activeTab === 'products' && <ProductsTab data={data} />}
         {activeTab === 'funnel' && <FunnelTab data={data} />}
         {activeTab === 'traffic' && <TrafficTab data={data} />}
-        {activeTab === 'orders' && <OrdersTab data={data} />}
-        {activeTab === 'products' && <ProductsTab data={data} />}
-        {activeTab === 'customers' && <CustomersTab data={data} />}
         {activeTab === 'sessions' && <SessionsTab data={data} />}
         {activeTab === 'events' && <EventsTab data={data} />}
       </div>
@@ -234,70 +271,323 @@ export default function AdminAnalyticsConsole() {
 
 // === TAB COMPONENTS ===
 
-function OverviewTab({ data }: any) {
-  // Calculate 30d totals
-  const totals = (data.dailySales || []).reduce((acc: any, d: any) => ({
-    revenue: acc.revenue + (d.net_revenue || 0),
-    orders: acc.orders + (d.total_orders || 0),
-    newCustomers: acc.newCustomers + (d.new_customer_orders || 0)
-  }), { revenue: 0, orders: 0, newCustomers: 0 });
+function OverviewTab({ data, dateRange, granularity }: any) {
+  // Determine if we are in "intraday" mode (<= 24 hours)
+  const isIntraday = useMemo(() => {
+    if (granularity === 'hourly') return true;
+    if (granularity === 'daily') return false;
+    
+    if (!dateRange?.startDate || !dateRange?.endDate) return false;
+    const diff = new Date(dateRange.endDate).getTime() - new Date(dateRange.startDate).getTime();
+    return diff <= 24 * 60 * 60 * 1000;
+  }, [dateRange, granularity]);
+
+  // Prepare chart data based on mode
+  const chartData = useMemo(() => {
+    const currentStart = new Date(dateRange.startDate).getTime();
+    const currentEnd = new Date(dateRange.endDate).getTime();
+    const duration = currentEnd - currentStart;
+    // Shift is exactly the duration because prevEndDate = currentStartDate
+    const shift = duration;
+
+    if (!isIntraday) {
+      return (data.dailySales || []).map((day: any) => {
+        const dayStart = new Date(day.day).getTime();
+        // Previous period equivalent range for this day
+        const prevDayStart = dayStart - shift;
+        const prevDayEnd = prevDayStart + 24 * 60 * 60 * 1000; // Approx 1 day window
+
+        const prevRevenue = (data.prevOrders || [])
+          .filter((o: any) => {
+            const t = new Date(o.created_at).getTime();
+            return t >= prevDayStart && t < prevDayEnd;
+          })
+          .reduce((sum: number, o: any) => sum + (o.net_sales || o.amount || 0), 0);
+
+        return {
+          ...day,
+          prev_net_revenue: prevRevenue
+        };
+      });
+    }
+
+    // Generate hourly buckets for intraday view
+    const buckets: any[] = [];
+    const start = new Date(dateRange.startDate);
+    const end = new Date(dateRange.endDate);
+    
+    // Round start down to nearest hour
+    start.setMinutes(0, 0, 0);
+
+    let current = new Date(start);
+    // Safety break to prevent infinite loops if range is huge
+    let iterations = 0;
+    while (current <= end && iterations < 1000) {
+      buckets.push({
+        time: current.toISOString(),
+        label: current.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        net_revenue: 0,
+        total_orders: 0,
+        prev_net_revenue: 0,
+        aov: 0
+      });
+      current.setHours(current.getHours() + 1);
+      iterations++;
+    }
+
+    // Fill buckets with order data
+    (data.orders || []).forEach((order: any) => {
+      const orderTime = new Date(order.created_at);
+      const bucket = buckets.find(b => {
+        const bTime = new Date(b.time);
+        return orderTime >= bTime && orderTime < new Date(bTime.getTime() + 60 * 60 * 1000);
+      });
+
+      if (bucket) {
+        bucket.net_revenue += (order.net_sales || order.amount || 0);
+        bucket.total_orders += 1;
+      }
+    });
+
+    // Fill buckets with previous period data
+    (data.prevOrders || []).forEach((order: any) => {
+      const orderTime = new Date(order.created_at).getTime();
+      // Find which bucket this order corresponds to in the CURRENT timeline
+      // The order is from the past. We need to shift it FORWARD to find the bucket.
+      // bucketTime = orderTime + shift
+      const shiftedTime = orderTime + shift;
+      
+      const bucket = buckets.find(b => {
+        const bTime = new Date(b.time).getTime();
+        return shiftedTime >= bTime && shiftedTime < (bTime + 60 * 60 * 1000);
+      });
+
+      if (bucket) {
+        bucket.prev_net_revenue += (order.net_sales || order.amount || 0);
+      }
+    });
+
+    // Convert to cumulative totals for "Pacing" view
+    let runningTotal = 0;
+    let prevRunningTotal = 0;
+    let runningOrders = 0;
+    const now = new Date();
+    
+    // First pass: Calculate cumulative totals
+    buckets.forEach(b => {
+      const discreteRevenue = b.net_revenue;
+      const discreteOrders = b.total_orders;
+
+      runningTotal += discreteRevenue;
+      prevRunningTotal += b.prev_net_revenue;
+      runningOrders += discreteOrders;
+      
+      // Store the cumulative total but don't assign to final keys yet
+      b._cumulative_revenue = runningTotal;
+      b.prev_net_revenue = prevRunningTotal;
+      b.aov = runningOrders > 0 ? runningTotal / runningOrders : 0;
+    });
+
+    // Second pass: Assign to solid/dotted based on time
+    let transitionIndex = -1;
+    
+    buckets.forEach((b, i) => {
+      const bucketTime = new Date(b.time);
+      
+      // If bucket is in the past (or current hour), it's solid
+      if (bucketTime <= now) {
+        b.net_revenue_solid = b._cumulative_revenue;
+        b.net_revenue_dotted = null;
+        transitionIndex = i;
+      } else {
+        b.net_revenue_solid = null;
+        b.net_revenue_dotted = b._cumulative_revenue;
+      }
+    });
+
+    // Connect the lines: The last solid point should also be the start of the dotted line
+    if (transitionIndex !== -1 && transitionIndex < buckets.length - 1) {
+      buckets[transitionIndex].net_revenue_dotted = buckets[transitionIndex].net_revenue_solid;
+    }
+
+    return buckets;
+  }, [isIntraday, data.dailySales, data.orders, data.prevOrders, dateRange]);
+
+  // Calculate totals based on the filtered data (orders for intraday, dailySales for longer)
+  const totals = useMemo(() => {
+    if (isIntraday) {
+      return data.orders.reduce((acc: any, o: any) => ({
+        revenue: acc.revenue + (o.net_sales || o.amount || 0),
+        orders: acc.orders + 1,
+        newCustomers: acc.newCustomers + ((!o.customer || o.customer.orders_count <= 1) ? 1 : 0),
+        returningCustomers: acc.returningCustomers + (o.customer?.orders_count > 1 ? 1 : 0)
+      }), { revenue: 0, orders: 0, newCustomers: 0, returningCustomers: 0 });
+    } else {
+      return (data.dailySales || []).reduce((acc: any, d: any) => ({
+        revenue: acc.revenue + (d.net_revenue || 0),
+        orders: acc.orders + (d.total_orders || 0),
+        newCustomers: acc.newCustomers + (d.new_customer_orders || 0),
+        returningCustomers: acc.returningCustomers + (d.returning_customer_orders || 0)
+      }), { revenue: 0, orders: 0, newCustomers: 0, returningCustomers: 0 });
+    }
+  }, [isIntraday, data.orders, data.dailySales]);
+
+  // Calculate funnel totals for conversion rate
+  const funnelTotals = (data.funnel || []).reduce((acc: any, day: any) => ({
+    sessions: acc.sessions + (day.sessions || 0),
+    carts: acc.carts + (day.sessions_with_add_to_cart || 0),
+    checkouts: acc.checkouts + (day.checkouts_initiated || 0),
+    orders: acc.orders + (day.orders || 0),
+  }), { sessions: 0, carts: 0, checkouts: 0, orders: 0 });
+
+  const conversionRate = funnelTotals.sessions > 0 
+    ? ((funnelTotals.orders / funnelTotals.sessions) * 100).toFixed(2) 
+    : '0.00';
+
+  const returningRate = totals.orders > 0 
+    ? ((totals.returningCustomers / totals.orders) * 100).toFixed(2)
+    : '0.00';
+
+  const aov = totals.orders > 0 ? totals.revenue / totals.orders : 0;
 
   return (
     <>
-      {/* KPI Row */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <MetricBox label="30d Revenue" value={fmt(totals.revenue)} trend="+12%" />
-        <MetricBox label="30d Orders" value={totals.orders} trend="+5%" />
-        <MetricBox label="30d AOV" value={fmt(totals.revenue / (totals.orders || 1))} trend="-2%" />
-        <MetricBox label="New Customers" value={totals.newCustomers} trend="+8%" />
-        <MetricBox label="Total Customers" value={data.customers.length} />
-        <MetricBox label="Products Tracked" value={data.products.length} />
-      </div>
-
-      {/* Main Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[400px]">
-        <div className="lg:col-span-2 bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-6">Revenue & Order Velocity (30d)</h3>
-          <ResponsiveContainer width="100%" height="85%">
-            <ComposedChart data={data.dailySales}>
+      {/* Main Grid Dashboard */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        
+        {/* 1. Total Sales */}
+        <DashboardCard title="Total Sales" value={fmt(totals.revenue)} trend="+5%">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={chartData}>
+              <defs>
+                <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-              <XAxis dataKey="day" tickFormatter={(d) => d.split('T')[0].slice(5)} tick={{fontSize: 10}} axisLine={false} tickLine={false} />
-              <YAxis yAxisId="left" tick={{fontSize: 10}} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-              <YAxis yAxisId="right" orientation="right" tick={{fontSize: 10}} axisLine={false} tickLine={false} />
+              <XAxis dataKey={isIntraday ? "label" : "day"} tick={{fontSize: 10}} tickLine={false} axisLine={false} />
+              <YAxis hide domain={['auto', 'auto']} />
               <Tooltip 
-                contentStyle={{backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '4px', fontSize: '12px'}}
-                formatter={(value: any, name: any) => [name === 'net_revenue' ? fmt(value) : value, name === 'net_revenue' ? 'Revenue' : 'Orders']}
+                contentStyle={{fontSize: '12px'}}
+                formatter={(value: any, name: any) => {
+                  if (name === 'net_revenue_solid' || name === 'net_revenue_dotted') return [fmt(value), 'Current Period'];
+                  return [fmt(value), 'Previous Period'];
+                }}
+                labelFormatter={(label) => label}
               />
-              <Legend />
-              <Bar yAxisId="right" dataKey="total_orders" name="Orders" fill="#e5e7eb" radius={[4, 4, 0, 0]} barSize={20} />
-              <Line yAxisId="left" type="monotone" dataKey="net_revenue" name="Revenue" stroke="#000000" strokeWidth={2} dot={false} activeDot={{r: 4}} />
+              <Area type="monotone" dataKey="net_revenue_solid" stroke="#8884d8" fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={2} />
+              <Area type="monotone" dataKey="net_revenue_dotted" stroke="#8884d8" fillOpacity={0.3} fill="url(#colorRevenue)" strokeWidth={2} strokeDasharray="3 3" />
+              <Line type="monotone" dataKey="prev_net_revenue" stroke="#9ca3af" strokeDasharray="3 3" dot={false} strokeWidth={2} />
             </ComposedChart>
           </ResponsiveContainer>
-        </div>
+        </DashboardCard>
 
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-           <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-6">Traffic Sources</h3>
-           <ResponsiveContainer width="100%" height="85%">
-             <PieChart>
-               <Pie
-                 data={data.traffic}
-                 dataKey="sessions"
-                 nameKey="source"
-                 cx="50%"
-                 cy="50%"
-                 innerRadius={60}
-                 outerRadius={80}
-                 paddingAngle={5}
-               >
-                 {data.traffic.map((entry: any, index: number) => (
-                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                 ))}
-               </Pie>
-               <Tooltip contentStyle={{fontSize: '12px'}} />
-               <Legend layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{fontSize: '10px'}} />
-             </PieChart>
-           </ResponsiveContainer>
-        </div>
+        {/* 2. Online Store Sessions */}
+        <DashboardCard title="Online Store Sessions" value={funnelTotals.sessions.toLocaleString()} trend="+12%">
+          <div className="absolute top-0 right-0 text-xs text-gray-500">
+            Visitors: <span className="font-bold text-gray-900">{funnelTotals.sessions.toLocaleString()}</span>
+          </div>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data.funnel}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <XAxis dataKey="day" hide />
+              <YAxis hide />
+              <Tooltip 
+                cursor={{fill: '#f3f4f6'}}
+                contentStyle={{fontSize: '12px'}}
+              />
+              <Bar dataKey="sessions" fill="#cbd5e1" radius={[2, 2, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </DashboardCard>
+
+        {/* 3. Returning Customer Rate */}
+        <DashboardCard title="Returning Customer Rate" value={`${returningRate}%`} trend="-2%">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={[
+                  { name: 'First-time', value: totals.newCustomers, fill: '#94a3b8' },
+                  { name: 'Returning', value: totals.returningCustomers, fill: '#0f172a' }
+                ]}
+                cx="50%"
+                cy="50%"
+                innerRadius={40}
+                outerRadius={60}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                <Cell fill="#94a3b8" />
+                <Cell fill="#0f172a" />
+              </Pie>
+              <Tooltip contentStyle={{fontSize: '12px'}} />
+              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{fontSize: '11px'}} />
+            </PieChart>
+          </ResponsiveContainer>
+        </DashboardCard>
+
+        {/* 4. Online Store Conversion Rate */}
+        <DashboardCard title="Online Store Conversion Rate" value={`${conversionRate}%`} trend="+90%">
+          <div className="flex flex-col justify-center h-full space-y-4 text-sm">
+            <div className="flex justify-between items-center border-b border-gray-50 pb-2">
+              <span className="text-gray-500">Added to cart</span>
+              <div className="text-right">
+                <div className="font-medium">{((funnelTotals.carts / funnelTotals.sessions) * 100).toFixed(2)}%</div>
+                <div className="text-xs text-gray-400">{funnelTotals.carts} sessions</div>
+              </div>
+            </div>
+            <div className="flex justify-between items-center border-b border-gray-50 pb-2">
+              <span className="text-gray-500">Reached checkout</span>
+              <div className="text-right">
+                <div className="font-medium">{((funnelTotals.checkouts / funnelTotals.sessions) * 100).toFixed(2)}%</div>
+                <div className="text-xs text-gray-400">{funnelTotals.checkouts} sessions</div>
+              </div>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500">Sessions converted</span>
+              <div className="text-right">
+                <div className="font-medium">{conversionRate}%</div>
+                <div className="text-xs text-gray-400">{funnelTotals.orders} sessions</div>
+              </div>
+            </div>
+          </div>
+        </DashboardCard>
+
+        {/* 5. Average Order Value */}
+        <DashboardCard title="Average Order Value" value={fmt(aov)} trend="-5%">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <XAxis dataKey={isIntraday ? "label" : "day"} tick={{fontSize: 10}} tickLine={false} axisLine={false} />
+              <YAxis hide domain={['auto', 'auto']} />
+              <Tooltip 
+                contentStyle={{fontSize: '12px'}}
+                formatter={(value: any) => [fmt(value), 'AOV']}
+                labelFormatter={(label) => label}
+              />
+              <Line type="monotone" dataKey="aov" stroke="#000000" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
+        </DashboardCard>
+
+        {/* 6. Total Orders */}
+        <DashboardCard title="Total Orders" value={totals.orders} trendLabel="orders">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <XAxis dataKey={isIntraday ? "label" : "day"} tick={{fontSize: 10}} tickLine={false} axisLine={false} />
+              <YAxis hide />
+              <Tooltip 
+                cursor={{fill: '#f3f4f6'}}
+                contentStyle={{fontSize: '12px'}}
+                labelFormatter={(label) => label}
+              />
+              <Bar dataKey="total_orders" fill="#000000" radius={[2, 2, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </DashboardCard>
+
       </div>
 
       <Section title="Daily Sales Performance (30 Days)" rows={data.dailySales.length}>
@@ -353,44 +643,127 @@ function OverviewTab({ data }: any) {
   );
 }
 
+
+
 function FunnelTab({ data }: any) {
-  // Prepare funnel data for chart
-  const latestFunnel = data.funnel[data.funnel.length - 1] || {};
-  const funnelChartData = [
-    { name: 'Sessions', value: latestFunnel.sessions || 0, fill: '#000000' },
-    { name: 'Product Views', value: latestFunnel.sessions_with_product_view || 0, fill: '#333333' },
-    { name: 'Add to Cart', value: latestFunnel.sessions_with_add_to_cart || 0, fill: '#666666' },
-    { name: 'Checkout', value: latestFunnel.checkouts_initiated || 0, fill: '#999999' },
-    { name: 'Orders', value: latestFunnel.orders || 0, fill: '#22c55e' }
-  ];
+  // Use the latest day's data for the visual funnel
+  const latest = data.funnel[data.funnel.length - 1] || {};
+  
+  // Calculate totals for the period (30 days)
+  const totals = data.funnel.reduce((acc: any, day: any) => ({
+    sessions: acc.sessions + (day.sessions || 0),
+    productViews: acc.productViews + (day.sessions_with_product_view || 0),
+    carts: acc.carts + (day.sessions_with_add_to_cart || 0),
+    checkouts: acc.checkouts + (day.checkouts_initiated || 0),
+    orders: acc.orders + (day.orders || 0),
+  }), { sessions: 0, productViews: 0, carts: 0, checkouts: 0, orders: 0 });
+
+  const conversionRate = totals.sessions > 0 
+    ? ((totals.orders / totals.sessions) * 100).toFixed(2) 
+    : '0.00';
+
+  const getPercentage = (val: number, total: number) => {
+    if (total === 0) return '0%';
+    return `${((val / total) * 100).toFixed(1)}%`;
+  };
+
+  // Funnel Step Component (Inline for now)
+  const FunnelStep = ({ label, value, total, prevValue, color, isLast }: any) => {
+    const percentOfTotal = getPercentage(value, totals.sessions);
+    const percentOfPrev = prevValue ? getPercentage(value, prevValue) : '100%';
+    
+    // Calculate height relative to max (sessions) for visualization
+    const heightPercent = totals.sessions > 0 ? (value / totals.sessions) * 100 : 0;
+
+    return (
+      <div className="flex-1 flex flex-col gap-4 min-w-[150px]">
+        <div className="text-xs font-bold uppercase tracking-wider text-gray-500">{label}</div>
+        <div className="flex items-end gap-2 h-[200px] relative group bg-gray-50 rounded-lg p-2 border border-gray-100">
+           {/* Bar */}
+           <div 
+             className={`w-full rounded-t-sm transition-all duration-500 ${color} relative`}
+             style={{ height: `${Math.max(heightPercent, 5)}%` }}
+           >
+             <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+               {value} ({percentOfTotal})
+             </div>
+           </div>
+        </div>
+        
+        <div className="space-y-1 text-center">
+          <div className="text-xl font-black text-gray-900">{value}</div>
+          <div className="flex flex-col items-center gap-1 text-[10px] text-gray-500 font-mono uppercase">
+            <span>{percentOfTotal} of Traffic</span>
+            {prevValue && (
+              <span className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">
+                ↘ {percentOfPrev} Step Conv.
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-6 h-[400px]">
-        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-6">Conversion Funnel (Today)</h3>
-        <ResponsiveContainer width="100%" height="85%">
-          <BarChart data={funnelChartData} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
-            <XAxis type="number" hide />
-            <YAxis dataKey="name" type="category" width={100} tick={{fontSize: 12}} axisLine={false} tickLine={false} />
-            <Tooltip cursor={{fill: 'transparent'}} contentStyle={{fontSize: '12px'}} />
-            <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={40}>
-              {funnelChartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.fill} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+      <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm mb-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 uppercase tracking-tight">Conversion Funnel (30 Days)</h3>
+            <p className="text-sm text-gray-500">Aggregate performance across all traffic sources.</p>
+          </div>
+          <div className="flex items-center gap-3 bg-green-50 px-4 py-2 rounded-full border border-green-100">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-sm font-bold text-green-700">{conversionRate}% Conversion Rate</span>
+          </div>
+        </div>
+
+        <div className="flex gap-4 md:gap-8 justify-between">
+            <FunnelStep 
+                label="Sessions" 
+                value={totals.sessions} 
+                total={totals.sessions}
+                color="bg-gray-800"
+            />
+            <FunnelStep 
+                label="Product Views" 
+                value={totals.productViews} 
+                total={totals.sessions}
+                prevValue={totals.sessions}
+                color="bg-gray-700"
+            />
+            <FunnelStep 
+                label="Added to Cart" 
+                value={totals.carts} 
+                total={totals.sessions}
+                prevValue={totals.productViews}
+                color="bg-gray-600"
+            />
+            <FunnelStep 
+                label="Checkout" 
+                value={totals.checkouts} 
+                total={totals.sessions}
+                prevValue={totals.carts}
+                color="bg-gray-400"
+            />
+            <FunnelStep 
+                label="Purchased" 
+                value={totals.orders} 
+                total={totals.sessions}
+                prevValue={totals.checkouts}
+                color="bg-[#22c55e]" // Green for success
+                isLast={true}
+            />
+        </div>
       </div>
 
-      <Section title="Conversion Funnel History (Daily)" rows={data.funnel.length}>
+      <Section title="Daily Funnel Breakdown" rows={data.funnel.length}>
         <DataTable 
-          headers={['Date', 'Sessions', 'PDP Views', 'PDP %', 'Add to Cart', 'ATC %', 'Checkout', 'Orders', 'Conv. Rate']}
+          headers={['Date', 'Sessions', 'Add to Cart', 'ATC Rate', 'Checkout', 'Orders', 'Conv. Rate']}
           rows={data.funnel.slice().reverse().map((d: any) => [
             d.day?.split('T')[0],
             d.sessions,
-            d.sessions_with_product_view,
-            <span key="pdp" className="text-gray-500">{d.product_view_rate}%</span>,
             d.sessions_with_add_to_cart,
             <span key="atc" className="text-gray-500">{d.add_to_cart_rate}%</span>,
             d.checkouts_initiated,
@@ -437,102 +810,6 @@ function TrafficTab({ data }: any) {
         />
       </Section>
     </>
-  );
-}
-
-function OrdersTab({ data }: any) {
-  return (
-    <Section title="Order Ledger" rows={data.orders.length}>
-      <DataTable 
-        headers={['Order', 'Date', 'Customer', 'Items', 'Total', 'Net Sales', 'Profit', 'Margin', 'Status', 'Source']}
-        rows={data.orders.map((o: any) => {
-          const cost = (o.order_items || []).reduce((acc: number, i: any) => acc + ((i.cost_per_item || 0) * (i.quantity || 0)), 0);
-          const profit = (o.net_sales || 0) - cost;
-          const margin = o.net_sales > 0 ? (profit / o.net_sales) * 100 : 0;
-          
-          return [
-            <span key="id" className="font-mono text-xs">#{o.order_number || o.id?.slice(0,6)}</span>,
-            new Date(o.created_at).toLocaleDateString(),
-            <div key="cust" className="flex flex-col">
-              <span className="font-medium text-gray-900">{o.customer?.first_name} {o.customer?.last_name}</span>
-              <span className="text-xs text-gray-500">{o.customer?.email || o.shipping_details?.email || 'Guest'}</span>
-            </div>,
-            (o.order_items || []).length,
-            fmt(o.subtotal_price),
-            <span key="net" className="font-medium">{fmt(o.net_sales)}</span>,
-            <span key="profit" className={profit >= 0 ? 'text-green-600' : 'text-red-600'}>{fmt(profit)}</span>,
-            `${margin.toFixed(1)}%`,
-            <Badge key="status" status={o.status} />,
-            <span key="src" className="text-xs bg-gray-100 px-2 py-1 rounded">{o.utm_source || 'Direct'}</span>
-          ];
-        })}
-      />
-    </Section>
-  );
-}
-
-function ProductsTab({ data }: any) {
-  return (
-    <>
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-6 h-[400px]">
-        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-6">Product Profitability Matrix</h3>
-        <ResponsiveContainer width="100%" height="85%">
-          <BarChart data={data.products.slice(0, 10)} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis dataKey="name" tick={{fontSize: 10}} interval={0} angle={-45} textAnchor="end" height={80} />
-            <YAxis yAxisId="left" orientation="left" stroke="#000000" tick={{fontSize: 10}} />
-            <YAxis yAxisId="right" orientation="right" stroke="#22c55e" tick={{fontSize: 10}} />
-            <Tooltip contentStyle={{fontSize: '12px'}} />
-            <Legend />
-            <Bar yAxisId="left" dataKey="gross_sales" name="Gross Sales" fill="#000000" />
-            <Bar yAxisId="right" dataKey="gross_profit" name="Profit" fill="#22c55e" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      <Section title="Product Performance" rows={data.products.length}>
-        <DataTable 
-          headers={['Product', 'SKU', 'Orders', 'Units', 'Gross Sales', 'COGS', 'Profit', 'Margin %', '$/Unit']}
-          rows={data.products.map((p: any) => [
-            <span key="name" className="font-medium text-gray-900">{p.name}</span>,
-            <span key="sku" className="font-mono text-xs text-gray-500">{p.sku || '-'}</span>,
-            p.orders || 0,
-            p.units_sold || 0,
-            fmt(p.gross_sales),
-            fmt(p.total_cost),
-            <span key="profit" className="text-green-600 font-medium">{fmt(p.gross_profit)}</span>,
-            <span key="margin" className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${p.profit_margin_pct > 50 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-              {(p.profit_margin_pct || 0).toFixed(1)}%
-            </span>,
-            fmt((p.gross_profit || 0) / (p.units_sold || 1))
-          ])}
-        />
-      </Section>
-    </>
-  );
-}
-
-function CustomersTab({ data }: any) {
-  return (
-    <Section title="Customer LTV Segments" rows={data.customers.length}>
-      <DataTable 
-        headers={['Customer', 'Orders', 'Total Spent', 'AOV', 'First Order', 'Last Order', 'Lifetime', 'Source', 'Segment']}
-        rows={data.customers.map((c: any) => [
-          <div key="c" className="flex flex-col">
-            <span className="font-medium text-gray-900">{c.first_name} {c.last_name}</span>
-            <span className="text-xs text-gray-500">{c.email}</span>
-          </div>,
-          c.orders_count || 0,
-          <span key="spent" className="font-bold text-gray-900">{fmt(c.total_spent)}</span>,
-          fmt(c.aov),
-          c.first_order_date ? new Date(c.first_order_date).toLocaleDateString() : '-',
-          c.last_order_date ? new Date(c.last_order_date).toLocaleDateString() : '-',
-          c.customer_lifetime_days ? `${Math.round(c.customer_lifetime_days)} days` : '-',
-          c.acquisition_source || '-',
-          c.customer_segment ? <Badge key="seg" status={c.customer_segment} /> : '-'
-        ])}
-      />
-    </Section>
   );
 }
 
@@ -590,7 +867,123 @@ function EventsTab({ data }: any) {
   );
 }
 
+function ProductsTab({ data }: any) {
+  // Calculate Category Metrics
+  const categoryMetrics = useMemo(() => {
+    const metrics = {
+      subscription: { revenue: 0, units: 0 },
+      onetime: { revenue: 0, units: 0 }
+    };
+
+    (data.orders || []).forEach((order: any) => {
+      (order.order_items || []).forEach((item: any) => {
+        // Determine category based on SKU or Name
+        // Subscription SKUs usually contain 'S' (e.g. FG1S1) or name has 'Subscription'
+        // One-time SKUs usually contain 'O' (e.g. FG1O)
+        const isSub = (item.sku && item.sku.includes('S')) || (item.name && item.name.toLowerCase().includes('subscription'));
+        const target = isSub ? metrics.subscription : metrics.onetime;
+        
+        // Use item price * quantity for revenue contribution
+        const itemRevenue = (item.price || 0) * (item.quantity || 1);
+        
+        target.revenue += itemRevenue;
+        target.units += (item.quantity || 0);
+      });
+    });
+
+    return [
+      { name: 'Subscription', value: metrics.subscription.revenue, units: metrics.subscription.units, fill: '#FF3300' }, // Orange
+      { name: 'One-time', value: metrics.onetime.revenue, units: metrics.onetime.units, fill: '#1a1a1a' } // Black
+    ];
+  }, [data.orders]);
+
+  return (
+    <div className="space-y-8">
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DashboardCard title="Revenue by Category" value={fmt(categoryMetrics.reduce((a, b) => a + b.value, 0))} trendLabel="Total Revenue">
+           <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={categoryMetrics}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={80}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {categoryMetrics.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value: number) => fmt(value)} contentStyle={{fontSize: '12px'}} />
+              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{fontSize: '11px'}} />
+            </PieChart>
+          </ResponsiveContainer>
+        </DashboardCard>
+        
+        <DashboardCard title="Units Sold by Category" value={categoryMetrics.reduce((a, b) => a + b.units, 0)} trendLabel="Total Units">
+           <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={categoryMetrics} layout="vertical" margin={{ top: 20, right: 30, left: 40, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
+              <XAxis type="number" hide />
+              <YAxis dataKey="name" type="category" tick={{fontSize: 11}} width={80} />
+              <Tooltip cursor={{fill: '#f3f4f6'}} contentStyle={{fontSize: '12px'}} />
+              <Bar dataKey="units" radius={[0, 4, 4, 0]} barSize={40}>
+                {categoryMetrics.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </DashboardCard>
+      </div>
+
+      {/* Product Performance Table */}
+      <Section title="Product Performance" rows={data.products.length}>
+        <DataTable 
+          headers={['Product Name', 'SKU', 'Units Sold', 'Gross Sales', 'Gross Profit', 'Margin']}
+          rows={data.products.map((p: any) => [
+            <span key="name" className="font-medium text-gray-900">{p.product_name}</span>,
+            <span key="sku" className="font-mono text-xs text-gray-500">{p.sku || '-'}</span>,
+            p.units_sold,
+            fmt(p.gross_sales),
+            fmt(p.gross_profit),
+            <span key="margin" className="text-green-600 font-bold">{p.profit_margin_pct}%</span>
+          ])}
+        />
+      </Section>
+    </div>
+  );
+}
+
 // === UI COMPONENTS ===
+
+function DashboardCard({ title, value, trend, trendLabel, children }: any) {
+  const isPositive = trend && (trend.startsWith('+') || !trend.startsWith('-'));
+  
+  return (
+    <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm flex flex-col h-[320px]">
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-dotted border-gray-300 pb-0.5 cursor-help">{title}</h3>
+      </div>
+      
+      <div className="flex items-baseline gap-3 mb-6">
+        <div className="text-3xl font-bold text-gray-900">{value}</div>
+        {trend && (
+          <div className={`flex items-center text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+            {isPositive ? '↑' : '↓'} {trend.replace(/[+-]/, '')}
+          </div>
+        )}
+      </div>
+      
+      <div className="flex-1 min-h-0 relative">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function MetricBox({ label, value }: any) {
   return (
@@ -680,3 +1073,5 @@ function timeAgo(dateStr: string) {
   if (hours < 24) return `${hours}h ago`;
   return `${Math.floor(hours / 24)}d ago`;
 }
+
+

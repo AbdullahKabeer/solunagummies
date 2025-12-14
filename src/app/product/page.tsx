@@ -15,6 +15,7 @@ import StickyMobileCTA from '@/components/StickyMobileCTA';
 export default function ProductPage() {
   const [purchaseType, setPurchaseType] = useState<'subscribe' | 'onetime'>('subscribe');
   const [quantity, setQuantity] = useState(1);
+  const [frequency, setFrequency] = useState(1);
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
   return (
@@ -123,7 +124,23 @@ export default function ProductPage() {
                         </div>
                         <div>
                           <div className="font-bold text-gray-900">Subscribe & Save 20%</div>
-                          <div className="text-sm text-gray-500">Delivered every 30 days. Cancel anytime.</div>
+                          <div className="text-sm text-gray-500 mb-2">Save 20% on every order. Cancel anytime.</div>
+                          
+                          {/* Frequency Selector */}
+                          {purchaseType === 'subscribe' && (
+                            <div className="flex items-center gap-2 mt-2" onClick={(e) => e.stopPropagation()}>
+                              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Deliver every:</label>
+                              <select 
+                                value={frequency}
+                                onChange={(e) => setFrequency(Number(e.target.value))}
+                                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2"
+                              >
+                                <option value={1}>1 Month (Most Common)</option>
+                                <option value={2}>2 Months</option>
+                                <option value={3}>3 Months</option>
+                              </select>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="text-right">

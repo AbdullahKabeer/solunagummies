@@ -8,12 +8,19 @@ This website is built with Next.js and Tailwind CSS.
 - **Modern Design**: Clean, whitespace-heavy design with Blood Orange accents.
 - **Product Showcase**: Highlighting the Blood Orange flavor and active ingredients.
 - **Pre-order Conversion**: Optimized for capturing pre-orders.
+- **Admin Dashboard**: Comprehensive analytics dashboard inspired by Shopify.
+  - Real-time sales tracking.
+  - Customizable date ranges and granularity (Hourly/Daily).
+  - Comparison views (Current vs Previous period).
+  - Conversion funnel analysis.
 
 ## Tech Stack
 
-- Next.js 15 (App Router)
+- Next.js 16 (App Router)
 - Tailwind CSS v4
 - TypeScript
+- Supabase (Database & Auth)
+- Recharts (Data Visualization)
 
 ## Getting Started
 

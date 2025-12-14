@@ -3,8 +3,34 @@ insert into public.sessions (id, last_seen, user_agent, country)
 select gen_random_uuid(), now() - (interval '1 minute' * generate_series(1, 50)), 'Synthetic Browser', 'Synthetic Country';
 
 -- Insert synthetic data into the `orders` table
-insert into public.orders (id, created_at, total_amount, customer_id)
-select gen_random_uuid(), now() - (interval '1 hour' * generate_series(1, 20)), random() * 100 + 20, gen_random_uuid();
+WITH generated_orders AS (
+  SELECT 
+    gen_random_uuid() as id,
+    now() - (interval '1 hour' * s) as created_at,
+    (random() * 100 + 20)::numeric(10,2) as order_value,
+    gen_random_uuid() as customer_id
+  FROM generate_series(1, 20) as s
+)
+INSERT INTO public.orders (
+  id, 
+  created_at, 
+  total_amount, 
+  amount, 
+  subtotal_price, 
+  net_sales, 
+  customer_id, 
+  status
+)
+SELECT 
+  id, 
+  created_at, 
+  order_value, 
+  order_value, 
+  order_value, 
+  order_value, 
+  customer_id,
+  'paid'
+FROM generated_orders;
 
 -- Insert synthetic data into the `order_items` table
 insert into public.order_items (id, order_id, product_name, category, price, quantity)
@@ -13,8 +39,15 @@ select gen_random_uuid(), (select id from public.orders order by random() limit 
 from generate_series(1, 60);
 
 -- Insert synthetic data into the `customers` table
-insert into public.customers (id, first_name, clv, churn_risk_score, acquisition_channel)
-select gen_random_uuid(), 'Customer ' || generate_series(1, 20), random() * 1000, random() * 100, 'Synthetic Channel';
+insert into public.customers (id, first_name, last_name, email, clv, churn_risk_score, acquisition_channel)
+select 
+  gen_random_uuid(), 
+  'Customer ' || generate_series(1, 20), 
+  'Doe',
+  'customer' || generate_series(1, 20) || '@example.com',
+  random() * 1000, 
+  random() * 100, 
+  'Synthetic Channel';
 
 -- Insert synthetic data into the `customer_segments` table
 insert into public.customer_segments (id, name, description, created_at)
