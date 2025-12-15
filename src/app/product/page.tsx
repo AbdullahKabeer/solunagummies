@@ -11,12 +11,144 @@ import TimelineSection from '@/components/TimelineSection';
 import IngredientsBreakdown from '@/components/IngredientsBreakdown';
 import ComparisonSection from '@/components/ComparisonSection';
 import StickyMobileCTA from '@/components/StickyMobileCTA';
+import { useCart } from '@/context/CartContext';
+import { useAnalytics } from '@/hooks/useAnalytics';
+import { createClient } from '@/lib/supabase/client';
 
 export default function ProductPage() {
   const [purchaseType, setPurchaseType] = useState<'subscribe' | 'onetime'>('subscribe');
   const [quantity, setQuantity] = useState(1);
   const [frequency, setFrequency] = useState(1);
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const { addToCart } = useCart();
+  const { track } = useAnalytics();
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data } = await supabase.from('products').select('*');
+      if (data) setProducts(data);
+    };
+    fetchProducts();
+  }, []);
+
+  const basePrice = 74.95;
+  
+  const getPriceDetails = (qty: number, type: 'subscribe' | 'onetime') => {
+    let sku = '';
+    if (type === 'subscribe') {
+        sku = `FG${qty}S${frequency}`; 
+    } else {
+        sku = `FG${qty}O`;
+    }
+
+    const product = products.find(p => p.sku === sku);
+
+    if (product) {
+        const finalPrice = product.price;
+        const totalBase = product.compare_at_price || (finalPrice * 1.25); 
+        const savings = totalBase - finalPrice;
+        const discountPercent = totalBase > 0 ? savings / totalBase : 0;
+        const perServing = finalPrice / (30 * qty);
+        
+        return { finalPrice, totalBase, savings, perServing, discountPercent };
+    }
+
+    // Fallback logic matching ProductPurchase.tsx
+    if (type === 'subscribe') {
+        const baseSku = `FG1S${frequency}`;
+        const baseProduct = products.find(p => p.sku === baseSku);
+        if (baseProduct) {
+             const finalPrice = baseProduct.price * qty;
+             const totalBase = (baseProduct.compare_at_price || (baseProduct.price * 1.25)) * qty;
+             const savings = totalBase - finalPrice;
+             const discountPercent = totalBase > 0 ? savings / totalBase : 0;
+             const perServing = finalPrice / (30 * qty);
+             return { finalPrice, totalBase, savings, perServing, discountPercent };
+        }
+    } else {
+        const baseSku = 'FG1O';
+        const baseProduct = products.find(p => p.sku === baseSku);
+        if (baseProduct) {
+             const finalPrice = baseProduct.price * qty;
+             const totalBase = (baseProduct.compare_at_price || (baseProduct.price * 1.25)) * qty;
+             const savings = totalBase - finalPrice;
+             const discountPercent = totalBase > 0 ? savings / totalBase : 0;
+             const perServing = finalPrice / (30 * qty);
+             return { finalPrice, totalBase, savings, perServing, discountPercent };
+        }
+    }
+
+    const totalBase = basePrice * qty;
+    let discountPercent = 0;
+    if (type === 'subscribe') {
+        if (frequency === 1) discountPercent = 0.20;
+        if (frequency === 2) discountPercent = 0.30;
+        if (frequency === 3) discountPercent = 0.35;
+    }
+    const finalPrice = totalBase * (1 - discountPercent);
+    const savings = totalBase - finalPrice;
+    const perServing = finalPrice / (30 * qty);
+    
+    return { finalPrice, totalBase, savings, perServing, discountPercent };
+  };
+
+  const { finalPrice, totalBase, savings, discountPercent } = getPriceDetails(quantity, purchaseType);
+
+  const handleAddToCart = () => {
+    if (purchaseType === 'subscribe') {
+        const sku = `FG${quantity}S${frequency}`; 
+        let productName = `Soluna Subscription (${quantity} Bottle${quantity > 1 ? 's' : ''})`;
+        productName += ` - Delivered Every ${frequency} Month${frequency > 1 ? 's' : ''}`;
+
+        track('add_to_cart', {
+            product_id: 'soluna-focus-protocol',
+            name: productName,
+            quantity: 1,
+            purchase_type: 'subscribe',
+            price: finalPrice,
+            currency: 'USD',
+            sku,
+            frequency: frequency
+        });
+
+        addToCart({
+            productId: 'soluna-focus-protocol',
+            name: productName,
+            price: finalPrice,
+            quantity: 1,
+            subscription: true,
+            sku
+        });
+    } else {
+        const bundleSku = `FG${quantity}O`;
+        const product = products.find(p => p.sku === bundleSku);
+        const sku = product ? bundleSku : 'FG1O';
+        const productName = 'Soluna Focus Protocol';
+        const cartQuantity = product ? 1 : quantity;
+        const unitPrice = product ? finalPrice : (finalPrice / quantity);
+
+        track('add_to_cart', {
+            product_id: 'soluna-focus-protocol',
+            name: productName,
+            quantity: cartQuantity,
+            purchase_type: 'onetime',
+            price: unitPrice,
+            currency: 'USD',
+            sku
+        });
+
+        addToCart({
+            productId: 'soluna-focus-protocol',
+            name: productName,
+            price: unitPrice,
+            quantity: cartQuantity,
+            subscription: false,
+            sku
+        });
+    }
+  };
 
   return (
     <main className="min-h-screen bg-[#FDFCF8] selection:bg-orange-200 selection:text-orange-900">
@@ -123,8 +255,8 @@ export default function ProductPage() {
                           {purchaseType === 'subscribe' && <Check className="w-4 h-4 text-white" />}
                         </div>
                         <div>
-                          <div className="font-bold text-gray-900">Subscribe & Save 20%</div>
-                          <div className="text-sm text-gray-500 mb-2">Save 20% on every order. Cancel anytime.</div>
+                          <div className="font-bold text-gray-900">Subscribe & Save {(discountPercent * 100).toFixed(0)}%</div>
+                          <div className="text-sm text-gray-500 mb-2">Save {(discountPercent * 100).toFixed(0)}% on every order. Cancel anytime.</div>
                           
                           {/* Frequency Selector */}
                           {purchaseType === 'subscribe' && (
@@ -144,8 +276,8 @@ export default function ProductPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-serif font-bold text-2xl text-gray-900">$49.00</div>
-                        <div className="text-sm text-gray-400 line-through">$59.00</div>
+                        <div className="font-serif font-bold text-2xl text-gray-900">${purchaseType === 'subscribe' ? finalPrice.toFixed(2) : getPriceDetails(quantity, 'subscribe').finalPrice.toFixed(2)}</div>
+                        <div className="text-sm text-gray-400 line-through">${purchaseType === 'subscribe' ? totalBase.toFixed(2) : getPriceDetails(quantity, 'subscribe').totalBase.toFixed(2)}</div>
                       </div>
                     </div>
                   </div>
@@ -162,7 +294,7 @@ export default function ProductPage() {
                         </div>
                         <div className="font-bold text-gray-900">One-time Purchase</div>
                       </div>
-                      <div className="font-serif font-bold text-2xl text-gray-900">$59.00</div>
+                      <div className="font-serif font-bold text-2xl text-gray-900">${purchaseType === 'onetime' ? finalPrice.toFixed(2) : getPriceDetails(quantity, 'onetime').finalPrice.toFixed(2)}</div>
                     </div>
                   </div>
                 </div>
@@ -178,8 +310,11 @@ export default function ProductPage() {
                       <Plus className="w-5 h-5" />
                     </button>
                   </div>
-                  <button className="flex-1 bg-gray-900 text-white h-16 rounded-full font-bold text-lg hover:bg-orange-600 transition-colors shadow-lg shadow-orange-900/20">
-                    Add to Cart — ${(purchaseType === 'subscribe' ? 49 : 59) * quantity}.00
+                  <button 
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-gray-900 text-white h-16 rounded-full font-bold text-lg hover:bg-orange-600 transition-colors shadow-lg shadow-orange-900/20"
+                  >
+                    Add to Cart — ${finalPrice.toFixed(2)}
                   </button>
                 </div>
 

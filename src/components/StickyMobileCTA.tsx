@@ -49,14 +49,14 @@ export default function StickyMobileCTA() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col">
               <span className="text-xs font-bold uppercase text-[#1a1a1a] tracking-tight">Focus Protocol</span>
-              <span className="font-mono text-sm text-gray-600">$59.96 / Month</span>
+              <span className="font-mono text-sm text-gray-600">From $49.00</span>
             </div>
             <button
               onClick={scrollToPurchase}
               className="flex-1 bg-[#FF3300] text-white py-3 border border-black font-mono font-bold uppercase text-sm flex items-center justify-center gap-2 shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
             >
               <Zap className="w-4 h-4" />
-              Initiate
+              Shop Now
             </button>
           </div>
         </motion.div>

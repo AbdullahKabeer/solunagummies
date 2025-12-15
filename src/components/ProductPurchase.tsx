@@ -151,13 +151,22 @@ export default function ProductPurchase() {
         
         const sku = product ? bundleSku : 'FG1O';
         const productName = 'Soluna Focus Protocol';
-        // If bundle exists, unit price is bundle price / qty. If not, it's just the calculated finalPrice / qty.
-        const unitPrice = finalPrice / quantity; 
+        
+        // If we found a bundle SKU (e.g. FG3O), we are adding 1 unit of that bundle.
+        // If we are falling back to single bottle SKU (FG1O), we are adding 'quantity' units.
+        const cartQuantity = product ? 1 : quantity;
+        
+        // If bundle, unit price is the full bundle price.
+        // If single, unit price is the single bottle price (which might be discounted if we calculated it that way, but usually it's base price).
+        // However, our getPriceDetails returns 'finalPrice' which is the TOTAL price for the selection.
+        // So if it's a bundle (qty=1), price = finalPrice.
+        // If it's singles (qty=N), price = finalPrice / N.
+        const unitPrice = product ? finalPrice : (finalPrice / quantity);
 
         track('add_to_cart', {
             product_id: 'soluna-focus-protocol',
             name: productName,
-            quantity: quantity,
+            quantity: cartQuantity,
             purchase_type: 'onetime',
             price: unitPrice,
             currency: 'USD',
@@ -168,7 +177,7 @@ export default function ProductPurchase() {
             productId: 'soluna-focus-protocol',
             name: productName,
             price: unitPrice,
-            quantity: quantity, // Actual number of bottles
+            quantity: cartQuantity, 
             subscription: false,
             sku
         });
