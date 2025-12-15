@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Search, Mail, Calendar } from 'lucide-react';
+import { Search, Mail, Calendar, DollarSign, ShoppingBag } from 'lucide-react';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<any[]>([]);
+  const [filteredCustomers, setFilteredCustomers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const supabase = createClient();
 
   useEffect(() => {
@@ -18,12 +20,35 @@ export default function CustomersPage() {
         .order('created_at', { ascending: false });
 
       if (error) console.error(error);
-      else setCustomers(data || []);
+      else {
+        setCustomers(data || []);
+        setFilteredCustomers(data || []);
+      }
       setIsLoading(false);
     };
 
     fetchCustomers();
   }, []);
+
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredCustomers(customers);
+    } else {
+      const lowerTerm = searchTerm.toLowerCase();
+      setFilteredCustomers(customers.filter(c => 
+        (c.first_name && c.first_name.toLowerCase().includes(lowerTerm)) ||
+        (c.last_name && c.last_name.toLowerCase().includes(lowerTerm)) ||
+        (c.email && c.email.toLowerCase().includes(lowerTerm))
+      ));
+    }
+  }, [searchTerm, customers]);
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
 
   return (
     <div className="space-y-8">
@@ -40,6 +65,8 @@ export default function CustomersPage() {
         <input 
           type="text" 
           placeholder="Search customers by name or email..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full pl-10 pr-4 py-3 border border-black font-mono text-sm focus:outline-none focus:ring-1 focus:ring-black"
         />
       </div>
@@ -48,19 +75,22 @@ export default function CustomersPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {isLoading ? (
           <p className="col-span-full text-center py-12 text-gray-500">Loading customers...</p>
-        ) : customers.length > 0 ? (
-          customers.map((customer) => (
+        ) : filteredCustomers.length > 0 ? (
+          filteredCustomers.map((customer) => (
             <div key={customer.id} className="bg-white border border-black p-6 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all group">
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-12 bg-[#F2F0E9] rounded-full flex items-center justify-center font-black text-xl border border-black/10 group-hover:bg-[#FF3300] group-hover:text-white transition-colors">
-                  {customer.first_name?.[0]?.toUpperCase() || '?'}
+                  {customer.first_name?.[0]?.toUpperCase() || customer.email?.[0]?.toUpperCase() || '?'}
                 </div>
                 <span className="font-mono text-[10px] bg-gray-100 px-2 py-1 rounded text-gray-500 uppercase">
-                  {customer.role || 'Customer'}
+                  {customer.orders_count > 0 ? 'Customer' : 'Lead'}
                 </span>
               </div>
               
-              <h3 className="font-bold text-lg mb-1">{customer.first_name} {customer.last_name}</h3>
+              <h3 className="font-bold text-lg mb-1">
+                {customer.first_name} {customer.last_name}
+                {!customer.first_name && !customer.last_name && <span className="text-gray-400 italic">No Name</span>}
+              </h3>
               
               <div className="space-y-2 mt-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -71,11 +101,19 @@ export default function CustomersPage() {
                   <Calendar className="w-4 h-4" />
                   <span>Joined {new Date(customer.created_at).toLocaleDateString()}</span>
                 </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>{customer.orders_count || 0} Orders</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <DollarSign className="w-4 h-4" />
+                  <span>{formatCurrency(customer.total_spent || 0)} Spent</span>
+                </div>
               </div>
 
               <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center">
                 <span className="font-mono text-xs text-gray-400">ID: {customer.id.slice(0, 8)}...</span>
-                <button className="text-xs font-bold uppercase underline hover:text-[#FF3300]">View History</button>
+                {/* <button className="text-xs font-bold uppercase underline hover:text-[#FF3300]">View History</button> */}
               </div>
             </div>
           ))

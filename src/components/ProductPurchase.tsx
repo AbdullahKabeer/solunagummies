@@ -8,7 +8,7 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { createClient } from '@/lib/supabase/client';
 
 export default function ProductPurchase() {
-  const [quantity, setQuantity] = useState<1 | 2 | 3>(2);
+  const [quantity, setQuantity] = useState<number>(2);
   const [frequency, setFrequency] = useState(1);
   const [purchaseType, setPurchaseType] = useState<'subscribe' | 'onetime'>('subscribe');
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
@@ -225,17 +225,19 @@ export default function ProductPurchase() {
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Quantity:</div>
                 <div className="flex items-center bg-white border border-gray-200 rounded-lg w-fit">
                     <button 
-                        onClick={() => setQuantity(Math.max(1, quantity - 1) as 1|2|3)} 
+                        onClick={() => {
+                            const minQty = purchaseType === 'subscribe' ? frequency : 1;
+                            setQuantity(Math.max(minQty, quantity - 1));
+                        }} 
                         className="px-4 py-2 hover:bg-gray-50 text-gray-600 font-bold transition-colors"
-                        disabled={quantity <= 1}
+                        disabled={quantity <= (purchaseType === 'subscribe' ? frequency : 1)}
                     >
                         -
                     </button>
                     <span className="w-12 text-center font-bold text-base">{quantity}</span>
                     <button 
-                        onClick={() => setQuantity(Math.min(3, quantity + 1) as 1|2|3)} 
+                        onClick={() => setQuantity(quantity + 1)} 
                         className="px-4 py-2 hover:bg-gray-50 text-gray-600 font-bold transition-colors"
-                        disabled={quantity >= 3}
                     >
                         +
                     </button>
@@ -285,16 +287,16 @@ export default function ProductPurchase() {
                                 {/* Quantity/Frequency Buttons */}
                                 {purchaseType === 'subscribe' && (
                                     <div className="mb-3 mt-3" onClick={(e) => e.stopPropagation()}>
-                                        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Deliver Every:</div>
+                                        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Deliver {quantity} every:</div>
                                         <div className="flex gap-2">
                                             {[1, 2, 3].map((freq) => (
                                                 <button
                                                     key={freq}
                                                     onClick={() => {
                                                         setFrequency(freq);
-                                                        // Auto-select matching quantity for best value if user hasn't explicitly set a weird combo?
-                                                        // Actually, let's just set quantity to match frequency to guide the user to the bundles
-                                                        setQuantity(freq as 1|2|3);
+                                                        if (quantity < freq) {
+                                                            setQuantity(freq);
+                                                        }
                                                     }}
                                                     className={`relative flex-1 py-2 px-1 rounded-xl border-2 transition-all flex flex-col items-center justify-center gap-0.5 ${
                                                         frequency === freq 
@@ -351,7 +353,7 @@ export default function ProductPurchase() {
                         </div>
                         <div className="text-right">
                             <div className="font-bold text-lg text-[#1a1a1a]">
-                                ${(basePrice * (purchaseType === 'onetime' ? quantity : 1)).toFixed(2)}
+                                ${(basePrice * quantity).toFixed(2)}
                             </div>
                         </div>
                     </div>

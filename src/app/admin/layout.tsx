@@ -16,7 +16,8 @@ import {
   LogOut,
   Menu,
   X,
-  Package
+  Package,
+  Beaker
 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -68,6 +69,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
     { href: '/admin/products', label: 'Products', icon: Package },
+    { href: '/admin/experiments', label: 'Experiments', icon: Beaker },
     { href: '/admin/fulfillment', label: 'Fulfillment', icon: Truck },
     { href: '/admin/customers', label: 'Customers', icon: Users },
     { href: '/admin/reports', label: 'Reports', icon: BarChart3 },

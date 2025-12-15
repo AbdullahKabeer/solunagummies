@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Star, Zap, Clock, CheckCircle } from 'lucide-react';
+import { DynamicText } from './ab/DynamicText';
 
 export default function Hero() {
   return (
@@ -20,17 +21,17 @@ export default function Hero() {
               New Formula 2.0
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-4 text-[#1a1a1a]">
-              Natural Support for<br/>
-              <span className="text-[#FF3300]">Focus, Flow</span><br/>
-              & Steady Energy
+              <DynamicText id="hero_headline_1" defaultContent="Natural Support for" /><br/>
+              <span className="text-[#FF3300]"><DynamicText id="hero_headline_2" defaultContent="Focus, Flow" /></span><br/>
+              <DynamicText id="hero_headline_3" defaultContent="& Steady Energy" />
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-[#1a1a1a]/80 max-w-xl leading-relaxed mb-6 font-light">
-              A daily gummy for calm, clear energy. No jitters, no crash. Just steady mental performance when you need it most.
+              <DynamicText id="hero_subheadline" defaultContent="A daily gummy for calm, clear energy. No jitters, no crash. Just steady mental performance when you need it most." />
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-4">
               <Link href="#purchase" className="bg-[#FF3300] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-[#e62e00] transition-colors text-center shadow-lg shadow-orange-500/20">
-                Start Your Focus Routine
+                <DynamicText id="hero_cta_primary" defaultContent="Start Your Focus Routine" />
               </Link>
               <Link href="#science" className="px-6 py-3 sm:px-8 sm:py-4 font-bold text-gray-900 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors text-center text-base sm:text-lg">
                 How It Works

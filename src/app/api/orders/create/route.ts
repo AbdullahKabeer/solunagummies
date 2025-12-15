@@ -50,20 +50,55 @@ export async function POST(request: Request) {
     const totalDiscounts = 0; // Placeholder
     const netSales = subtotalPrice - totalDiscounts;
 
+    // 2.5 Find or Create Customer
+    let customerId = null;
+    if (email) {
+      const { data: existingCustomer } = await supabaseAdmin
+        .from('customers')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+      if (existingCustomer) {
+        customerId = existingCustomer.id;
+        // Link auth user if logged in
+        if (user?.id) {
+             await supabaseAdmin.from('customers').update({ auth_user_id: user.id }).eq('id', customerId);
+        }
+      } else {
+        const { data: newCustomer, error: createCustomerError } = await supabaseAdmin
+          .from('customers')
+          .insert({
+            email: email,
+            first_name: shippingDetails?.name?.split(' ')[0] || '',
+            last_name: shippingDetails?.name?.split(' ').slice(1).join(' ') || '',
+            auth_user_id: user?.id || null,
+            accepts_marketing: true 
+          })
+          .select('id')
+          .single();
+        
+        if (!createCustomerError && newCustomer) {
+          customerId = newCustomer.id;
+        }
+      }
+    }
+
     // 3. Create Order
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
       .insert({
         user_id: user?.id || null,
+        customer_id: customerId, // Link to CRM Customer
         session_id: sessionId || null,
-        visitor_id: visitorId, // New Field
+        visitor_id: visitorId, 
         stripe_payment_intent_id: paymentIntentId,
         amount: totalAmount,
-        subtotal_price: subtotalPrice, // New Field
-        total_tax: totalTax, // New Field
-        total_shipping: totalShipping, // New Field
-        total_discounts: totalDiscounts, // New Field
-        net_sales: netSales, // New Field
+        subtotal_price: subtotalPrice, 
+        total_tax: totalTax, 
+        total_shipping: totalShipping, 
+        total_discounts: totalDiscounts, 
+        net_sales: netSales, 
         status: 'paid',
         shipping_details: { ...shippingDetails, email },
       })

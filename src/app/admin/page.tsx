@@ -60,7 +60,10 @@ export default function AdminAnalyticsConsole() {
         { data: auditLogs },
         // Comparison Data
         { data: prevSessions },
-        { data: prevOrders }
+        { data: prevOrders },
+        { data: landingPageStats },
+        { data: referrerStats },
+        { data: campaignStats }
       ] = await Promise.all([
         supabase.from('sessions').select('*').gte('last_seen', startDateStr).lte('last_seen', endDateStr).order('last_seen', { ascending: false }).limit(1000),
         supabase.from('orders').select('*, order_items(*), customer:customers(*)').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(1000),
@@ -79,7 +82,10 @@ export default function AdminAnalyticsConsole() {
         supabase.from('audit_logs').select('*').gte('created_at', startDateStr).lte('created_at', endDateStr).order('created_at', { ascending: false }).limit(100),
         // Comparison Queries
         supabase.from('sessions').select('*').gte('last_seen', prevStartDateStr).lte('last_seen', prevEndDateStr).limit(1000),
-        supabase.from('orders').select('total_amount, created_at').gte('created_at', prevStartDateStr).lte('created_at', prevEndDateStr).limit(1000)
+        supabase.from('orders').select('total_amount, created_at').gte('created_at', prevStartDateStr).lte('created_at', prevEndDateStr).limit(1000),
+        supabase.from('landing_page_stats').select('*'),
+        supabase.from('referrer_stats').select('*'),
+        supabase.from('campaign_stats').select('*')
       ]);
 
       // Compute real-time metrics
@@ -127,6 +133,9 @@ export default function AdminAnalyticsConsole() {
         auditLogs: auditLogs || [],
         prevSessions: prevSessions || [],
         prevOrders: prevOrders || [],
+        landingPageStats: landingPageStats || [],
+        referrerStats: referrerStats || [],
+        campaignStats: campaignStats || [],
         liveVisitors,
         todaySales,
         perf: (performance.now() - start).toFixed(0)
@@ -146,6 +155,7 @@ export default function AdminAnalyticsConsole() {
     { id: 'products', label: 'Product Analytics' },
     { id: 'funnel', label: 'Conversion Funnel' },
     { id: 'traffic', label: 'Traffic Intelligence' },
+    { id: 'landing_pages', label: 'Landing Pages' },
     { id: 'sessions', label: 'Live Sessions' },
     { id: 'events', label: 'Event Stream' }
   ];
@@ -219,6 +229,7 @@ export default function AdminAnalyticsConsole() {
         {activeTab === 'products' && <ProductsTab data={data} />}
         {activeTab === 'funnel' && <FunnelTab data={data} />}
         {activeTab === 'traffic' && <TrafficTab data={data} />}
+        {activeTab === 'landing_pages' && <LandingPagesTab data={data} />}
         {activeTab === 'sessions' && <SessionsTab data={data} />}
         {activeTab === 'events' && <EventsTab data={data} />}
       </div>
@@ -1054,6 +1065,56 @@ function Badge({ status }: { status: string }) {
     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium uppercase ${styles[status] || 'bg-gray-100 text-gray-800'}`}>
       {status}
     </span>
+  );
+}
+
+function LandingPagesTab({ data }: any) {
+  const landingStats = data.landingPageStats || [];
+  const referrerStats = data.referrerStats || [];
+  const campaignStats = data.campaignStats || [];
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-6">
+        <Section title="Landing Page Performance" rows={landingStats.length}>
+          <DataTable 
+            headers={['Landing Page', 'Sessions', 'Orders', 'Conversion Rate']}
+            rows={landingStats.map((s: any) => [
+              s.landing_page || '(Direct/Unknown)',
+              s.sessions_count,
+              s.orders_count,
+              `${s.conversion_rate}%`
+            ])}
+          />
+        </Section>
+
+        <Section title="Campaign Performance (UTM)" rows={campaignStats.length}>
+          <DataTable 
+            headers={['Source', 'Medium', 'Campaign', 'Sessions', 'Orders', 'Conversion Rate']}
+            rows={campaignStats.map((s: any) => [
+              s.utm_source || '-',
+              s.utm_medium || '-',
+              s.utm_campaign || '-',
+              s.sessions_count,
+              s.orders_count,
+              `${s.conversion_rate}%`
+            ])}
+          />
+        </Section>
+
+        <Section title="Referrer Performance" rows={referrerStats.length}>
+          <DataTable 
+            headers={['Referrer', 'Sessions', 'Orders', 'Conversion Rate']}
+            rows={referrerStats.map((s: any) => [
+              s.referrer || '(Direct)',
+              s.sessions_count,
+              s.orders_count,
+              `${s.conversion_rate}%`
+            ])}
+          />
+        </Section>
+      </div>
+    </div>
   );
 }
 

@@ -84,12 +84,23 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
     const updateHeartbeat = async () => {
       try {
+        const landingPage = sessionStorage.getItem('soluna_landing_page');
+        const referrer = sessionStorage.getItem('soluna_referrer');
+        const utmSource = sessionStorage.getItem('utm_source');
+        const utmMedium = sessionStorage.getItem('utm_medium');
+        const utmCampaign = sessionStorage.getItem('utm_campaign');
+
         await supabase.from('sessions').upsert({
           id: sessionId,
           visitor_id: visitorId,
           last_seen: new Date().toISOString(),
           path: pathname,
           user_agent: navigator.userAgent,
+          landing_page: landingPage,
+          referrer: referrer,
+          utm_source: utmSource,
+          utm_medium: utmMedium,
+          utm_campaign: utmCampaign,
         }, { onConflict: 'id' });
       } catch (error) {
         console.error('Error updating session heartbeat:', error);
