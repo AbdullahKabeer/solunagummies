@@ -1,7 +1,10 @@
 -- Clear all data from tables
 -- Run this in the Supabase SQL Editor to reset your database.
 
-TRUNCATE TABLE 
+TRUNCATE TABLE
+  public.ab_assignments,
+  public.ab_tests,
+  public.ab_variants,
   public.addresses,
   public.analytics_events,
   public.attribution_touchpoints,
@@ -18,9 +21,9 @@ TRUNCATE TABLE
   public.orders,
   public.page_views,
   public.product_views,
-  public.products,
+  public.profiles,
   public.refunds,
   public.search_queries,
   public.sessions,
   public.subscription_events
-CASCADE;
+RESTART IDENTITY CASCADE;
