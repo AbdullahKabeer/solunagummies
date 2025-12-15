@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     const headersList = await headers();
 
-    // Extract Geo & Device Info from Headers (Vercel/Next.js specific + Custom Middleware)
+    // Extract Geo & Device Info from Headers (Vercel/Next.js specific + Custom Proxy)
     const ip = headersList.get('x-ip') || headersList.get('x-forwarded-for') || 'unknown';
     const country = headersList.get('x-geo-country') || headersList.get('x-vercel-ip-country') || 'unknown';
     const city = headersList.get('x-geo-city') || headersList.get('x-vercel-ip-city') || 'unknown';

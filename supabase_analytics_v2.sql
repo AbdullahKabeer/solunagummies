@@ -18,7 +18,7 @@ ADD COLUMN IF NOT EXISTS browser TEXT,
 ADD COLUMN IF NOT EXISTS visitor_id UUID; -- Long-lived cookie ID
 
 -- Note: utm_source, utm_medium, utm_campaign, device_type were added in previous step, 
--- but we will ensure they are populated correctly via middleware/API.
+-- but we will ensure they are populated correctly via proxy/API.
 
 -- 4. Ensure Analytics Events has proper indexing
 CREATE INDEX IF NOT EXISTS idx_analytics_events_session_id ON analytics_events(session_id);

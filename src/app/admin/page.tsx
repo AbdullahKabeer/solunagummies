@@ -9,6 +9,7 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ComposedChart, Legend,
   ScatterChart, Scatter, ZAxis
 } from 'recharts';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // Colors for charts
 const COLORS = ['#000000', '#333333', '#666666', '#999999', '#cccccc'];
@@ -148,7 +149,39 @@ export default function AdminAnalyticsConsole() {
     return () => clearInterval(interval);
   }, [dateRange]);
 
-  if (loading) return <div className="flex h-screen items-center justify-center bg-gray-50 text-sm text-gray-500 font-mono animate-pulse">INITIALIZING DATA STREAMS...</div>;
+  if (loading) {
+    return (
+      <div className="p-6 max-w-[1800px] mx-auto min-h-screen bg-gray-50/50 space-y-8 animate-in fade-in duration-500">
+        {/* Header Skeleton */}
+        <div className="flex justify-end mb-4 gap-2">
+           <Skeleton className="h-10 w-32 bg-gray-200" />
+           <Skeleton className="h-10 w-64 bg-gray-200" />
+        </div>
+        
+        <header className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
+           <div className="space-y-3">
+              <Skeleton className="h-10 w-48 bg-gray-300" />
+              <Skeleton className="h-4 w-64 bg-gray-200" />
+           </div>
+           <Skeleton className="h-20 w-full rounded bg-white border border-gray-200" />
+           <Skeleton className="h-20 w-full rounded bg-white border border-gray-200" />
+        </header>
+
+        {/* Tabs Skeleton */}
+        <div className="flex gap-4 mb-6 border-b border-gray-200 pb-2 overflow-x-auto">
+           {[1,2,3,4,5,6].map(i => <Skeleton key={i} className="h-8 w-32 bg-gray-200 rounded" />)}
+        </div>
+
+        {/* Content Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+           <Skeleton className="h-96 w-full rounded-lg bg-white border border-gray-200" />
+           <Skeleton className="h-96 w-full rounded-lg bg-white border border-gray-200" />
+           <Skeleton className="h-64 w-full rounded-lg bg-white border border-gray-200" />
+           <Skeleton className="h-64 w-full rounded-lg bg-white border border-gray-200" />
+        </div>
+      </div>
+    );
+  }
 
   const tabs = [
     { id: 'overview', label: 'Command Center' },

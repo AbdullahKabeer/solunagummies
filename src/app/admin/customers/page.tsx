@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Search, Mail, Calendar, DollarSign, ShoppingBag } from 'lucide-react';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -74,7 +75,24 @@ export default function CustomersPage() {
       {/* Customers Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {isLoading ? (
-          <p className="col-span-full text-center py-12 text-gray-500">Loading customers...</p>
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="bg-white border border-black p-6">
+              <div className="flex items-start justify-between mb-4">
+                <Skeleton className="w-12 h-12 rounded-full" />
+                <Skeleton className="w-16 h-6 rounded" />
+              </div>
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <div className="space-y-2 mt-4">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-1/3" />
+              </div>
+              <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center">
+                <Skeleton className="h-3 w-20" />
+              </div>
+            </div>
+          ))
         ) : filteredCustomers.length > 0 ? (
           filteredCustomers.map((customer) => (
             <div key={customer.id} className="bg-white border border-black p-6 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all group">
