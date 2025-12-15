@@ -72,7 +72,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/experiments', label: 'Experiments', icon: Beaker },
     { href: '/admin/fulfillment', label: 'Fulfillment', icon: Truck },
     { href: '/admin/customers', label: 'Customers', icon: Users },
-    { href: '/admin/reports', label: 'Reports', icon: BarChart3 },
   ];
 
   return (
