@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingBag, User, LogOut } from 'lucide-react';
+import { ShoppingBag, User } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 
 export default function Header() {
   const { cartCount, setIsCartOpen } = useCart();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-black bg-[#F2F0E9]">
@@ -46,22 +46,13 @@ export default function Header() {
 
         {/* User & Cart Actions */}
         <div className="flex items-stretch border-r border-black ml-auto md:ml-0">
-          {user ? (
-            <button 
-              onClick={logout}
-              className="flex items-center px-4 md:px-6 border-l md:border-l-0 border-black hover:bg-[#FF3300] hover:text-white transition-colors"
-              title={`Signed in as ${user.name}`}
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
-          ) : (
-            <Link 
-              href="/login"
-              className="flex items-center px-4 md:px-6 border-l md:border-l-0 border-black hover:bg-[#FF3300] hover:text-white transition-colors"
-            >
-              <User className="w-5 h-5" />
-            </Link>
-          )}
+          <Link 
+            href={user ? "/account" : "/login"}
+            className="flex items-center px-4 md:px-6 border-l md:border-l-0 border-black hover:bg-[#FF3300] hover:text-white transition-colors"
+            title={user ? "My Account" : "Sign In"}
+          >
+            <User className="w-5 h-5" />
+          </Link>
 
           <button 
             onClick={() => setIsCartOpen(true)}
@@ -78,11 +69,20 @@ export default function Header() {
 
         {/* CTA */}
         <Link 
-          href="#purchase" 
+          href="/#purchase" 
           className="hidden md:flex items-center px-8 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF3300] transition-colors"
         >
           Shop Now
         </Link>
+        
+        {cartCount > 0 && (
+          <Link 
+            href="/checkout" 
+            className="hidden md:flex items-center px-8 border-l border-white/20 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF3300] transition-colors"
+          >
+            Checkout
+          </Link>
+        )}
       </div>
     </header>
   );

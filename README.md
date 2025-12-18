@@ -13,6 +13,11 @@ This website is built with Next.js and Tailwind CSS.
   - Customizable date ranges and granularity (Hourly/Daily).
   - Comparison views (Current vs Previous period).
   - Conversion funnel analysis.
+- **User Account Management**:
+  - Profile management (Personal details, Shipping addresses).
+  - Order history and status tracking.
+  - Seamless checkout integration with address auto-fill.
+  - Post-purchase account creation.
 
 ## Tech Stack
 

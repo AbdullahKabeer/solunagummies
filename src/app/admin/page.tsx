@@ -5,17 +5,30 @@ import { createClient } from '@/lib/supabase/client';
 import DateRangePicker, { DateRange } from '@/components/admin/DateRangePicker';
 import GranularityPicker from '@/components/admin/GranularityPicker';
 import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ComposedChart, Legend,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid,
+  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ComposedChart,
   ScatterChart, Scatter, ZAxis
 } from 'recharts';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
 
-// Colors for charts
-const COLORS = ['#000000', '#333333', '#666666', '#999999', '#cccccc'];
-const GREEN = '#22c55e';
-const RED = '#ef4444';
-const BLUE = '#3b82f6';
+
+// Colors for charts (prefer CSS variables so theming stays consistent)
+const COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+];
 
 export default function AdminAnalyticsConsole() {
   const [data, setData] = useState<any>(null);
@@ -28,7 +41,14 @@ export default function AdminAnalyticsConsole() {
     startDate: new Date(new Date().setHours(0, 0, 0, 0)),
     endDate: new Date(new Date().setHours(23, 59, 59, 999))
   });
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
+
+  const liveChartConfig = {
+    visitors: {
+      label: "Visitors",
+      color: "var(--chart-1)",
+    },
+  } satisfies ChartConfig
 
   useEffect(() => {
     const fetchData = async () => {
@@ -151,33 +171,33 @@ export default function AdminAnalyticsConsole() {
 
   if (loading) {
     return (
-      <div className="p-6 max-w-[1800px] mx-auto min-h-screen bg-gray-50/50 space-y-8 animate-in fade-in duration-500">
+      <div className="p-6 max-w-[1800px] mx-auto min-h-screen space-y-8 animate-in fade-in duration-500">
         {/* Header Skeleton */}
         <div className="flex justify-end mb-4 gap-2">
-           <Skeleton className="h-10 w-32 bg-gray-200" />
-           <Skeleton className="h-10 w-64 bg-gray-200" />
+           <Skeleton className="h-10 w-32 bg-muted" />
+           <Skeleton className="h-10 w-64 bg-muted" />
         </div>
         
         <header className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
            <div className="space-y-3">
-              <Skeleton className="h-10 w-48 bg-gray-300" />
-              <Skeleton className="h-4 w-64 bg-gray-200" />
+              <Skeleton className="h-10 w-48 bg-muted" />
+              <Skeleton className="h-4 w-64 bg-muted" />
            </div>
-           <Skeleton className="h-20 w-full rounded bg-white border border-gray-200" />
-           <Skeleton className="h-20 w-full rounded bg-white border border-gray-200" />
+            <Skeleton className="h-20 w-full rounded bg-card border border-border" />
+            <Skeleton className="h-20 w-full rounded bg-card border border-border" />
         </header>
 
         {/* Tabs Skeleton */}
-        <div className="flex gap-4 mb-6 border-b border-gray-200 pb-2 overflow-x-auto">
-           {[1,2,3,4,5,6].map(i => <Skeleton key={i} className="h-8 w-32 bg-gray-200 rounded" />)}
+          <div className="flex gap-4 mb-6 border-b border-border pb-2 overflow-x-auto">
+            {[1,2,3,4,5,6].map(i => <Skeleton key={i} className="h-8 w-32 bg-muted rounded" />)}
         </div>
 
         {/* Content Skeleton */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-           <Skeleton className="h-96 w-full rounded-lg bg-white border border-gray-200" />
-           <Skeleton className="h-96 w-full rounded-lg bg-white border border-gray-200" />
-           <Skeleton className="h-64 w-full rounded-lg bg-white border border-gray-200" />
-           <Skeleton className="h-64 w-full rounded-lg bg-white border border-gray-200" />
+           <Skeleton className="h-96 w-full rounded-lg bg-card border border-border" />
+           <Skeleton className="h-96 w-full rounded-lg bg-card border border-border" />
+           <Skeleton className="h-64 w-full rounded-lg bg-card border border-border" />
+           <Skeleton className="h-64 w-full rounded-lg bg-card border border-border" />
         </div>
       </div>
     );
@@ -194,7 +214,7 @@ export default function AdminAnalyticsConsole() {
   ];
 
   return (
-    <div className="p-6 max-w-[1800px] mx-auto min-h-screen bg-gray-50/50">
+    <div className="p-6 max-w-[1800px] mx-auto min-h-screen">
       {/* Date Picker */}
       <div className="flex justify-end mb-4 gap-2">
         <GranularityPicker value={granularity} onChange={setGranularity} />
@@ -204,10 +224,10 @@ export default function AdminAnalyticsConsole() {
       {/* Header */}
       <header className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
-            SOLUNA <span className="text-gray-400 font-light">ANALYTICS</span>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+            SOLUNA <span className="text-muted-foreground font-light">ANALYTICS</span>
           </h1>
-          <div className="flex gap-4 text-xs font-mono text-gray-500 mt-2 uppercase tracking-wider">
+          <div className="flex gap-4 text-xs font-mono text-muted-foreground mt-2 uppercase tracking-wider">
             <span className="flex items-center gap-2 text-green-600 font-bold">
               <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
               SYSTEM ONLINE
@@ -218,43 +238,69 @@ export default function AdminAnalyticsConsole() {
         </div>
 
         {/* Live Graph */}
-        <div className="h-16 w-full bg-white border border-gray-200 rounded shadow-sm overflow-hidden relative">
-          <div className="absolute top-1 left-2 text-[10px] font-bold text-gray-400 uppercase">Real-time Traffic</div>
-          <div className="absolute top-1 right-2 text-lg font-bold text-green-600">{data.liveVisitors}</div>
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={liveHistory}>
-              <Area type="monotone" dataKey="visitors" stroke="#22c55e" fill="#dcfce7" strokeWidth={2} isAnimationActive={false} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+        <Card className="pt-0">
+          <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+            <div className="grid flex-1 gap-1">
+              <CardTitle className="text-base">Real-time Traffic</CardTitle>
+              <CardDescription>Active visitors (last 30 minutes)</CardDescription>
+            </div>
+            <div className="text-lg font-bold text-green-600 tabular-nums">{data.liveVisitors}</div>
+          </CardHeader>
+          <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+            <ChartContainer config={liveChartConfig} className="aspect-auto h-[80px] w-full">
+              <AreaChart data={liveHistory}>
+                <defs>
+                  <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-visitors)" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="var(--color-visitors)" stopOpacity={0.1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="time" tickLine={false} axisLine={false} hide />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel indicator="dot" />}
+                />
+                <Area
+                  type="natural"
+                  dataKey="visitors"
+                  stroke="var(--color-visitors)"
+                  fill="url(#fillVisitors)"
+                  strokeWidth={2}
+                  isAnimationActive={false}
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+              </AreaChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-        <div className="text-right bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex justify-between items-center">
+        <Card className="p-4 flex justify-between items-center">
           <div>
-            <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Today's Revenue</div>
-            <div className="text-2xl font-bold text-gray-900">{fmt(data.todaySales?.net_revenue || 0)}</div>
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Today's Revenue</div>
+            <div className="text-2xl font-bold">{fmt(data.todaySales?.net_revenue || 0)}</div>
           </div>
           <div className="text-right">
-             <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Orders</div>
-             <div className="text-xl font-bold text-gray-900">{data.todaySales?.total_orders || 0}</div>
+             <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Orders</div>
+             <div className="text-xl font-bold">{data.todaySales?.total_orders || 0}</div>
           </div>
-        </div>
+        </Card>
       </header>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 border-b border-gray-200 overflow-x-auto pb-1">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border-b-2 transition-all whitespace-nowrap
-              ${activeTab === tab.id 
-                ? 'border-black text-black bg-white' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+        <TabsList className="w-full justify-start overflow-x-auto h-auto p-1 bg-transparent border-b rounded-none">
+          {tabs.map(tab => (
+            <TabsTrigger 
+              key={tab.id} 
+              value={tab.id}
+              className="data-[state=active]:bg-background data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-4 py-2"
+            >
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
       {/* Tab Content */}
       <div className="space-y-8 animate-in fade-in duration-500">
@@ -269,45 +315,49 @@ export default function AdminAnalyticsConsole() {
 
       {/* Customer Segments */}
       <section className="mb-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Customer Segments</h2>
+        <h2 className="text-xl font-bold mb-4">Customer Segments</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.customerSegments.map((segment: any) => (
-            <div key={segment.id} className="p-4 bg-white shadow rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-900">{segment.name}</h3>
-              <p className="text-sm text-gray-600">{segment.description}</p>
-              <p className="text-xs text-gray-400 mt-2">Created: {new Date(segment.created_at).toLocaleDateString()}</p>
-            </div>
+            <Card key={segment.id}>
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold">{segment.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">{segment.description}</p>
+                <p className="text-xs text-muted-foreground mt-2">Created: {new Date(segment.created_at).toLocaleDateString()}</p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
 
       {/* Audit Logs */}
       <section className="mb-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Audit Logs</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow rounded-lg">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Table</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Action</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">User</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Changes</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Timestamp</th>
-              </tr>
-            </thead>
-            <tbody>
+        <h2 className="text-xl font-bold mb-4">Audit Logs</h2>
+        <Card>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Table</TableHead>
+                <TableHead>Action</TableHead>
+                <TableHead>User</TableHead>
+                <TableHead>Changes</TableHead>
+                <TableHead>Timestamp</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {data.auditLogs.map((log: any) => (
-                <tr key={log.id} className="border-t">
-                  <td className="px-4 py-2 text-sm text-gray-700">{log.table_name}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{log.action}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{log.user_id || 'N/A'}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{JSON.stringify(log.changes)}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{new Date(log.created_at).toLocaleString()}</td>
-                </tr>
+                <TableRow key={log.id}>
+                  <TableCell>{log.table_name}</TableCell>
+                  <TableCell>{log.action}</TableCell>
+                  <TableCell>{log.user_id || 'N/A'}</TableCell>
+                  <TableCell className="max-w-xs truncate">{JSON.stringify(log.changes)}</TableCell>
+                  <TableCell>{new Date(log.created_at).toLocaleString()}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </Card>
       </section>
     </div>
   );
@@ -494,6 +544,41 @@ function OverviewTab({ data, dateRange, granularity }: any) {
 
   const aov = totals.orders > 0 ? totals.revenue / totals.orders : 0;
 
+  const chartConfig = {
+    net_revenue_solid: {
+      label: "Revenue (Solid)",
+      color: "var(--chart-1)",
+    },
+    net_revenue_dotted: {
+      label: "Revenue (Projected)",
+      color: "var(--chart-1)",
+    },
+    prev_net_revenue: {
+      label: "Previous Period",
+      color: "var(--muted-foreground)",
+    },
+    sessions: {
+      label: "Sessions",
+      color: "var(--chart-2)",
+    },
+    first_time: {
+      label: "First-time",
+      color: "var(--chart-3)",
+    },
+    returning: {
+      label: "Returning",
+      color: "var(--chart-4)",
+    },
+    aov: {
+      label: "AOV",
+      color: "var(--chart-5)",
+    },
+    total_orders: {
+      label: "Orders",
+      color: "var(--chart-2)",
+    },
+  } satisfies ChartConfig
+
   return (
     <>
       {/* Main Grid Dashboard */}
@@ -501,59 +586,54 @@ function OverviewTab({ data, dateRange, granularity }: any) {
         
         {/* 1. Total Sales */}
         <DashboardCard title="Total Sales" value={fmt(totals.revenue)} trend="+5%">
-          <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={chartConfig} className="h-full w-full">
             <ComposedChart data={chartData}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.1}/>
-                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="var(--color-net_revenue_solid)" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="var(--color-net_revenue_solid)" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--grid-color)" />
               <XAxis dataKey={isIntraday ? "label" : "day"} tick={{fontSize: 10}} tickLine={false} axisLine={false} />
               <YAxis hide domain={['auto', 'auto']} />
-              <Tooltip 
-                contentStyle={{fontSize: '12px'}}
-                formatter={(value: any, name: any) => {
-                  if (name === 'net_revenue_solid' || name === 'net_revenue_dotted') return [fmt(value), 'Current Period'];
-                  return [fmt(value), 'Previous Period'];
-                }}
-                labelFormatter={(label) => label}
+              <ChartTooltip 
+                content={<ChartTooltipContent indicator="dot" />}
               />
-              <Area type="monotone" dataKey="net_revenue_solid" stroke="#8884d8" fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={2} />
-              <Area type="monotone" dataKey="net_revenue_dotted" stroke="#8884d8" fillOpacity={0.3} fill="url(#colorRevenue)" strokeWidth={2} strokeDasharray="3 3" />
-              <Line type="monotone" dataKey="prev_net_revenue" stroke="#9ca3af" strokeDasharray="3 3" dot={false} strokeWidth={2} />
+              <Area type="monotone" dataKey="net_revenue_solid" stroke="var(--color-net_revenue_solid)" fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={2} />
+              <Area type="monotone" dataKey="net_revenue_dotted" stroke="var(--color-net_revenue_dotted)" fillOpacity={0.3} fill="url(#colorRevenue)" strokeWidth={2} strokeDasharray="3 3" />
+              <Line type="monotone" dataKey="prev_net_revenue" stroke="var(--color-prev_net_revenue)" strokeDasharray="3 3" dot={false} strokeWidth={2} />
             </ComposedChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </DashboardCard>
 
         {/* 2. Online Store Sessions */}
         <DashboardCard title="Online Store Sessions" value={funnelTotals.sessions.toLocaleString()} trend="+12%">
-          <div className="absolute top-0 right-0 text-xs text-gray-500">
-            Visitors: <span className="font-bold text-gray-900">{funnelTotals.sessions.toLocaleString()}</span>
+          <div className="absolute top-0 right-0 text-xs text-muted-foreground">
+            Visitors: <span className="font-bold text-foreground">{funnelTotals.sessions.toLocaleString()}</span>
           </div>
-          <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={chartConfig} className="h-full w-full">
             <BarChart data={data.funnel}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--grid-color)" />
               <XAxis dataKey="day" hide />
               <YAxis hide />
-              <Tooltip 
-                cursor={{fill: '#f3f4f6'}}
-                contentStyle={{fontSize: '12px'}}
+              <ChartTooltip 
+                content={<ChartTooltipContent indicator="line" />}
+                cursor={{fill: 'var(--muted)'}}
               />
-              <Bar dataKey="sessions" fill="#cbd5e1" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="sessions" fill="var(--color-sessions)" radius={[2, 2, 0, 0]} />
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </DashboardCard>
 
         {/* 3. Returning Customer Rate */}
         <DashboardCard title="Returning Customer Rate" value={`${returningRate}%`} trend="-2%">
-          <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={chartConfig} className="h-full w-full">
             <PieChart>
               <Pie
                 data={[
-                  { name: 'First-time', value: totals.newCustomers, fill: '#94a3b8' },
-                  { name: 'Returning', value: totals.returningCustomers, fill: '#0f172a' }
+                  { name: 'first_time', value: totals.newCustomers, fill: 'var(--color-first_time)' },
+                  { name: 'returning', value: totals.returningCustomers, fill: 'var(--color-returning)' }
                 ]}
                 cx="50%"
                 cy="50%"
@@ -562,37 +642,37 @@ function OverviewTab({ data, dateRange, granularity }: any) {
                 paddingAngle={5}
                 dataKey="value"
               >
-                <Cell fill="#94a3b8" />
-                <Cell fill="#0f172a" />
+                <Cell fill="var(--color-first_time)" />
+                <Cell fill="var(--color-returning)" />
               </Pie>
-              <Tooltip contentStyle={{fontSize: '12px'}} />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{fontSize: '11px'}} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} verticalAlign="bottom" height={36} />
             </PieChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </DashboardCard>
 
         {/* 4. Online Store Conversion Rate */}
         <DashboardCard title="Online Store Conversion Rate" value={`${conversionRate}%`} trend="+90%">
           <div className="flex flex-col justify-center h-full space-y-4 text-sm">
-            <div className="flex justify-between items-center border-b border-gray-50 pb-2">
-              <span className="text-gray-500">Added to cart</span>
+            <div className="flex justify-between items-center border-b pb-2">
+              <span className="text-muted-foreground">Added to cart</span>
               <div className="text-right">
                 <div className="font-medium">{((funnelTotals.carts / funnelTotals.sessions) * 100).toFixed(2)}%</div>
-                <div className="text-xs text-gray-400">{funnelTotals.carts} sessions</div>
+                <div className="text-xs text-muted-foreground">{funnelTotals.carts} sessions</div>
               </div>
             </div>
-            <div className="flex justify-between items-center border-b border-gray-50 pb-2">
-              <span className="text-gray-500">Reached checkout</span>
+            <div className="flex justify-between items-center border-b pb-2">
+              <span className="text-muted-foreground">Reached checkout</span>
               <div className="text-right">
                 <div className="font-medium">{((funnelTotals.checkouts / funnelTotals.sessions) * 100).toFixed(2)}%</div>
-                <div className="text-xs text-gray-400">{funnelTotals.checkouts} sessions</div>
+                <div className="text-xs text-muted-foreground">{funnelTotals.checkouts} sessions</div>
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-500">Sessions converted</span>
+              <span className="text-muted-foreground">Sessions converted</span>
               <div className="text-right">
                 <div className="font-medium">{conversionRate}%</div>
-                <div className="text-xs text-gray-400">{funnelTotals.orders} sessions</div>
+                <div className="text-xs text-muted-foreground">{funnelTotals.orders} sessions</div>
               </div>
             </div>
           </div>
@@ -600,36 +680,28 @@ function OverviewTab({ data, dateRange, granularity }: any) {
 
         {/* 5. Average Order Value */}
         <DashboardCard title="Average Order Value" value={fmt(aov)} trend="-5%">
-          <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={chartConfig} className="h-full w-full">
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--grid-color)" />
               <XAxis dataKey={isIntraday ? "label" : "day"} tick={{fontSize: 10}} tickLine={false} axisLine={false} />
               <YAxis hide domain={['auto', 'auto']} />
-              <Tooltip 
-                contentStyle={{fontSize: '12px'}}
-                formatter={(value: any) => [fmt(value), 'AOV']}
-                labelFormatter={(label) => label}
-              />
-              <Line type="monotone" dataKey="aov" stroke="#000000" strokeWidth={2} dot={false} />
+              <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+              <Line type="monotone" dataKey="aov" stroke="var(--color-aov)" strokeWidth={2} dot={false} />
             </LineChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </DashboardCard>
 
         {/* 6. Total Orders */}
         <DashboardCard title="Total Orders" value={totals.orders} trendLabel="orders">
-          <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={chartConfig} className="h-full w-full">
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--grid-color)" />
               <XAxis dataKey={isIntraday ? "label" : "day"} tick={{fontSize: 10}} tickLine={false} axisLine={false} />
               <YAxis hide />
-              <Tooltip 
-                cursor={{fill: '#f3f4f6'}}
-                contentStyle={{fontSize: '12px'}}
-                labelFormatter={(label) => label}
-              />
-              <Bar dataKey="total_orders" fill="#000000" radius={[2, 2, 0, 0]} />
+              <ChartTooltip cursor={{fill: 'var(--muted)'}} content={<ChartTooltipContent indicator="line" />} />
+              <Bar dataKey="total_orders" fill="var(--color-total_orders)" radius={[2, 2, 0, 0]} />
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </DashboardCard>
 
       </div>
@@ -751,19 +823,19 @@ function FunnelTab({ data }: any) {
 
   return (
     <>
-      <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm mb-8">
-        <div className="flex items-center justify-between mb-8">
+      <Card className="mb-8">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-8">
           <div>
-            <h3 className="text-lg font-bold text-gray-900 uppercase tracking-tight">Conversion Funnel (30 Days)</h3>
-            <p className="text-sm text-gray-500">Aggregate performance across all traffic sources.</p>
+            <CardTitle className="text-lg font-bold uppercase tracking-tight">Conversion Funnel (30 Days)</CardTitle>
+            <CardDescription>Aggregate performance across all traffic sources.</CardDescription>
           </div>
           <div className="flex items-center gap-3 bg-green-50 px-4 py-2 rounded-full border border-green-100">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
             <span className="text-sm font-bold text-green-700">{conversionRate}% Conversion Rate</span>
           </div>
-        </div>
+        </CardHeader>
 
-        <div className="flex gap-4 md:gap-8 justify-between">
+        <CardContent className="flex gap-4 md:gap-8 justify-between">
             <FunnelStep 
                 label="Sessions" 
                 value={totals.sessions} 
@@ -799,8 +871,8 @@ function FunnelTab({ data }: any) {
                 color="bg-[#22c55e]" // Green for success
                 isLast={true}
             />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <Section title="Daily Funnel Breakdown" rows={data.funnel.length}>
         <DataTable 
@@ -821,22 +893,33 @@ function FunnelTab({ data }: any) {
 }
 
 function TrafficTab({ data }: any) {
+  const chartConfig = {
+    traffic: {
+      label: "Traffic Sources",
+      color: "var(--chart-1)",
+    },
+  } satisfies ChartConfig
+
   return (
     <>
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-6 h-[400px]">
-        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-6">Traffic Quality Analysis</h3>
-        <ResponsiveContainer width="100%" height="85%">
-          <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis type="number" dataKey="sessions" name="Sessions" unit="" tick={{fontSize: 10}} />
-            <YAxis type="number" dataKey="conversion_rate" name="Conversion Rate" unit="%" tick={{fontSize: 10}} />
-            <ZAxis type="number" dataKey="avg_session_duration" range={[50, 400]} name="Duration" unit="s" />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{fontSize: '12px'}} />
-            <Legend />
-            <Scatter name="Traffic Sources" data={data.traffic} fill="#000000" />
-          </ScatterChart>
-        </ResponsiveContainer>
-      </div>
+      <Card className="mb-6 h-[400px]">
+        <CardHeader>
+          <CardTitle className="text-sm font-bold uppercase tracking-wide">Traffic Quality Analysis</CardTitle>
+        </CardHeader>
+        <CardContent className="h-[85%]">
+          <ChartContainer config={chartConfig} className="h-full w-full">
+            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--grid-color)" />
+              <XAxis type="number" dataKey="sessions" name="Sessions" unit="" tick={{fontSize: 10}} />
+              <YAxis type="number" dataKey="conversion_rate" name="Conversion Rate" unit="%" tick={{fontSize: 10}} />
+              <ZAxis type="number" dataKey="avg_session_duration" range={[50, 400]} name="Duration" unit="s" />
+              <ChartTooltip cursor={{ strokeDasharray: '3 3' }} content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Scatter name="traffic" data={data.traffic} fill="var(--color-traffic)" />
+            </ScatterChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
       <Section title="Traffic Sources (30 Days)" rows={data.traffic.length}>
         <DataTable 
@@ -936,17 +1019,31 @@ function ProductsTab({ data }: any) {
     });
 
     return [
-      { name: 'Subscription', value: metrics.subscription.revenue, units: metrics.subscription.units, fill: '#FF3300' }, // Orange
-      { name: 'One-time', value: metrics.onetime.revenue, units: metrics.onetime.units, fill: '#1a1a1a' } // Black
+      { name: 'Subscription', value: metrics.subscription.revenue, units: metrics.subscription.units, fill: 'var(--chart-1)' },
+      { name: 'One-time', value: metrics.onetime.revenue, units: metrics.onetime.units, fill: 'var(--chart-2)' }
     ];
   }, [data.orders]);
+
+  const categoryChartConfig = {
+    Subscription: {
+      label: "Subscription",
+      color: "var(--chart-1)",
+    },
+    "One-time": {
+      label: "One-time",
+      color: "var(--chart-2)",
+    },
+    units: {
+      label: "Units",
+    },
+  } satisfies ChartConfig
 
   return (
     <div className="space-y-8">
       {/* Charts Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <DashboardCard title="Revenue by Category" value={fmt(categoryMetrics.reduce((a, b) => a + b.value, 0))} trendLabel="Total Revenue">
-           <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={categoryChartConfig} className="h-full w-full">
             <PieChart>
               <Pie
                 data={categoryMetrics}
@@ -961,26 +1058,26 @@ function ProductsTab({ data }: any) {
                   <Cell key={`cell-${index}`} fill={entry.fill} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => fmt(value)} contentStyle={{fontSize: '12px'}} />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{fontSize: '11px'}} />
+              <ChartTooltip content={<ChartTooltipContent nameKey="name" indicator="dot" />} />
+              <ChartLegend content={<ChartLegendContent nameKey="name" />} />
             </PieChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </DashboardCard>
         
         <DashboardCard title="Units Sold by Category" value={categoryMetrics.reduce((a, b) => a + b.units, 0)} trendLabel="Total Units">
-           <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={categoryChartConfig} className="h-full w-full">
             <BarChart data={categoryMetrics} layout="vertical" margin={{ top: 20, right: 30, left: 40, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--grid-color)" />
               <XAxis type="number" hide />
               <YAxis dataKey="name" type="category" tick={{fontSize: 11}} width={80} />
-              <Tooltip cursor={{fill: '#f3f4f6'}} contentStyle={{fontSize: '12px'}} />
+              <ChartTooltip cursor={{fill: 'var(--muted)'}} content={<ChartTooltipContent nameKey="name" indicator="dot" />} />
               <Bar dataKey="units" radius={[0, 4, 4, 0]} barSize={40}>
                 {categoryMetrics.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.fill} />
                 ))}
               </Bar>
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </DashboardCard>
       </div>
 
@@ -1008,74 +1105,78 @@ function DashboardCard({ title, value, trend, trendLabel, children }: any) {
   const isPositive = trend && (trend.startsWith('+') || !trend.startsWith('-'));
   
   return (
-    <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm flex flex-col h-[320px]">
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-dotted border-gray-300 pb-0.5 cursor-help">{title}</h3>
-      </div>
-      
-      <div className="flex items-baseline gap-3 mb-6">
-        <div className="text-3xl font-bold text-gray-900">{value}</div>
-        {trend && (
-          <div className={`flex items-center text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-            {isPositive ? '↑' : '↓'} {trend.replace(/[+-]/, '')}
-          </div>
-        )}
-      </div>
-      
-      <div className="flex-1 min-h-0 relative">
-        {children}
-      </div>
-    </div>
+    <Card className="flex flex-col h-[320px]">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm font-bold uppercase tracking-wide text-muted-foreground">{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-1 min-h-0 flex flex-col">
+        <div className="flex items-baseline gap-3 mb-6">
+          <div className="text-3xl font-bold">{value}</div>
+          {trend && (
+            <div className={cn("flex items-center text-sm font-medium", isPositive ? "text-green-600" : "text-red-600")}>
+              {isPositive ? '↑' : '↓'} {trend.replace(/[+-]/, '')}
+            </div>
+          )}
+        </div>
+        <div className="flex-1 relative">
+          {children}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
 function MetricBox({ label, value }: any) {
   return (
-    <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-      <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{label}</div>
-      <div className="text-xl font-bold text-gray-900">{value}</div>
-    </div>
+    <Card>
+      <CardHeader className="p-4 pb-2">
+        <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4 pt-0">
+        <div className="text-xl font-bold">{value}</div>
+      </CardContent>
+    </Card>
   );
 }
 
 function Section({ title, rows, children }: any) {
   return (
-    <section className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">{title}</h2>
-        <span className="text-xs font-medium text-gray-500 bg-white px-2 py-1 rounded border border-gray-200">{rows} records</span>
-      </div>
-      <div className="overflow-x-auto">
+    <Card className="overflow-hidden">
+      <CardHeader className="px-6 py-4 border-b flex flex-row justify-between items-center bg-muted/50 space-y-0">
+        <CardTitle className="text-sm font-bold uppercase tracking-wide">{title}</CardTitle>
+        <span className="text-xs font-medium text-muted-foreground bg-background px-2 py-1 rounded border">{rows} records</span>
+      </CardHeader>
+      <CardContent className="p-0 overflow-x-auto">
         {children}
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }
 
 function DataTable({ headers, rows }: any) {
   if (!rows || rows.length === 0) {
-    return <div className="p-8 text-center text-gray-500 italic">No data available for this period</div>;
+    return <div className="p-8 text-center text-muted-foreground italic">No data available for this period</div>;
   }
 
   return (
-    <table className="w-full text-left text-sm">
-      <thead>
-        <tr className="bg-white border-b border-gray-200">
+    <Table>
+      <TableHeader>
+        <TableRow className="bg-background hover:bg-background">
           {headers.map((h: string, i: number) => (
-            <th key={i} className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">{h}</th>
+            <TableHead key={i} className="px-6 py-3 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">{h}</TableHead>
           ))}
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-gray-100">
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {rows.map((row: any[], i: number) => (
-          <tr key={i} className="hover:bg-gray-50 transition-colors">
+          <TableRow key={i}>
             {row.map((cell: any, j: number) => (
-              <td key={j} className="px-6 py-3 whitespace-nowrap text-gray-700">{cell}</td>
+              <TableCell key={j} className="px-6 py-3 whitespace-nowrap">{cell}</TableCell>
             ))}
-          </tr>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }
 

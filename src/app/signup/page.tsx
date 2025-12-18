@@ -9,6 +9,9 @@ export default function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [gender, setGender] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
@@ -18,7 +21,7 @@ export default function SignupPage() {
     setIsLoading(true);
     setError(null);
     try {
-      await signup(name, email, password);
+      await signup(name, email, password, { phone, birthdate, gender });
     } catch (error: any) {
       console.error(error);
       setError(error.message || 'An error occurred during signup');
@@ -97,6 +100,49 @@ export default function SignupPage() {
                 placeholder="••••••••"
               />
               <p className="text-[10px] font-mono text-gray-400 text-right">MINIMUM 8 CHARACTERS REQUIRED</p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider flex justify-between">
+                Phone (Optional)
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full bg-white border border-black p-4 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-all placeholder:text-gray-300"
+                placeholder="+1 (555) 000-0000"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider flex justify-between">
+                  Birthdate (Optional)
+                </label>
+                <input
+                  type="date"
+                  value={birthdate}
+                  onChange={(e) => setBirthdate(e.target.value)}
+                  className="w-full bg-white border border-black p-4 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-all placeholder:text-gray-300"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider flex justify-between">
+                  Gender (Optional)
+                </label>
+                <select
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="w-full bg-white border border-black p-4 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-all placeholder:text-gray-300 appearance-none"
+                >
+                  <option value="">Select...</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                  <option value="prefer_not_to_say">Prefer not to say</option>
+                </select>
+              </div>
             </div>
 
             <button

@@ -1,7 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { Calendar, ChevronDown, X } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Calendar as CalendarIcon, ChevronDown, X } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import type { DateRange as DayPickerRange } from "react-day-picker";
 
 export type DateRange = {
   label: string;
@@ -17,21 +22,19 @@ export default function DateRangePicker({ onRangeChange }: DateRangePickerProps)
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState('Today');
   const [showCustom, setShowCustom] = useState(false);
-  
-  // Initialize with current date/time for inputs
-  const now = new Date();
-  const yesterday = new Date(now);
-  yesterday.setDate(yesterday.getDate() - 1);
-  
-  const formatForInput = (date: Date) => {
-    // Adjust for local timezone offset to ensure input shows correct local time
-    const offset = date.getTimezoneOffset() * 60000;
-    const localISOTime = (new Date(date.getTime() - offset)).toISOString().slice(0, 16);
-    return localISOTime;
-  };
 
-  const [customStart, setCustomStart] = useState(formatForInput(yesterday));
-  const [customEnd, setCustomEnd] = useState(formatForInput(now));
+  const now = useMemo(() => new Date(), []);
+  const todayStart = useMemo(
+    () => new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+    [now]
+  );
+
+  const [customRange, setCustomRange] = useState<DayPickerRange | undefined>(() => {
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(end);
+    start.setDate(start.getDate() - 1);
+    return { from: start, to: end };
+  });
 
   const ranges = [
     {
@@ -39,7 +42,7 @@ export default function DateRangePicker({ onRangeChange }: DateRangePickerProps)
       getRange: () => {
         const now = new Date();
         const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
         return { startDate: start, endDate: end };
       }
     },
@@ -48,7 +51,7 @@ export default function DateRangePicker({ onRangeChange }: DateRangePickerProps)
       getRange: () => {
         const now = new Date();
         const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59);
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
         return { startDate: start, endDate: end };
       }
     },
@@ -103,105 +106,81 @@ export default function DateRangePicker({ onRangeChange }: DateRangePickerProps)
   };
 
   const handleCustomApply = () => {
-    if (customStart && customEnd) {
-      const start = new Date(customStart);
-      const end = new Date(customEnd);
-      
-      if (start > end) {
-        alert('Start date cannot be after end date');
-        return;
-      }
+    if (!customRange?.from || !customRange?.to) return;
 
-      onRangeChange({ label: 'Custom', startDate: start, endDate: end });
-      setSelectedLabel('Custom');
-      setIsOpen(false);
-      setShowCustom(false);
-    }
+    const start = new Date(customRange.from);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(customRange.to);
+    end.setHours(23, 59, 59, 999);
+
+    onRangeChange({ label: 'Custom', startDate: start, endDate: end });
+    setSelectedLabel('Custom');
+    setIsOpen(false);
+    setShowCustom(false);
   };
 
   return (
-    <div className="relative">
-      <button 
-        onClick={() => {
-          setIsOpen(!isOpen);
-          setShowCustom(false);
-        }}
-        className="flex items-center gap-2 bg-white border border-gray-300 px-3 py-1.5 rounded shadow-sm text-sm font-medium hover:bg-gray-50"
-      >
-        <Calendar className="w-4 h-4 text-gray-500" />
-        <span>{selectedLabel}</span>
-        <ChevronDown className="w-3 h-3 text-gray-400" />
-      </button>
-
-      {isOpen && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className="absolute top-full right-0 mt-1 w-64 bg-white border border-gray-200 rounded shadow-lg z-20 py-1 overflow-hidden">
-            {!showCustom ? (
-              <>
-                {ranges.map((range) => (
-                  <button
-                    key={range.label}
-                    onClick={() => handleSelect(range)}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
-                      selectedLabel === range.label ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-700'
-                    }`}
-                  >
-                    {range.label}
-                  </button>
-                ))}
-                <div className="border-t border-gray-100 mt-1 pt-1">
-                  <button
-                    onClick={() => setShowCustom(true)}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
-                      selectedLabel === 'Custom' ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-700'
-                    }`}
-                  >
-                    Custom...
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-xs font-bold uppercase text-gray-500">Custom Range</span>
-                  <button onClick={() => setShowCustom(false)} className="text-gray-400 hover:text-gray-600">
-                    <X size={14} />
-                  </button>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">Start</label>
-                    <input 
-                      type="datetime-local" 
-                      value={customStart}
-                      onChange={(e) => setCustomStart(e.target.value)}
-                      className="w-full text-sm border border-gray-300 rounded px-2 py-1"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">End</label>
-                    <input 
-                      type="datetime-local" 
-                      value={customEnd}
-                      onChange={(e) => setCustomEnd(e.target.value)}
-                      className="w-full text-sm border border-gray-300 rounded px-2 py-1"
-                    />
-                  </div>
-                  
-                  <button 
-                    onClick={handleCustomApply}
-                    className="w-full bg-black text-white text-sm font-medium py-1.5 rounded hover:bg-gray-800 transition-colors mt-2"
-                  >
-                    Apply
-                  </button>
-                </div>
-              </div>
-            )}
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-[240px] justify-start text-left font-normal bg-background">
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {selectedLabel}
+          <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80 p-0" align="end">
+        {!showCustom ? (
+          <div className="flex flex-col p-1">
+            {ranges.map((range) => (
+              <Button
+                key={range.label}
+                variant="ghost"
+                onClick={() => handleSelect(range)}
+                className={cn(
+                  "justify-start font-normal",
+                  selectedLabel === range.label && "bg-accent text-accent-foreground font-medium"
+                )}
+              >
+                {range.label}
+              </Button>
+            ))}
+            <div className="border-t my-1" />
+            <Button
+              variant="ghost"
+              onClick={() => setShowCustom(true)}
+              className={cn(
+                "justify-start font-normal",
+                selectedLabel === 'Custom' && "bg-accent text-accent-foreground font-medium"
+              )}
+            >
+              Custom...
+            </Button>
           </div>
-        </>
-      )}
-    </div>
+        ) : (
+          <div className="p-4">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-xs font-bold uppercase text-muted-foreground">Custom Range</span>
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setShowCustom(false)}>
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
+
+            <div className="rounded-md border">
+              <Calendar
+                mode="range"
+                numberOfMonths={1}
+                selected={customRange}
+                onSelect={setCustomRange}
+                defaultMonth={customRange?.from ?? todayStart}
+              />
+            </div>
+
+            <Button onClick={handleCustomApply} className="w-full mt-3">
+              Apply
+            </Button>
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
   );
 }

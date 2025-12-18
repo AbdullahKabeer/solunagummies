@@ -9,12 +9,53 @@ html {
   --foreground: #121212; /* Ink */
   --primary: #FF3300; /* International Orange */
   --grid-color: #E5E5E5;
+
+  /* shadcn/ui-style tokens (mapped to existing palette) */
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --popover: #ffffff;
+  --popover-foreground: var(--foreground);
+  --muted: var(--background);
+  --muted-foreground: #525252;
+  --border: var(--foreground);
+  --input: var(--foreground);
+  --ring: var(--primary);
+  --primary-foreground: #ffffff;
+  --secondary: var(--background);
+  --secondary-foreground: var(--foreground);
+  --accent: var(--background);
+  --accent-foreground: var(--foreground);
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Chart colors (used by shadcn chart examples) */
+  --chart-1: var(--primary);
+  --chart-2: var(--foreground);
+  --chart-3: #FF8C69;
+  --chart-4: #22c55e;
+  --chart-5: #3b82f6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 }

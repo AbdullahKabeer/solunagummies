@@ -10,20 +10,80 @@ import {
 } from '@stripe/react-stripe-js';
 import { useCart } from '@/context/CartContext';
 import { useSession } from '@/context/SessionContext';
+import { useAuth } from '@/context/AuthContext';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
+  const { user } = useAuth();
+  const supabase = createClient();
+  
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [shippingDetails, setShippingDetails] = useState<any>(null);
+  const [savedAddress, setSavedAddress] = useState<any>(null);
   const [isPromoOpen, setIsPromoOpen] = useState(false);
   const { cartTotal, clearCart, items } = useCart();
   const { sessionId } = useSession();
+
+  // Auto-fill email and fetch shipping details if logged in
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+      
+      const fetchCustomerDetails = async () => {
+        // First get customer ID
+        let { data: customer } = await supabase
+          .from('customers')
+          .select('id')
+          .eq('auth_user_id', user.id)
+          .maybeSingle();
+        
+        // Fallback to email if not found by auth_id
+        if (!customer && user.email) {
+             const { data: customerByEmail } = await supabase
+                .from('customers')
+                .select('id')
+                .eq('email', user.email)
+                .maybeSingle();
+             customer = customerByEmail;
+        }
+        
+        if (customer) {
+            // Then get default address
+            const { data: address } = await supabase
+                .from('addresses')
+                .select('*')
+                .eq('customer_id', customer.id)
+                .eq('is_default', true)
+                .maybeSingle();
+            
+            if (address) {
+                const formattedAddress = {
+                    name: `${address.first_name} ${address.last_name}`,
+                    phone: address.phone,
+                    address: {
+                        line1: address.address1,
+                        line2: address.address2,
+                        city: address.city,
+                        state: address.province,
+                        postal_code: address.zip,
+                        country: address.country
+                    }
+                };
+                setSavedAddress(formattedAddress);
+                setShippingDetails(formattedAddress);
+            }
+        }
+      };
+      fetchCustomerDetails();
+    }
+  }, [user, supabase]);
 
   useEffect(() => {
     if (!stripe) {
@@ -166,8 +226,10 @@ export default function CheckoutForm() {
       <div>
         <h3 className="text-lg font-bold uppercase tracking-wide mb-4">Contact Information</h3>
         <LinkAuthenticationElement
+          key={user?.email || 'guest-email'}
           id="link-authentication-element"
           onChange={(e) => setEmail(e.value.email)}
+          options={{ defaultValues: { email } }}
         />
       </div>
 
@@ -175,8 +237,21 @@ export default function CheckoutForm() {
       <div>
         <h3 className="text-lg font-bold uppercase tracking-wide mb-4">Shipping Address</h3>
         <AddressElement
+          key={savedAddress ? 'saved-address' : 'guest-address'}
           options={{
             mode: 'shipping',
+            defaultValues: savedAddress ? {
+                name: savedAddress.name,
+                phone: savedAddress.phone,
+                address: {
+                    line1: savedAddress.address?.line1,
+                    line2: savedAddress.address?.line2,
+                    city: savedAddress.address?.city,
+                    state: savedAddress.address?.state,
+                    postal_code: savedAddress.address?.postal_code,
+                    country: savedAddress.address?.country,
+                }
+            } : undefined,
             fields: {
               phone: 'always',
             },

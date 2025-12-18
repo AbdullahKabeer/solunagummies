@@ -61,10 +61,58 @@ export async function POST(request: Request) {
 
       if (existingCustomer) {
         customerId = existingCustomer.id;
-        // Link auth user if logged in
+        
+        // Link auth user if logged in and update profile info
+        const customerUpdateData: any = {};
         if (user?.id) {
-             await supabaseAdmin.from('customers').update({ auth_user_id: user.id }).eq('id', customerId);
+            customerUpdateData.auth_user_id = user.id;
         }
+        if (shippingDetails?.name) {
+            customerUpdateData.first_name = shippingDetails.name.split(' ')[0] || '';
+            customerUpdateData.last_name = shippingDetails.name.split(' ').slice(1).join(' ') || '';
+        }
+        if (shippingDetails?.phone) {
+            customerUpdateData.phone = shippingDetails.phone;
+        }
+
+        if (Object.keys(customerUpdateData).length > 0) {
+            await supabaseAdmin.from('customers').update(customerUpdateData).eq('id', customerId);
+        }
+
+        // Update or Insert Address
+        if (shippingDetails) {
+            // Check if address exists (simple check, ideally we'd check content)
+            // For now, we'll just insert a new one if it's the first one, or update the default one.
+            // Actually, let's just insert a new address and make it default if none exists.
+            
+            const { data: existingAddress } = await supabaseAdmin
+                .from('addresses')
+                .select('id')
+                .eq('customer_id', customerId)
+                .eq('is_default', true)
+                .single();
+
+            const addressData = {
+                customer_id: customerId,
+                first_name: shippingDetails.name?.split(' ')[0] || '',
+                last_name: shippingDetails.name?.split(' ').slice(1).join(' ') || '',
+                address1: shippingDetails.address?.line1,
+                address2: shippingDetails.address?.line2,
+                city: shippingDetails.address?.city,
+                province: shippingDetails.address?.state,
+                country: shippingDetails.address?.country,
+                zip: shippingDetails.address?.postal_code,
+                phone: shippingDetails.phone,
+                is_default: true
+            };
+
+            if (existingAddress) {
+                await supabaseAdmin.from('addresses').update(addressData).eq('id', existingAddress.id);
+            } else {
+                await supabaseAdmin.from('addresses').insert(addressData);
+            }
+        }
+
       } else {
         const { data: newCustomer, error: createCustomerError } = await supabaseAdmin
           .from('customers')
@@ -72,6 +120,7 @@ export async function POST(request: Request) {
             email: email,
             first_name: shippingDetails?.name?.split(' ')[0] || '',
             last_name: shippingDetails?.name?.split(' ').slice(1).join(' ') || '',
+            phone: shippingDetails?.phone,
             auth_user_id: user?.id || null,
             accepts_marketing: true 
           })
@@ -80,6 +129,23 @@ export async function POST(request: Request) {
         
         if (!createCustomerError && newCustomer) {
           customerId = newCustomer.id;
+          
+          // Insert Address
+          if (shippingDetails) {
+             await supabaseAdmin.from('addresses').insert({
+                customer_id: customerId,
+                first_name: shippingDetails.name?.split(' ')[0] || '',
+                last_name: shippingDetails.name?.split(' ').slice(1).join(' ') || '',
+                address1: shippingDetails.address?.line1,
+                address2: shippingDetails.address?.line2,
+                city: shippingDetails.address?.city,
+                province: shippingDetails.address?.state,
+                country: shippingDetails.address?.country,
+                zip: shippingDetails.address?.postal_code,
+                phone: shippingDetails.phone,
+                is_default: true
+             });
+          }
         }
       }
     }
